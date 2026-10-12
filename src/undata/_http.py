@@ -7,8 +7,11 @@ It exists to make three of the platform's behaviours impossible to trip over:
 * A POST body containing a ``"select"`` key is also answered with 403, so the
   observation endpoint is only ever called with GET (see ``_endpoints``).
 * Relation expressions (``->``, ``<-``, ``+``, ``{typeOf:Country}``) must be
-  percent-encoded or the API answers 400. httpx encodes query values; the tests
-  pin that, including ``+``, which would otherwise arrive as a space.
+  percent-encoded or the API answers 400. Query strings are built here with every
+  reserved character percent-encoded, ``+`` included.
+* The server does not decode ``+`` as a space in a query string: ``nodes=Viet+Nam``
+  reaches it as ``Viet+Nam``. Spaces are therefore sent as ``%20``, never ``+``,
+  which is what httpx would do by default.
 """
 
 from __future__ import annotations
@@ -18,6 +21,7 @@ import json
 import time
 from collections.abc import Mapping, Sequence
 from typing import Any, Final
+from urllib.parse import quote, urlencode
 
 import httpx
 
@@ -50,8 +54,17 @@ def encode_body(body: Mapping[str, Any]) -> bytes:
     return json.dumps(body, separators=(",", ":"), ensure_ascii=False).encode()
 
 
-def _query_pairs(params: Mapping[str, QueryValue | None]) -> httpx.QueryParams:
-    """Flatten params into ordered pairs, repeating keys for sequence values."""
+def query_string(params: Mapping[str, QueryValue | None]) -> str:
+    """Encode params as a query string the way this deployment needs.
+
+    Sequence values become repeated keys, ``None`` values are dropped, and every
+    reserved character is percent-encoded. Spaces become ``%20``: the server reads
+    ``+`` literally.
+
+    Example:
+        >>> query_string({"nodes": ["Viet Nam", "Chad"], "property": "<-a+", "x": None})
+        'nodes=Viet%20Nam&nodes=Chad&property=%3C-a%2B'
+    """
     pairs: list[tuple[str, str]] = []
     for key, value in params.items():
         if value is None:
@@ -60,7 +73,7 @@ def _query_pairs(params: Mapping[str, QueryValue | None]) -> httpx.QueryParams:
             pairs.append((key, value))
         else:
             pairs.extend((key, item) for item in value)
-    return httpx.QueryParams(tuple(pairs))
+    return urlencode(pairs, quote_via=quote, safe="")
 
 
 class Transport:
@@ -94,9 +107,7 @@ class Transport:
 
     def get(self, path: str, params: Mapping[str, QueryValue | None] | None = None) -> Any:
         """GET ``path`` and return the decoded JSON body."""
-        request = self._client.build_request(
-            "GET", self._url(path), params=_query_pairs(params or {})
-        )
+        request = self._client.build_request("GET", self._url(path, params))
         return self._send(request)
 
     def post(
@@ -108,8 +119,7 @@ class Transport:
         """POST a single-line JSON ``body`` to ``path`` and return the decoded JSON."""
         request = self._client.build_request(
             "POST",
-            self._url(path),
-            params=_query_pairs(params or {}),
+            self._url(path, params),
             content=encode_body(body),
             headers={"Content-Type": "application/json"},
         )
@@ -126,8 +136,10 @@ class Transport:
     def __exit__(self, *exc_info: object) -> None:
         self.close()
 
-    def _url(self, path: str) -> str:
-        return f"{self.base_url}/{path.lstrip('/')}"
+    def _url(self, path: str, params: Mapping[str, QueryValue | None] | None) -> str:
+        url = f"{self.base_url}/{path.lstrip('/')}"
+        query = query_string(params or {})
+        return f"{url}?{query}" if query else url
 
     def _send(self, request: httpx.Request) -> Any:
         url = str(request.url)

@@ -14,4 +14,11 @@ All notable changes are recorded here. The format follows
 - One wrapper per API route, including graph walks that follow `nextToken` past the
   500-value page cap.
 - The dcid grammar: `parse_dcid`, `build_dcid`, `describe_dcid`, `child_countries_of`.
-- A live contract suite that pins the platform behaviours the package depends on.
+- A live contract suite that pins the platform behaviours the package depends on,
+  including that variable search ranks Data Commons' older `sdg/...` copy above the
+  UN's own `undata/sdg/...` series.
+
+### Fixed
+
+- Spaces in query strings are sent as `%20`. httpx sends `+`, which this server reads
+  literally, so `resolve("Viet Nam")` reached it as `Viet+Nam`.

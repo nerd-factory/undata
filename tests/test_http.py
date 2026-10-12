@@ -147,3 +147,24 @@ def test_a_supplied_client_is_not_closed() -> None:
 
     assert not client.is_closed
     client.close()
+
+
+@respx.mock
+def test_spaces_are_sent_as_percent_20_because_the_server_reads_plus_literally(
+    transport: Transport,
+) -> None:
+    route = respx.get(f"{BASE}/core/api/v2/resolve").mock(return_value=httpx.Response(200, json={}))
+
+    transport.get("/core/api/v2/resolve", {"nodes": "Viet Nam"})
+
+    raw_query = route.calls.last.request.url.query.decode()
+    assert raw_query == "nodes=Viet%20Nam"
+
+
+@respx.mock
+def test_a_request_without_params_has_no_query_string(transport: Transport) -> None:
+    route = respx.get(f"{BASE}/x").mock(return_value=httpx.Response(200, json={}))
+
+    transport.get("/x", {"skip": None})
+
+    assert str(route.calls.last.request.url) == f"{BASE}/x"

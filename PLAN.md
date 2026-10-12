@@ -27,13 +27,14 @@ request.
 | `/core/api/v2/node` | Graph walks | 500 values per page, then `nextToken`. `->`, `<-`, `+` must be percent-encoded. |
 | `/core/api/v2/resolve` | Names to dcids | |
 | `/api/observations/series` | Full series per variable × place | Missing places are absent, not empty. |
-| `/api/stats/stat-var-search` | Variable search | Returns base Data Commons variables as well as `undata/...` |
+| `/api/stats/stat-var-search` | Variable search | Ranks Data Commons' older copy (`sdg/...`, from `dc/base/UN_SDG`) above the UN's own series (`undata/sdg/...`). For maternal mortality the UN series is result 23 of 65. |
 | `/api/variable/info` | Coverage and provenance summary | |
 | `/api/place/name` | Place display names | |
 | `/api/variable-group/info` | Category tree with counts | POST |
 | `/api/explore/detect-and-fulfill` | Natural-language resolver | Silently supplies a place when it recognises none. |
 
-Any POST body containing a line break also gets 403. `tests/live/` pins all of this
+Any POST body containing a line break also gets 403. In query strings the server reads
+`+` literally rather than as a space. `tests/live/` pins all of this
 nightly.
 
 ## 3. Public API
@@ -134,6 +135,8 @@ There are four layers, and each may only call the one below it:
 | Age/sex slices leave out "unknown" | `disaggregations()` includes `_U` and says the named slices won't sum to the total. |
 | One indicator under two agencies | `DuplicateSourceWarning`. `info()` lists them as related. |
 | Sub-national queries return dependent territories | `SubnationalArtefactWarning`. |
+| Search ranks the older base copy above the UN series | `search` ranks `undata/` results first and labels every result with its source. |
+| `+` in a query string is read literally | Spaces are sent as `%20`, and a test pins it. |
 
 Every warning class can be silenced individually.
 
@@ -174,7 +177,7 @@ for versioning. It will be published at `nerd-factory.github.io/undata`.
   Python step in Power BI; caching.
 - **Reference:** generated from docstrings. Every public function has a runnable
   example.
-- **Explanation:** how the platform works; the eleven traps; why the package uses GET;
+- **Explanation:** how the platform works; the thirteen traps; why the package uses GET;
   how it compares with `datacommons-client` and wbgapi.
 
 Also planned:

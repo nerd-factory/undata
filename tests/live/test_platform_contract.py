@@ -86,3 +86,28 @@ def test_resolver_supplies_a_place_the_question_did_not_name(live: Transport) ->
     body = ep.detect_and_fulfill(live, "child mortality in Bengal")
 
     assert body["place"]["dcid"] == "country/USA"
+
+
+def test_plus_in_a_query_string_is_not_read_as_a_space(live: Transport) -> None:
+    """Why the transport sends %20. If the echo becomes "Viet Nam", httpx's default is safe."""
+    plus = httpx.get(
+        f"{DEFAULT_BASE_URL}/core/api/v2/resolve?nodes=Viet+Nam&property=%3C-description-%3Edcid",
+        timeout=30,
+    ).json()
+    ours = ep.resolve(live, "Viet Nam")
+
+    assert plus["entities"][0]["node"] == "Viet+Nam"
+    assert ours["entities"][0]["node"] == "Viet Nam"
+
+
+def test_search_ranks_the_base_import_above_the_un_series(live: Transport) -> None:
+    """The top hit for maternal mortality is Data Commons' own copy, not the UN's.
+
+    ``sdg/...`` comes from ``dc/base/UN_SDG`` and lags the UN's ``undata/sdg/...``
+    series by years, under the same provenance URL. The UN series is in the results,
+    further down. Search results must be steered to the ``undata/`` collection.
+    """
+    hits = [hit["dcid"] for hit in ep.stat_var_search(live, "maternal mortality")["statVars"]]
+
+    assert hits[0] == "sdg/SH_STA_MORT.SEX--F"
+    assert hits.index("undata/sdg/SH_STA_MORT.SEX--F") > 0
