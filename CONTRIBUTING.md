@@ -1,0 +1,69 @@
+# Contributing
+
+Short version: turn up, be curious, break something interesting.
+
+There is no application process and no minimum qualification. If you have never used
+GitHub before, start at [Nerd Lab Discussions](https://github.com/nerd-factory/nerd-lab/discussions)
+and ask the question you are worried is too basic. It is not.
+
+Things that are real contributions:
+
+- "I followed the README and it did not work."
+- "This error message did not tell me what to do."
+- "The platform returned something this package did not expect" — with the URL.
+- A typo. Yes, that one counts too.
+
+## Setting up
+
+You need [uv](https://docs.astral.sh/uv/). It installs the right Python for you.
+
+```bash
+git clone https://github.com/nerd-factory/undata && cd undata
+uv sync
+uv run pytest
+```
+
+## Before you open a pull request
+
+```bash
+uv run ruff format .
+uv run ruff check .
+uv run mypy
+uv run pytest
+```
+
+CI runs the same four on Linux, macOS and Windows, on every supported Python.
+
+## What we care about in review
+
+- **Safe by default.** The package never substitutes, rounds away or zero-fills anything
+  without saying so. If a change makes a wrong answer easier to get, it needs a very good
+  reason.
+- **Errors say what to do next.** A message that only restates the HTTP status is a bug.
+- **Tests that pin behaviour, not implementation.** Unit tests mock HTTP with `respx`.
+  Anything that depends on how the live platform behaves also gets a test in
+  `tests/live/`, so the nightly run notices when the platform changes.
+- **Typed and documented.** Every public function has type hints and a docstring with a
+  runnable example; doctests run as part of the suite.
+- **No dependency arrives without a reason attached.** The core depends on `httpx` only.
+- **Does it sound like us?** Dry, exact, unhurried. No hype.
+
+## Layout
+
+```
+src/undata/_http.py        the only module that touches the network
+src/undata/_endpoints.py   one thin wrapper per API route, no interpretation
+src/undata/dcid.py         the identifier grammar
+src/undata/errors.py       every exception, each with a message that helps
+tests/                     offline tests; tests/live/ calls the real API
+```
+
+## Releasing (maintainers)
+
+Tag `vX.Y.Z` on `main` and push the tag. The release workflow builds, publishes to PyPI
+through trusted publishing (no tokens anywhere), and creates the GitHub release. The `pypi`
+environment requires a maintainer's approval before the upload step runs.
+
+## One rule
+
+Read the [Code of Conduct](CODE_OF_CONDUCT.md). It is short and it is enforced.

@@ -1,0 +1,45 @@
+name: Live API contract
+
+# The platform is young and its behaviour is undocumented. This runs the tests in
+# tests/live/ against the real API every night and opens an issue when one fails,
+# because a failure means the platform changed under us.
+
+on:
+  schedule:
+    - cron: "17 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@v10
+      - run: uv sync --locked
+      - run: uv run pytest -m live --no-header -rA | tee live.log
+        shell: bash
+      - name: Open an issue if the platform changed
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="Live API contract failed on $(date -u +%F)"
+          if ! gh issue list --state open --label platform-change --json title -q '.[].title' | grep -qx "$title"; then
+            gh label create platform-change --color D93F0B --description "The live platform changed behaviour" 2>/dev/null || true
+            {
+              echo "The nightly contract run failed: data.un.org no longer behaves the way undata assumes."
+              echo
+              echo "Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+              echo
+              echo '```'
+              tail -n 60 live.log
+              echo '```'
+            } > body.md
+            gh issue create --title "$title" --label platform-change --body-file body.md
+          fi

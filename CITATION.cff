@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you use undata in published work, please cite it as below, and cite the agency that published the data."
+title: "undata: a Python client for the UN System Data Commons"
+type: software
+authors:
+  - family-names: Islam
+    given-names: Mafizul
+  - name: "Nerd Lab contributors"
+repository-code: "https://github.com/nerd-factory/undata"
+license: MIT
+keywords:
+  - United Nations
+  - Data Commons
+  - SDG
+  - official statistics

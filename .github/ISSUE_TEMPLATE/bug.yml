@@ -1,0 +1,23 @@
+name: Something did not work
+description: A wrong result, a crash, or an error message that did not help.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What you ran
+      description: The smallest piece of code that shows it. Paste it as text.
+      render: python
+    validations:
+      required: true
+  - type: textarea
+    id: got
+    attributes:
+      label: What happened, and what you expected
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: undata version
+      description: "python -c 'import undata; print(undata.__version__)'"

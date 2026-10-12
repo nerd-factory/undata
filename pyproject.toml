@@ -1,0 +1,123 @@
+[build-system]
+requires = ["hatchling>=1.25", "hatch-vcs>=0.4"]
+build-backend = "hatchling.build"
+
+[project]
+name = "undata"
+dynamic = ["version"]
+description = "Unofficial Python client for the UN System Data Commons (data.un.org). Safe by default."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Mafizul Islam", email = "islam50@un.org" }]
+maintainers = [{ name = "Nerd Lab contributors" }]
+requires-python = ">=3.11"
+dependencies = ["httpx>=0.27"]
+keywords = [
+  "united-nations",
+  "data-commons",
+  "sdg",
+  "statistics",
+  "open-data",
+  "api-client",
+]
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Scientific/Engineering :: Information Analysis",
+  "Typing :: Typed",
+]
+
+[project.optional-dependencies]
+pandas = ["pandas>=2.1"]
+polars = ["polars>=1.0"]
+
+[project.urls]
+Homepage = "https://github.com/nerd-factory/undata"
+Source = "https://github.com/nerd-factory/undata"
+Issues = "https://github.com/nerd-factory/undata/issues"
+Changelog = "https://github.com/nerd-factory/undata/blob/main/CHANGELOG.md"
+"Field guide" = "https://mafiatun.github.io/un-data-commons-field-guide/"
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3",
+  "pytest-cov>=6.0",
+  "respx>=0.22",
+  "hypothesis>=6.120",
+  "mypy>=1.13",
+  "ruff>=0.8",
+]
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/undata/_version.py"
+
+[tool.hatch.build.targets.sdist]
+exclude = ["/.github"]
+
+# ── Tests ──────────────────────────────────────────────────────────────
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["src", "tests"]
+addopts = [
+  "-ra", "--strict-markers", "--strict-config", "--doctest-modules", "-m", "not live",
+]
+markers = [
+  "live: calls the real data.un.org API (run nightly, or with `-m live`)",
+]
+filterwarnings = ["error"]
+xfail_strict = true
+
+[tool.coverage.run]
+source = ["undata"]
+branch = true
+omit = ["src/undata/_version.py"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+exclude_also = ["if TYPE_CHECKING:", "@overload", "raise NotImplementedError"]
+
+# ── Lint and types ─────────────────────────────────────────────────────
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = ["src/undata/_version.py"]
+
+[tool.ruff.lint]
+select = [
+  "E", "W", "F", "I", "B", "UP", "SIM", "C4", "PT", "RUF", "N", "D", "S", "PL", "TRY",
+]
+ignore = [
+  "D105",    # magic methods are self-describing
+  "D107",    # __init__ is documented on the class
+  "PLR0913", # endpoint wrappers mirror the API's own parameters
+  "TRY003",  # long messages are the point: errors here explain what to do next
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["D", "S101", "PLR2004", "PLC0415"]
+
+[tool.mypy]
+strict = true
+python_version = "3.11"
+files = ["src", "tests"]
+exclude = ["src/undata/_version.py"]
+
+[[tool.mypy.overrides]]
+module = ["undata._version"]
+ignore_missing_imports = true
