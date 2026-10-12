@@ -17,6 +17,8 @@
 
 </div>
 
+**[Use cases, with real output →](https://nerd-factory.github.io/undata/)**
+
 > **Status: pre-alpha.** The foundation is built and tested; the friendly public API is
 > not yet. Nothing is on PyPI. Read [PLAN.md](PLAN.md) for where this is going.
 >
@@ -67,6 +69,10 @@ undata.parse_dcid("undata/sdg/VC_DTH_TOTN.AGE--Y0T17__SEX--F")
   500-value cap), resolve, series, variable search, variable info, place names, the
   variable-group tree, and the natural-language resolver.
 - **The dcid grammar** — parse, build and describe variable identifiers.
+
+Ten runnable scripts in [examples/](examples/) show what it can do today. They run against
+the live API every night, and the [use-cases page](https://nerd-factory.github.io/undata/)
+is built from them.
 
 ## What it will look like
 

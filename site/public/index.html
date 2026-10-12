@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>undata · use cases</title>
+<meta name="description" content="undata is a Python client for the UN System Data Commons that refuses to guess. Ten things you can do with it, each with real output from the live API.">
+<meta name="theme-color" content="#141419">
+<meta property="og:title" content="undata — UN data in Python, without the guessing">
+<meta property="og:description" content="A Python client for the UN System Data Commons. Ten use cases, each with real output from the live API. A Nerd Lab experiment.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://nerd-factory.github.io/undata/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23141419'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='15' font-weight='700' text-anchor='middle' fill='%23C8F531'%3Eun%3C/text%3E%3C/svg%3E">
+<style>
+/* Nerd Lab: ink, off-white, one accent. Tokens match nerd-factory/nerd-lab. */
+:root {
+  --ink: #141419;
+  --ink-2: #1c1c23;
+  --offwhite: #F4F1EA;
+  --volt: #C8F531;
+  --muted: #9A9996;
+  --line: #2b2b34;
+  --display: Futura, "Avenir Next", "Century Gothic", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --wrap: 60rem;
+  --pad: clamp(1rem, 5vw, 3rem);
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+body {
+  margin: 0; background: var(--ink); color: var(--offwhite);
+  font-family: var(--display); font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--volt); text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--volt); outline-offset: 3px; }
+.wrap { width: 100%; max-width: var(--wrap); margin-inline: auto; padding-inline: var(--pad); }
+.skip { position: absolute; left: -9999px; background: var(--volt); color: var(--ink); padding: 0.75rem 1rem; font-family: var(--mono); font-size: 0.85rem; text-decoration: none; z-index: 10; }
+.skip:focus { left: 0.5rem; top: 0.5rem; }
+.anno { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.06em; color: var(--muted); margin: 0 0 0.75rem; }
+code, pre { font-family: var(--mono); }
+:not(pre) > code { font-size: 0.88em; background: var(--ink-2); border: 1px solid var(--line); padding: 0.05em 0.35em; overflow-wrap: anywhere; }
+
+/* top bar */
+.bar { position: sticky; top: 0; z-index: 5; background: rgba(20, 20, 25, 0.92); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); }
+.bar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 3.5rem; }
+.brand { font-family: var(--mono); font-size: 0.85rem; letter-spacing: 0.04em; color: var(--offwhite); text-decoration: none; white-space: nowrap; }
+.brand span { color: var(--muted); }
+.bar nav { display: flex; gap: clamp(0.75rem, 3vw, 1.5rem); font-family: var(--mono); font-size: 0.8rem; }
+.bar nav a { color: var(--muted); text-decoration: none; }
+.bar nav a:hover { color: var(--volt); }
+@media (max-width: 34rem) { .bar nav .opt { display: none; } }
+
+/* sections */
+.sec { padding-block: clamp(2.75rem, 8vh, 5rem); border-bottom: 1px solid var(--line); }
+h1, h2 { font-family: var(--display); font-weight: 700; text-transform: uppercase; letter-spacing: 0.01em; line-height: 1.05; margin: 0 0 1.25rem; }
+h1 { font-size: clamp(2.2rem, 1.5rem + 4vw, 4.2rem); max-width: 14ch; }
+h2 { font-size: clamp(1.6rem, 1.2rem + 2vw, 2.6rem); }
+h3 { font-family: var(--mono); font-size: 1.1rem; font-weight: 700; letter-spacing: 0.01em; margin: 0 0 0.75rem; line-height: 1.35; }
+.lede { font-size: clamp(1.1rem, 1rem + 0.5vw, 1.3rem); max-width: 40rem; margin: 0 0 1.75rem; }
+p { max-width: 42rem; }
+.muted { color: var(--muted); }
+
+.status { border: 1px dashed var(--line); padding: 1rem 1.15rem; font-size: 0.95rem; max-width: 42rem; color: var(--muted); }
+.status strong { color: var(--offwhite); font-weight: 600; }
+
+.install { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: stretch; margin: 1.75rem 0 1.5rem; }
+.install pre { margin: 0; flex: 1 1 22rem; }
+
+/* findings */
+.facts { list-style: none; margin: 2rem 0 0; padding: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); }
+.facts li { border: 1px solid var(--line); background: var(--ink-2); padding: 1.25rem 1.2rem; }
+.facts .num { display: block; font-family: var(--display); font-weight: 700; font-size: 2rem; line-height: 1.1; margin-bottom: 0.6rem; }
+.facts p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+
+/* index of use cases */
+.toc { list-style: none; margin: 1.5rem 0 0; padding: 0; columns: 2 18rem; column-gap: 2rem; }
+.toc li { break-inside: avoid; border-top: 1px solid var(--line); }
+.toc a { display: flex; gap: 0.9rem; padding: 0.6rem 0; color: var(--offwhite); text-decoration: none; font-size: 0.98rem; }
+.toc a:hover { color: var(--volt); }
+.toc .n { font-family: var(--mono); color: var(--muted); font-size: 0.8rem; padding-top: 0.2rem; }
+
+/* a use case */
+.case { padding-block: clamp(2.25rem, 6vh, 3.5rem); border-top: 1px solid var(--line); }
+.case:first-of-type { border-top: 0; }
+.for { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.06em; color: var(--muted); margin: 0 0 0.6rem; text-transform: uppercase; }
+.block { margin-top: 1.25rem; border: 1px solid var(--line); background: var(--ink-2); min-width: 0; }
+.block.out { background: transparent; }
+.block.planned { border-style: dashed; background: transparent; }
+.head { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.9rem; padding: 0.55rem 0.9rem; border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.05em; color: var(--muted); }
+.block.planned .head { border-bottom-style: dashed; }
+.tag { text-transform: uppercase; letter-spacing: 0.1em; color: var(--offwhite); }
+.planned .tag { color: var(--muted); }
+.head .file { overflow-wrap: anywhere; }
+.copy { margin-left: auto; font: inherit; color: var(--muted); background: none; border: 1px solid var(--line); padding: 0.2rem 0.6rem; cursor: pointer; }
+.copy:hover { color: var(--volt); border-color: var(--volt); }
+pre { margin: 0; padding: 1rem 0.95rem; overflow-x: auto; font-size: 0.84rem; line-height: 1.55; tab-size: 4; color: var(--offwhite); }
+pre .c { color: var(--muted); }
+.install pre { border: 1px solid var(--line); background: var(--ink-2); }
+
+.cols { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); margin-top: 1.5rem; }
+.cols > div { border: 1px solid var(--line); padding: 1.15rem 1.2rem; }
+.cols h3 { font-size: 0.95rem; }
+.cols p { margin: 0 0 0.75rem; font-size: 0.95rem; color: var(--muted); }
+.cols pre { padding: 0.6rem 0; font-size: 0.8rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+.foot { padding-block: 2.5rem 3.5rem; font-size: 0.9rem; color: var(--muted); }
+.foot p { margin: 0 0 0.6rem; }
+
+@media (forced-colors: active) { .block, .facts li, .cols > div, .copy { border: 1px solid CanvasText; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="brand" href="https://nerd-factory.github.io/nerd-lab/"><span>nerd lab /</span> undata</a>
+    <nav aria-label="Page">
+      <a href="#why" class="opt">why</a>
+      <a href="#use-cases">use cases</a>
+      <a href="#install" class="opt">install</a>
+      <a href="https://github.com/nerd-factory/undata">github</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="sec">
+  <div class="wrap">
+    <p class="anno">// a nerd lab experiment · unofficial</p>
+    <h1>UN data in Python, without the guessing.</h1>
+    <p class="lede">undata is a Python client for the <a href="https://data.un.org">UN System Data Commons</a>:
+    statistics from 26 UN System entities in one knowledge graph, no API key required. It is built
+    around the platform's habits that make ordinary client code quietly wrong.</p>
+
+    <div class="install">
+      <pre><code>pip install "git+https://github.com/nerd-factory/undata"</code></pre>
+    </div>
+
+    <p class="status"><strong>Pre-alpha, and honest about it.</strong> Every block marked
+    <em>works today</em> is a script in <a href="https://github.com/nerd-factory/undata/tree/main/examples">examples/</a>,
+    and the output under it is what that script printed against the live API on 12 October 2026.
+    Blocks marked <em>from 0.1</em> show the planned API in the
+    <a href="https://github.com/nerd-factory/undata/blob/main/PLAN.md">plan</a>; they do not run yet.</p>
+  </div>
+</section>
+
+<section class="sec" id="why">
+  <div class="wrap">
+    <p class="anno">// 01 — why it exists</p>
+    <h2>Four things the platform will not tell you</h2>
+    <p>Each was found by calling the live API, and each is pinned by a test that runs every night,
+    so the package notices when the platform changes.</p>
+    <ul class="facts">
+      <li><span class="num">403</span><p>Google's official <code>datacommons-client</code> cannot fetch data from data.un.org: the firewall blocks any POST body containing <code>"select"</code>, and that client always POSTs. undata uses GET.</p></li>
+      <li><span class="num">USA</span><p>Ask the search box about child mortality in Bengal and it answers about the United States, under a title that does not say so.</p></li>
+      <li><span class="num">20 / 210</span><p>20 countries report the conflict death rate; 210 report GDP per capita. The other 190 are absent from the response, not zero.</p></li>
+      <li><span class="num">#23</span><p>Search ranks an older copy of the SDG data first. The UN's own maternal mortality series is result 23 of 65, and its latest figure is three years newer.</p></li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="use-cases">
+  <div class="wrap">
+    <p class="anno">// 02 — use cases</p>
+    <h2>Ten things to do with it</h2>
+    <ol class="toc">
+      <li><a href="#compare"><span class="n">01</span>Compare countries on one indicator</a></li>
+      <li><a href="#region"><span class="n">02</span>A whole region in one request</a></li>
+      <li><a href="#missing"><span class="n">03</span>Count who reports before you join</a></li>
+      <li><a href="#sdg"><span class="n">04</span>From an SDG target to data</a></li>
+      <li><a href="#resolver"><span class="n">05</span>Check what the search box decided</a></li>
+      <li><a href="#names"><span class="n">06</span>Turn names into identifiers</a></li>
+      <li><a href="#whose"><span class="n">07</span>Know whose series you are publishing</a></li>
+      <li><a href="#trend"><span class="n">08</span>A full time series for a trend line</a></li>
+      <li><a href="#identifiers"><span class="n">09</span>Read and build identifiers</a></li>
+      <li><a href="#pandas"><span class="n">10</span>A tidy DataFrame with sources</a></li>
+    </ol>
+
+    <article class="case" id="compare">
+      <p class="for">01 · for analysts and report writers</p>
+      <h3>Compare countries on one indicator</h3>
+      <p>Five South Asian countries on the Human Development Index, each at its latest year. India and
+      Bangladesh tie at 0.685. That is the data, not a rounding bug.</p>
+      <div class="block"><div class="head"><span class="tag">works today</span><span class="file">examples/01_compare_countries.py</span></div><pre><code><span class="c">&quot;&quot;&quot;Compare South Asian countries on the Human Development Index.&quot;&quot;&quot;</span>
+
+import undata
+from undata import _endpoints as api
+
+HDI = &quot;undata/undphdro/HDI_hdi&quot;
+COUNTRIES = [&quot;country/BGD&quot;, &quot;country/IND&quot;, &quot;country/LKA&quot;, &quot;country/NPL&quot;, &quot;country/PAK&quot;]
+
+with undata.Transport() as t:
+    body = api.observation(t, HDI, entities=COUNTRIES)
+
+rows = []
+for place, block in body[&quot;byVariable&quot;][HDI][&quot;byEntity&quot;].items():
+    latest = block[&quot;orderedFacets&quot;][0][&quot;observations&quot;][0]
+    rows.append((latest[&quot;value&quot;], place, latest[&quot;date&quot;]))
+
+for value, place, year in sorted(rows, reverse=True):
+    print(f&quot;{place:&lt;12} {year}  {value:.3f}&quot;)</code></pre></div>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 12 October 2026</span></div><pre><samp>country/LKA  2023  0.776
+country/IND  2023  0.685
+country/BGD  2023  0.685
+country/NPL  2023  0.622
+country/PAK  2023  0.544</samp></pre></div>
+      <div class="block planned"><div class="head"><span class="tag">from 0.1 · planned</span></div><pre><code>un.data.latest("undata/undphdro/HDI_hdi", places=["BGD", "IND", "LKA", "NPL", "PAK"])</code></pre></div>
+    </article>
+
+    <article class="case" id="region">
+      <p class="for">02 · for dashboards and regional reports</p>
+      <h3>A whole region in one request</h3>
+      <p>A containment expression is evaluated inside the graph, so one call replaces a loop over 54
+      country codes. The script also counts which year each value is from, because "latest" means each
+      country's own latest. Here every country happens to report 2024. Often they do not.</p>
+      <div class="block"><div class="head"><span class="tag">works today</span><span class="file">examples/02_whole_region.py</span></div><pre><code><span class="c">&quot;&quot;&quot;Every African country in one request, and a check on which year each value is from.&quot;&quot;&quot;</span>
+
+from collections import Counter
+
+import undata
+from undata import _endpoints as api
+
+ELECTRICITY = &quot;undata/sdg/EG_ACS_ELEC&quot;  <span class="c"># % of population with access to electricity</span>
+
+with undata.Transport() as t:
+    body = api.observation(t, ELECTRICITY, entity_expression=undata.child_countries_of(&quot;africa&quot;))
+
+latest = {
+    place: block[&quot;orderedFacets&quot;][0][&quot;observations&quot;][0]
+    for place, block in body[&quot;byVariable&quot;][ELECTRICITY][&quot;byEntity&quot;].items()
+    if block.get(&quot;orderedFacets&quot;)
+}
+print(len(latest), &quot;countries&quot;)
+print(&quot;years:&quot;, dict(Counter(obs[&quot;date&quot;] for obs in latest.values())))
+for place, obs in sorted(latest.items(), key=lambda item: item[1][&quot;value&quot;])[:3]:
+    print(f&quot;{place:&lt;12} {obs[&#x27;date&#x27;]}  {obs[&#x27;value&#x27;]}%&quot;)</code></pre></div>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 12 October 2026</span></div><pre><samp>54 countries
+years: {&#x27;2024&#x27;: 54}
+country/SSD  2024  5.4%
+country/TCD  2024  13.4%
+country/MWI  2024  15.6%</samp></pre></div>
+      <div class="block planned"><div class="head"><span class="tag">from 0.1 · planned</span></div><pre><code>africa = un.place.countries(within="africa")
+un.data.latest("undata/sdg/EG_ACS_ELEC", places=africa)  <span class="c"># warns when the years differ widely</span></code></pre></div>
+    </article>
+
+    <article class="case" id="missing">
+      <p class="for">03 · for researchers, and anyone about to draw a scatter</p>
+      <h3>Count who reports before you join</h3>
+      <p>Norway is not zero on conflict deaths. It is not in the response at all, because a country
+      with no conflict files no conflict-death return. Join these two indicators and every peaceful
+      country drops out before the chart is drawn, so the scatter answers a different question from
+      the one you asked.</p>
+      <div class="block"><div class="head"><span class="tag">works today</span><span class="file">examples/03_missing_is_not_zero.py</span></div><pre><code><span class="c">&quot;&quot;&quot;Count who reports before you join two indicators. Absent is not zero.&quot;&quot;&quot;</span>
+
+import undata
+from undata import _endpoints as api
+
+GDP_PER_CAPITA = &quot;undata/unicef/SPP_GDPPC&quot;
+CONFLICT_DEATH_RATE = &quot;undata/sdg/VC_DTH_TOTR&quot;  <span class="c"># SDG 16.1.2, per 100,000</span>
+EVERY_COUNTRY = undata.child_countries_of(&quot;Earth&quot;)
+
+
+def reporting(t: undata.Transport, variable: str) -&gt; set[str]:
+    body = api.observation(t, variable, entity_expression=EVERY_COUNTRY)
+    by_entity = body[&quot;byVariable&quot;][variable][&quot;byEntity&quot;]
+    return {place for place, block in by_entity.items() if block.get(&quot;orderedFacets&quot;)}
+
+
+with undata.Transport() as t:
+    gdp = reporting(t, GDP_PER_CAPITA)
+    conflict = reporting(t, CONFLICT_DEATH_RATE)
+
+print(&quot;GDP per capita:     &quot;, len(gdp), &quot;countries&quot;)
+print(&quot;Conflict death rate:&quot;, len(conflict), &quot;countries&quot;)
+print(&quot;Both:               &quot;, len(gdp &amp; conflict))
+print(&quot;Norway in the conflict series?&quot;, &quot;country/NOR&quot; in conflict)</code></pre></div>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 12 October 2026</span></div><pre><samp>GDP per capita:      210 countries
+Conflict death rate: 20 countries
+Both:                20
+Norway in the conflict series? False</samp></pre></div>
+      <div class="block planned"><div class="head"><span class="tag">from 0.1 · planned</span></div><pre><code>obs = un.data.fetch(["undata/unicef/SPP_GDPPC", "undata/sdg/VC_DTH_TOTR"], places="world")
+obs.missing  <span class="c"># every absent place/variable pair, listed rather than hidden</span></code></pre></div>
+    </article>
+
+    <article class="case" id="sdg">
+      <p class="for">04 · for SDG reporting officers</p>
+      <h3>From an SDG target to data you can fetch</h3>
+      <p>Mandates name targets, not variable codes. The SDG framework is a branch of the graph you can
+      walk exactly: target 16.1, then indicator 16.1.2, then six groups, one of which is a
+      per-100,000 rate you might not have known existed.</p>
+      <div class="block"><div class="head"><span class="tag">works today</span><span class="file">examples/04_sdg_target.py</span></div><pre><code><span class="c">&quot;&quot;&quot;From an SDG target to variables you can fetch, by walking the framework.&quot;&quot;&quot;</span>
+
+import undata
+from undata import _endpoints as api
+
+
+def children(t: undata.Transport, node: str) -&gt; list[dict[str, str]]:
+    body = api.node(t, node, &quot;&lt;-specializationOf&quot;)
+    return body[&quot;data&quot;][node][&quot;arcs&quot;][&quot;specializationOf&quot;][&quot;nodes&quot;]
+
+
+with undata.Transport() as t:
+    for indicator in children(t, &quot;undata/g/sdgf/target-16-1&quot;):
+        print(indicator[&quot;name&quot;][:72])
+    print()
+    for group in children(t, &quot;undata/g/sdgf/ind-16-1-2&quot;):
+        print(f&quot;{group[&#x27;dcid&#x27;]:&lt;26} {group[&#x27;name&#x27;]}&quot;)</code></pre></div>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 12 October 2026</span></div><pre><samp>SDG Indicator 16.1.1 — Number of victims of intentional homicide per 100
+SDG Indicator 16.1.2 — Conflict-related deaths per 100,000 population, b
+SDG Indicator 16.1.3 — Proportion of population subjected to (a) physica
+SDG Indicator 16.1.4 — Proportion of population that feel safe walking a
+
+undata/g/sdg/VC_DTH_TOCVN  Number of conflict-related deaths (civilians)
+undata/g/sdg/VC_DTH_TONCVN Number of conflict-related deaths (non-civilians)
+undata/g/sdg/VC_DTH_TOTN   Number of total conflict-related deaths
+undata/g/sdg/VC_DTH_TOTPT  Conflict-related total death rate
+undata/g/sdg/VC_DTH_TOTR   Number of total conflict-related deaths per 100,000 population
+undata/g/sdg/VC_DTH_TOUNN  Number of conflict-related deaths (unknown)</samp></pre></div>
+      <div class="block planned"><div class="head"><span class="tag">from 0.1 · planned</span></div><pre><code>un.sdg.target("16.1").indicators()
+un.sdg.indicator("16.1.2").variables()</code></pre></div>
+    </article>
+
+    <article class="case" id="resolver">
+      <p class="for">05 · for anyone who uses, or builds on, data.un.org's search</p>
+      <h3>Check what the search box decided</h3>
+      <p>The natural-language resolver always commits to a place. Given one it does not recognise, it
+      substitutes another without saying so. The chart it draws is titled "Total Child Mortality, by
+      Age" either way.</p>
+      <div class="block"><div class="head"><span class="tag">works today</span><span class="file">examples/05_check_the_resolver.py</span></div><pre><code><span class="c">&quot;&quot;&quot;See which place the site&#x27;s search box decided you meant, before trusting its chart.&quot;&quot;&quot;</span>
+
+import undata
+from undata import _endpoints as api
+
+with undata.Transport() as t:
+    for question in [&quot;child mortality in Bengal&quot;, &quot;child mortality in Bangladesh&quot;]:
+        place = api.detect_and_fulfill(t, question)[&quot;place&quot;]
+        print(f&quot;{question!r:&lt;34} -&gt; {place[&#x27;dcid&#x27;]}  ({place[&#x27;name&#x27;]})&quot;)</code></pre></div>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 12 October 2026</span></div><pre><samp>&#x27;child mortality in Bengal&#x27;        -&gt; country/USA  (United States of America)
+&#x27;child mortality in Bangladesh&#x27;    -&gt; country/BGD  (Bangladesh)</samp></pre></div>
+      <div class="block planned"><div class="head"><span class="tag">from 0.1 · planned</span></div><pre><code>r = un.ask("child mortality in Bengal")
+r.place_was_inferred  <span class="c"># True, and an InferredPlaceWarning is raised</span></code></pre></div>
+    </article>
+
+    <article class="case" id="names">
+      <p class="for">06 · for pipelines that start from a spreadsheet of country names</p>
+      <h3>Turn names into identifiers</h3>
+      <p>Official names resolve, accents and apostrophes included. "Bengal" resolves to nothing, which
+      is the honest answer and the one the search box does not give.</p>
+      <div class="block"><div class="head"><span class="tag">works today</span><span class="file">examples/06_names_to_ids.py</span></div><pre><code><span class="c">&quot;&quot;&quot;Turn place names into identifiers, and notice when a name matches nothing.&quot;&quot;&quot;</span>
+
+import undata
+from undata import _endpoints as api
+
+NAMES = [&quot;Bangladesh&quot;, &quot;Viet Nam&quot;, &quot;Côte d&#x27;Ivoire&quot;, &quot;Bengal&quot;]
+
+with undata.Transport() as t:
+    body = api.resolve(t, NAMES)
+
+for entity in body[&quot;entities&quot;]:
+    candidates = [c[&quot;dcid&quot;] for c in entity.get(&quot;candidates&quot;, [])]
+    print(f&quot;{entity[&#x27;node&#x27;]:&lt;15} {candidates or &#x27;no match&#x27;}&quot;)</code></pre></div>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 12 October 2026</span></div><pre><samp>Bangladesh      [&#x27;country/BGD&#x27;]
+Viet Nam        [&#x27;country/VNM&#x27;]
+Côte d&#x27;Ivoire   [&#x27;country/CIV&#x27;]
+Bengal          no match</samp></pre></div>
+      <div class="block planned"><div class="head"><span class="tag">from 0.1 · planned</span></div><pre><code>un.place.get("Viet Nam")  <span class="c"># Place(dcid='country/VNM', ...)</span>
+un.place.get("Bengal")    <span class="c"># PlaceNotFound, with suggestions. Never a substitute.</span></code></pre></div>
+    </article>
+
+    <article class="case" id="whose">
+      <p class="for">07 · for anyone who cites a number</p>
+      <h3>Know whose series you are publishing</h3>
+      <p>Search ranks Data Commons' own older copy of the SDG database first. Both copies link to the
+      same UN portal, so nothing on the surface tells them apart, but they disagree on the year and the
+      value. The source field does tell them apart.</p>
+      <div class="block"><div class="head"><span class="tag">works today</span><span class="file">examples/07_two_series_one_name.py</span></div><pre><code><span class="c">&quot;&quot;&quot;Search hands you a series. Check whose it is before you publish a number from it.&quot;&quot;&quot;</span>
+
+import undata
+from undata import _endpoints as api
+
+with undata.Transport() as t:
+    hits = [hit[&quot;dcid&quot;] for hit in api.stat_var_search(t, &quot;maternal mortality&quot;)[&quot;statVars&quot;]]
+    un_series = &quot;undata/sdg/SH_STA_MORT.SEX--F&quot;
+    print(&quot;top hit:      &quot;, hits[0])
+    print(&quot;UN series at: &quot;, f&quot;#{hits.index(un_series) + 1} of {len(hits)}&quot;)
+    print()
+
+    body = api.series(t, [hits[0], un_series], [&quot;country/BGD&quot;])
+
+for variable, by_entity in body[&quot;data&quot;].items():
+    block = by_entity[&quot;country/BGD&quot;]
+    last = block[&quot;series&quot;][-1]
+    source = body[&quot;facets&quot;][block[&quot;facet&quot;]][&quot;provenanceId&quot;]
+    print(f&quot;{variable:&lt;30} {last[&#x27;date&#x27;]}  {last[&#x27;value&#x27;]:.1f}  source: {source}&quot;)</code></pre></div>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 12 October 2026</span></div><pre><samp>top hit:       sdg/SH_STA_MORT.SEX--F
+UN series at:  #23 of 65
+
+sdg/SH_STA_MORT.SEX--F         2020  123.0  source: dc/base/UN_SDG
+undata/sdg/SH_STA_MORT.SEX--F  2023  115.1  source: undata/p/SDG</samp></pre></div>
+      <div class="block planned"><div class="head"><span class="tag">from 0.1 · planned</span></div><pre><code>un.search("maternal mortality")  <span class="c"># UN collections first, every hit labelled with its source</span></code></pre></div>
+    </article>
+
+    <article class="case" id="trend">
+      <p class="for">08 · for charts</p>
+      <h3>A full time series for a trend line</h3>
+      <p>Every year for every variable and place pair, in one call. Bangladesh's maternal mortality
+      ratio fell by more than three quarters between 2000 and 2023.</p>
+      <div class="block"><div class="head"><span class="tag">works today</span><span class="file">examples/08_time_series.py</span></div><pre><code><span class="c">&quot;&quot;&quot;A full time series per country, for a trend line.&quot;&quot;&quot;</span>
+
+import undata
+from undata import _endpoints as api
+
+MMR = &quot;undata/sdg/SH_STA_MORT.SEX--F&quot;  <span class="c"># maternal deaths per 100,000 live births</span>
+
+with undata.Transport() as t:
+    body = api.series(t, MMR, [&quot;country/BGD&quot;, &quot;country/NOR&quot;])
+
+for place, block in body[&quot;data&quot;][MMR].items():
+    first, last = block[&quot;series&quot;][0], block[&quot;series&quot;][-1]
+    print(
+        f&quot;{place:&lt;12} {len(block[&#x27;series&#x27;])} years   &quot;
+        f&quot;{first[&#x27;date&#x27;]}: {first[&#x27;value&#x27;]:.1f}  -&gt;  {last[&#x27;date&#x27;]}: {last[&#x27;value&#x27;]:.1f}&quot;
+    )</code></pre></div>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 12 October 2026</span></div><pre><samp>country/BGD  24 years   2000: 522.7  -&gt;  2023: 115.1
+country/NOR  24 years   2000: 5.4  -&gt;  2023: 1.3</samp></pre></div>
+      <div class="block planned"><div class="head"><span class="tag">from 0.1 · planned</span></div><pre><code>un.data.fetch("undata/sdg/SH_STA_MORT.SEX--F", places=["BGD", "NOR"], time="all").to_pandas()</code></pre></div>
+    </article>
+
+    <article class="case" id="identifiers">
+      <p class="for">09 · for developers</p>
+      <h3>Read and build identifiers</h3>
+      <p>The identifier grammar, offline. One warning it encodes: the "unknown" age band is a slice of
+      its own, so adding up the named age bands will not reproduce the total.</p>
+      <div class="block"><div class="head"><span class="tag">works today</span><span class="file">examples/09_identifiers.py</span></div><pre><code><span class="c">&quot;&quot;&quot;Read and build variable identifiers. No network needed.&quot;&quot;&quot;</span>
+
+import undata
+
+dcid = &quot;undata/sdg/VC_DTH_TOTN.AGE--Y0T17__SEX--F&quot;
+parsed = undata.parse_dcid(dcid)
+assert parsed is not None
+print(parsed.agency_label, &quot;|&quot;, parsed.code, &quot;|&quot;, [str(d) for d in parsed.dimensions])
+print(undata.describe_dcid(dcid))
+
+<span class="c"># The same slice always gets the same identifier, whatever order you pass dimensions in.</span>
+print(undata.build_dcid(&quot;undata/sdg/VC_DTH_TOTN&quot;, {&quot;SEX&quot;: &quot;F&quot;, &quot;AGE&quot;: &quot;Y0T17&quot;}))
+
+<span class="c"># The &quot;unknown&quot; age band is its own slice. The named bands do not sum to the total.</span>
+print(undata.describe_dcid(&quot;undata/sdg/VC_DTH_TOTN.AGE--_U__SEX--_U&quot;))</code></pre></div>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>offline</span></div><pre><samp>Global SDG Indicators Database | VC_DTH_TOTN | [&#x27;AGE--Y0T17&#x27;, &#x27;SEX--F&#x27;]
+Global SDG Indicators Database · VC_DTH_TOTN [AGE=Y0T17, SEX=F]
+undata/sdg/VC_DTH_TOTN.AGE--Y0T17__SEX--F
+Global SDG Indicators Database · VC_DTH_TOTN [AGE=_U, SEX=_U]</samp></pre></div>
+      <div class="block planned"><div class="head"><span class="tag">from 0.1 · planned</span></div><pre><code>un.variable.disaggregations("undata/sdg/VC_DTH_TOTN")  <span class="c"># every slice, the unknown band included</span></code></pre></div>
+    </article>
+
+    <article class="case" id="pandas">
+      <p class="for">10 · for notebooks and data teams</p>
+      <h3>A tidy DataFrame with sources</h3>
+      <p>The flattening everyone writes today, with the empty-series branch written first and the
+      source carried onto every row. In 0.1 the whole script becomes one line.</p>
+      <div class="block"><div class="head"><span class="tag">works today</span><span class="file">examples/10_to_pandas.py</span></div><pre><code><span class="c">&quot;&quot;&quot;A tidy pandas DataFrame with the source on every row. Needs: pip install pandas.&quot;&quot;&quot;</span>
+
+import pandas as pd
+
+import undata
+from undata import _endpoints as api
+
+VARIABLES = [&quot;undata/sdg/SH_STA_MORT.SEX--F&quot;, &quot;undata/sdg/EG_ACS_ELEC&quot;]
+PLACES = [&quot;country/BGD&quot;, &quot;country/NPL&quot;, &quot;country/SSD&quot;]
+
+with undata.Transport() as t:
+    body = api.series(t, VARIABLES, PLACES)
+
+rows = []
+for variable, by_entity in body[&quot;data&quot;].items():
+    for place in PLACES:
+        block = by_entity.get(place, {})
+        if not block.get(&quot;series&quot;):
+            print(&quot;no data:&quot;, variable, place)  <span class="c"># absent, not zero</span>
+            continue
+        facet = body[&quot;facets&quot;][block[&quot;facet&quot;]]
+        rows.extend(
+            {
+                <span class="c">&quot;variable&quot;</span>: variable,
+                <span class="c">&quot;place&quot;</span>: place,
+                <span class="c">&quot;date&quot;</span>: obs[&quot;date&quot;],
+                <span class="c">&quot;value&quot;</span>: obs[&quot;value&quot;],
+                <span class="c">&quot;source&quot;</span>: facet[&quot;provenanceId&quot;],
+                <span class="c">&quot;unit&quot;</span>: facet.get(&quot;unitDisplayName&quot;),
+                <span class="c">&quot;provenance_url&quot;</span>: facet.get(&quot;provenanceUrl&quot;),
+            }
+            for obs in block[&quot;series&quot;]
+        )
+
+df = pd.DataFrame(rows)
+print(df.groupby([&quot;variable&quot;, &quot;place&quot;])[&quot;date&quot;].agg([&quot;min&quot;, &quot;max&quot;, &quot;count&quot;]))</code></pre></div>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 12 October 2026</span></div><pre><samp>                                            min   max  count
+variable                      place                         
+undata/sdg/EG_ACS_ELEC        country/BGD  2000  2024     25
+                              country/NPL  2000  2024     25
+                              country/SSD  2007  2024     18
+undata/sdg/SH_STA_MORT.SEX--F country/BGD  2000  2023     24
+                              country/NPL  2000  2023     24
+                              country/SSD  2000  2023     24</samp></pre></div>
+      <div class="block planned"><div class="head"><span class="tag">from 0.1 · planned</span></div><pre><code>un.data.frame(
+    ["undata/sdg/SH_STA_MORT.SEX--F", "undata/sdg/EG_ACS_ELEC"],
+    places=["BGD", "NPL", "SSD"],
+    time="all",
+)  <span class="c"># tidy columns: variable, place, date, value, unit, source, provenance_url</span></code></pre></div>
+    </article>
+  </div>
+</section>
+
+<section class="sec" id="install">
+  <div class="wrap">
+    <p class="anno">// 03 — install</p>
+    <h2>Getting it</h2>
+    <div class="cols">
+      <div>
+        <h3>Today, from GitHub</h3>
+        <p>The foundation: transport, one wrapper per route, the identifier grammar.</p>
+        <pre><code>pip install "git+https://github.com/nerd-factory/undata"</code></pre>
+      </div>
+      <div>
+        <h3>Run the examples</h3>
+        <p>Needs <a href="https://docs.astral.sh/uv/">uv</a>. It fetches the right Python itself.</p>
+        <pre><code>git clone https://github.com/nerd-factory/undata
+cd undata
+uv run python examples/01_compare_countries.py</code></pre>
+      </div>
+      <div>
+        <h3>From 0.1, from PyPI</h3>
+        <p>Not published yet. The release pipeline is ready and waiting for the API it ships.</p>
+        <pre><code>pip install undata
+pip install "undata[pandas]"</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>undata is a <a href="https://nerd-factory.github.io/nerd-lab/">Nerd Lab</a> experiment. Unofficial:
+    not affiliated with or endorsed by the United Nations. The data belongs to the agencies that publish it, under the
+    <a href="https://data.un.org/undatacommons/terms-of-use">UN Data Commons terms of use</a>.</p>
+    <p>Most of what the package knows about the platform was found while writing the
+    <a href="https://mafiatun.github.io/un-data-commons-field-guide/">UN Data Commons Field Guide</a>.</p>
+    <p><a href="https://github.com/nerd-factory/undata">Source</a> ·
+    <a href="https://github.com/nerd-factory/undata/blob/main/PLAN.md">Plan</a> ·
+    <a href="https://github.com/nerd-factory/undata/issues">Issues</a> ·
+    <a href="https://github.com/nerd-factory/nerd-lab/discussions">Questions</a> · Code: MIT</p>
+  </div>
+</footer>
+
+<script>
+/* Copy buttons: added only when the clipboard is available, so the page needs no JS. */
+if (navigator.clipboard) {
+  for (const block of document.querySelectorAll(".block:not(.out)")) {
+    const head = block.querySelector(".head");
+    const code = block.querySelector("pre code");
+    if (!head || !code) continue;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "copy";
+    button.textContent = "copy";
+    button.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(code.innerText);
+        button.textContent = "copied";
+      } catch {
+        button.textContent = "select and copy";
+      }
+      setTimeout(() => { button.textContent = "copy"; }, 1600);
+    });
+    head.append(button);
+  }
+}
+</script>
+</body>
+</html>

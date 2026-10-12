@@ -24,6 +24,13 @@ jobs:
       - run: uv sync --locked
       - run: uv run pytest -m live --no-header -rA | tee live.log
         shell: bash
+      - name: Run every example against the live API
+        shell: bash
+        run: |
+          for example in examples/*.py; do
+            echo "=== $example" | tee -a live.log
+            uv run --with pandas python "$example" 2>&1 | tee -a live.log
+          done
       - name: Open an issue if the platform changed
         if: failure()
         env:

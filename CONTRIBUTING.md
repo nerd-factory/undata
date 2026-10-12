@@ -56,7 +56,21 @@ src/undata/_endpoints.py   one thin wrapper per API route, no interpretation
 src/undata/dcid.py         the identifier grammar
 src/undata/errors.py       every exception, each with a message that helps
 tests/                     offline tests; tests/live/ calls the real API
+examples/                  runnable use cases, run nightly against the live API
+site/                      the use-cases page, built from examples/
 ```
+
+## The use-cases page
+
+`site/public/index.html` is generated from `site/template.html` and the scripts in
+`examples/`, and committed. After changing either, rebuild it (this runs every example
+against the live API):
+
+```bash
+uv run --with pandas python site/build.py
+```
+
+Pushing the result to `main` deploys it to https://nerd-factory.github.io/undata/.
 
 ## Releasing (maintainers)
 

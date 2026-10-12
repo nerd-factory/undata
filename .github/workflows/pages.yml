@@ -1,0 +1,42 @@
+name: Pages
+
+# Publishes site/public/ as https://nerd-factory.github.io/undata/. The page is
+# built locally with `uv run --with pandas python site/build.py`, which reruns the
+# examples against the live API, and the result is committed; this only deploys it.
+
+on:
+  push:
+    branches: [main]
+    paths: ["site/public/**", ".github/workflows/pages.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Check the page was built
+        run: |
+          test -f site/public/index.html
+          if grep -q '<!--\(example\|output\|name\|generated\)' site/public/index.html; then
+            echo "site/public/index.html still has template placeholders; run site/build.py" >&2
+            exit 1
+          fi
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: site/public
+      - id: deployment
+        uses: actions/deploy-pages@v5
