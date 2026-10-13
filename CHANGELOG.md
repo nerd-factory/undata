@@ -6,6 +6,11 @@ All notable changes are recorded here. The format follows
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-13
+
+Everything a UN colleague was doing by hand in the 0.1 use cases, built in, on the UN's
+own country list.
+
 ### Added
 
 - undata's own country list: the UN M49 standard, shipped as `m49.csv` and refreshed by
@@ -110,5 +115,6 @@ First release.
 - Spaces in query strings are sent as `%20`. httpx sends `+`, which this server reads
   literally, so `resolve("Viet Nam")` reached it as `Viet+Nam`.
 
-[Unreleased]: https://github.com/nerd-factory/undata/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/nerd-factory/undata/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/nerd-factory/undata/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/nerd-factory/undata/releases/tag/v0.1.0
