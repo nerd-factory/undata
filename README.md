@@ -3,7 +3,7 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/nerd-factory/nerd-lab/main/assets/logo/nerd-lab-offwhite.svg">
   <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/nerd-factory/nerd-lab/main/assets/logo/nerd-lab-ink.svg">
-  <img alt="NERD LAB" src="https://raw.githubusercontent.com/nerd-factory/nerd-lab/main/assets/logo/nerd-lab-offwhite.svg" width="300">
+  <img alt="NERD LAB" src="https://raw.githubusercontent.com/nerd-factory/nerd-lab/main/assets/logo/nerd-lab-ink.svg" width="300">
 </picture>
 
 # undata
@@ -12,6 +12,7 @@
 
 [![CI](https://github.com/nerd-factory/undata/actions/workflows/ci.yml/badge.svg)](https://github.com/nerd-factory/undata/actions/workflows/ci.yml)
 [![Live API contract](https://github.com/nerd-factory/undata/actions/workflows/live.yml/badge.svg)](https://github.com/nerd-factory/undata/actions/workflows/live.yml)
+[![PyPI](https://img.shields.io/pypi/v/undata)](https://pypi.org/project/undata/)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://github.com/nerd-factory/undata/blob/main/pyproject.toml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://github.com/nerd-factory/undata/blob/main/LICENSE)
 

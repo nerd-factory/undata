@@ -156,11 +156,10 @@ pre .c { color: var(--muted); }
     entities. It is written for colleagues who need numbers for a report, not a course in APIs.</p>
 
     <div class="install">
-      <pre><code>pip install "git+https://github.com/nerd-factory/undata"</code></pre>
+      <pre><code>pip install undata</code></pre>
     </div>
 
-    <p class="status"><strong>Alpha.</strong> It works today; install it from GitHub as above until
-    it reaches PyPI. Every output on this page is real: each example below is a script in
+    <p class="status"><strong>Alpha</strong>, <a href="https://pypi.org/project/undata/">on PyPI</a>: the API may still change before 1.0. Every output on this page is real: each example below is a script in
     <a href="https://github.com/nerd-factory/undata/tree/main/examples">examples/</a>, run against the
     live platform on <!--generated-->, and the same scripts run again every night.</p>
   </div>
@@ -179,7 +178,7 @@ table = un.get("undata/sdg/SH_STA_MORT.SEX--F", ["Bangladesh", "Viet Nam"])
 un.save(table, "maternal-mortality.xlsx")</code></pre></div>
     <p class="muted">Don't know the indicator's id? <code>un.search("maternal mortality")</code> lists
     matching indicators with their names; copy the id from the first column. In Colab, install with
-    <code>!pip install "git+https://github.com/nerd-factory/undata"</code>.</p>
+    <code>!pip install undata</code>.</p>
   </div>
 </section>
 
@@ -345,12 +344,12 @@ un.save(table, "maternal-mortality.xlsx")</code></pre></div>
       <div>
         <h3>On your computer</h3>
         <p>Needs Python 3.11 or newer. Comes with pandas and Excel support.</p>
-        <pre><code>pip install "git+https://github.com/nerd-factory/undata"</code></pre>
+        <pre><code>pip install undata</code></pre>
       </div>
       <div>
         <h3>In Google Colab</h3>
         <p>Nothing to install on your machine. Run this in the first cell.</p>
-        <pre><code>!pip install "git+https://github.com/nerd-factory/undata"</code></pre>
+        <pre><code>!pip install undata</code></pre>
       </div>
       <div>
         <h3>Run these examples</h3>
