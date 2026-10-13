@@ -117,6 +117,12 @@ def parse_dcid(dcid: str) -> ParsedDcid | None:
     more segments, such as ``Count_Person`` or ``country/BGD``, so callers can treat
     unfamiliar identifiers as opaque on a graph that is still growing.
 
+    Args:
+        dcid: A variable identifier, such as ``"undata/sdg/SH_STA_MORT.SEX--F"``.
+
+    Returns:
+        Its namespace, agency, code and dimensions, or ``None``.
+
     Example:
         >>> parsed = parse_dcid("undata/sdg/VC_DTH_TOTN.AGE--Y0T17__SEX--F")
         >>> parsed.code, [str(d) for d in parsed.dimensions]
@@ -155,6 +161,13 @@ def build_dcid(base: str, dimensions: Mapping[str, str] | None = None) -> str:
     Dimensions are sorted by name, as they are in the graph's own identifiers, so
     the same slice always produces the same identifier whatever order you pass them in.
 
+    Args:
+        base: The series without dimensions, such as ``"undata/sdg/VC_DTH_TOTN"``.
+        dimensions: Dimension codes and values, such as ``{"SEX": "F"}``.
+
+    Returns:
+        The identifier of that slice.
+
     Example:
         >>> build_dcid("undata/sdg/VC_DTH_TOTN", {"SEX": "F", "AGE": "Y0T17"})
         'undata/sdg/VC_DTH_TOTN.AGE--Y0T17__SEX--F'
@@ -169,6 +182,12 @@ def build_dcid(base: str, dimensions: Mapping[str, str] | None = None) -> str:
 
 def describe_dcid(dcid: str) -> str:
     """Return a short human-readable gloss of a dcid.
+
+    Args:
+        dcid: Any identifier; ones undata cannot parse come back unchanged.
+
+    Returns:
+        The agency, code and slice in words.
 
     Example:
         >>> describe_dcid("undata/sdg/SH_STA_MORT.SEX--F")
@@ -188,6 +207,12 @@ def child_countries_of(place: str) -> str:
 
     ``<-containedInPlace+`` walks containment inward and recursively, so one request
     covers a whole continent; ``{typeOf:Country}`` keeps other place types out.
+
+    Args:
+        place: A platform place identifier, such as ``"africa"`` or ``"SouthernAsia"``.
+
+    Returns:
+        The expression to pass where the API takes a place relation.
 
     Example:
         >>> child_countries_of("africa")

@@ -6,6 +6,20 @@ All notable changes are recorded here. The format follows
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-10-13
+
+Documentation only; no change to behaviour.
+
+### Fixed
+
+- The terms-of-use link on PyPI, the README and the page pointed at a page that no
+  longer exists; it now points at UNdata's Terms and Conditions of Use.
+- The connector's evaluation set (`evals/undata_mcp_evaluation.xml`) was not valid XML
+  (a double hyphen inside a comment), so evaluation harnesses rejected it. A test now
+  keeps it valid. Claude, given only the connector, answers all ten questions correctly.
+- Every public function documents its arguments; `palette()` and the dcid helpers did not.
+- The PyPI summary and keywords mention the analyses, charts and MCP connector.
+
 ## [0.4.0] - 2026-10-13
 
 undata as an MCP connector, so AI assistants such as Claude can use it directly.
@@ -183,7 +197,8 @@ First release.
 - Spaces in query strings are sent as `%20`. httpx sends `+`, which this server reads
   literally, so `resolve("Viet Nam")` reached it as `Viet+Nam`.
 
-[Unreleased]: https://github.com/nerd-factory/undata/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/nerd-factory/undata/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/nerd-factory/undata/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/nerd-factory/undata/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/nerd-factory/undata/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/nerd-factory/undata/compare/v0.1.0...v0.2.0

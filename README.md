@@ -260,5 +260,5 @@ too basic.
 ## Licence
 
 Code: [MIT](https://github.com/nerd-factory/undata/blob/main/LICENSE). Data fetched with it is governed by the
-[UN Data Commons terms of use](https://data.un.org/undatacommons/terms-of-use) and by each
+[UNdata terms and conditions of use](https://data.un.org/Host.aspx?Content=UNdataUse) and by each
 contributing agency's own terms.

@@ -7,7 +7,8 @@
   numeric answer can move after a data release; re-verify when one fails.
 
   Run with the mcp-builder evaluation harness, pointing it at the stdio command
-  `uvx --from "undata[mcp]" undata-mcp`.
+  undata-mcp (installed with the mcp extra). Comments here avoid double hyphens,
+  which XML forbids inside comments.
 -->
 <evaluation>
   <qa_pair>

@@ -63,6 +63,14 @@ _TEXT: Final[Mapping[str, float]] = {"report": 9.0, "slides": 13.0}
 def palette(name: Literal["categorical", "sequential", "status"] = "categorical") -> list[str]:
     """One of undata's checked palettes, as hex colours.
 
+    Args:
+        name: ``"categorical"`` for categories (in a fixed order), ``"sequential"`` for
+            magnitudes, light to dark, or ``"status"`` for the progress categories,
+            best first.
+
+    Returns:
+        Hex colour strings.
+
     Example:
         >>> import undata as un
         >>> un.palette("sequential")

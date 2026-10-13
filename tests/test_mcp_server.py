@@ -222,3 +222,14 @@ def test_main_configures_the_cache_and_serves_stdio(monkeypatch: pytest.MonkeyPa
     assert served[1][0] == ("streamable-http",)
     assert served[1][1]["port"] == 9000
     assert configured == [{"cache": True}, {"cache": False}]
+
+
+def test_the_evaluation_set_is_valid_xml_with_ten_questions() -> None:
+    import xml.etree.ElementTree as ET
+    from pathlib import Path
+
+    path = Path(__file__).resolve().parents[1] / "evals" / "undata_mcp_evaluation.xml"
+    pairs = ET.parse(path).getroot().findall("qa_pair")  # noqa: S314 — our own file
+
+    assert len(pairs) == 10
+    assert all(p.findtext("question") and p.findtext("answer") for p in pairs)

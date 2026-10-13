@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "undata"
 dynamic = ["version"]
-description = "UN data in Python, without the guessing: a friendly, unofficial client for the UN System Data Commons (data.un.org)."
+description = "UN data in Python, without the guessing: an unofficial client for the UN System Data Commons (data.un.org), with SDG progress analysis, publication-ready charts and an MCP connector for AI assistants."
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
@@ -24,6 +24,9 @@ keywords = [
   "open-data",
   "pandas",
   "api-client",
+  "mcp",
+  "model-context-protocol",
+  "data-visualization",
 ]
 classifiers = [
   "Development Status :: 3 - Alpha",
@@ -38,6 +41,7 @@ classifiers = [
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
   "Topic :: Scientific/Engineering :: Information Analysis",
+  "Topic :: Scientific/Engineering :: Visualization",
   "Typing :: Typed",
 ]
 
