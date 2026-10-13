@@ -44,10 +44,12 @@ classifiers = [
 [project.optional-dependencies]
 charts = ["matplotlib>=3.9", "seaborn>=0.13"]
 interactive = ["plotly>=5.20"]
-all = ["matplotlib>=3.9", "seaborn>=0.13", "plotly>=5.20"]
+mcp = ["mcp>=2.3", "matplotlib>=3.9"]
+all = ["matplotlib>=3.9", "seaborn>=0.13", "plotly>=5.20", "mcp>=2.3"]
 
 [project.scripts]
 undata = "undata.cli:main"
+undata-mcp = "undata.mcp_server:main"
 
 [project.urls]
 Homepage = "https://nerd-factory.github.io/undata/"
@@ -70,6 +72,7 @@ dev = [
   "matplotlib>=3.9",
   "seaborn>=0.13",
   "plotly>=5.20",
+  "mcp>=2.3",
 ]
 
 [tool.hatch.version]
@@ -141,10 +144,12 @@ convention = "google"
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["D", "S101", "PLR2004", "PLC0415"]
+"tests/**/test_mcp_*.py" = ["E501", "D103", "S101", "PLR2004"]  # one tool call per table row
 "examples/**" = ["D103", "S101", "PLR2004"]
 "site/**" = ["E501", "PLR2004"]  # SVG string templates and chart geometry
 "src/undata/export.py" = ["E501"]  # the generated Power Query (M) lines are kept whole
 "src/undata/chart.py" = ["E501", "PLR0911", "PLR0913"]  # drawing calls read better on one line
+"src/undata/mcp_server.py" = ["E501", "PLR0913", "PLR0917"]  # tool signatures and descriptions read better whole
 "src/undata/_interactive.py" = ["E501", "C901", "PLR0911", "PLR0912", "PLR0915"]  # one branch per chart kind
 
 [tool.mypy]

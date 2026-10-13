@@ -141,7 +141,46 @@ sizes it for a presentation, `interactive=True` returns a Plotly chart with hove
 seaborn charts the same look. Tile maps avoid drawing borders, so they take no position
 on disputed boundaries.
 
-## Taking it to an AI assistant
+## In Claude, as a connector
+
+undata is also an [MCP](https://modelcontextprotocol.io) connector, so an AI assistant
+such as Claude can search UN indicators, fetch data and run the analyses itself, with the
+sources, years and gaps in every answer. Ask it "Which least developed countries are on
+track to bring maternal mortality below 70 by 2030? Show me a chart." and it calls the
+same functions you would.
+
+It needs [uv](https://docs.astral.sh/uv/getting-started/installation/), which fetches
+Python and the package on first use. In **Claude Desktop**, open *Settings → Developer →
+Edit Config* and add:
+
+```json
+{
+  "mcpServers": {
+    "undata": {
+      "command": "uvx",
+      "args": ["--from", "undata[mcp]", "undata-mcp"]
+    }
+  }
+}
+```
+
+In **Claude Code**: `claude mcp add undata -- uvx --from "undata[mcp]" undata-mcp`. Any
+other MCP client can run `undata-mcp` (after `pip install "undata[mcp]"`) over stdio, or
+`undata-mcp --http` for Streamable HTTP on `http://127.0.0.1:8000/mcp`.
+
+| Tool | What the assistant can do |
+|---|---|
+| `undata_search_indicators` · `undata_describe_indicator` · `undata_browse_sdg` | Find an indicator by words or by SDG goal, target and number; read its unit, source, years and breakdowns. |
+| `undata_list_places` | List countries in an M49 region or UN group, or the regions and groups themselves. |
+| `undata_get_data` · `undata_latest_values` · `undata_group_totals` | Values by year (paged), each country's latest, and the official totals for regions, groups and the world. |
+| `undata_change_over_time` · `undata_compare_indicators` · `undata_check_availability` | Change between two years, indicators side by side, and who reports what and how recently. |
+| `undata_assess_progress` · `undata_country_profile` · `undata_group_gap` · `undata_benchmark_groups` | The analyses: on track for 2030 by the UN Statistics Division's method, a country beside its region and the world, the gap between two groups, UN groups side by side. |
+
+Every tool only reads, needs no account or key, and answers with a table, a summary
+sentence, the data-quality notes and the sources. The analysis tools can also return their
+chart as an image.
+
+## Taking it to an AI assistant without a connector
 
 ```python
 table = un.latest("3.1.1", "LDCs", within=10)

@@ -1,0 +1,53 @@
+<!--
+  Questions an assistant should answer using only the undata-mcp tools.
+
+  Each needs several calls: finding the indicator (often from an SDG number that several
+  series report), resolving places and groups, then fetching or analysing. Answers were
+  verified through the connector on 2026-10-13. Agencies revise their series, so a
+  numeric answer can move after a data release; re-verify when one fails.
+
+  Run with the mcp-builder evaluation harness, pointing it at the stdio command
+  `uvx --from "undata[mcp]" undata-mcp`.
+-->
+<evaluation>
+  <qa_pair>
+    <question>Using the SDG Global Database series for SDG indicator 3.1.1, by how many maternal deaths per 100,000 live births did the published maternal mortality ratio for the least developed countries, as a group, fall between 2015 and 2023? Round to the nearest whole number.</question>
+    <answer>126</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>Of the three UN country groups LDCs, LLDCs and SIDS, which group's published maternal mortality ratio (SDG 3.1.1) fell the most in percentage terms between 2015 and 2023? Answer with the group's abbreviation.</question>
+    <answer>LLDCs</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>Among the countries of Middle Africa, which one has the lowest ratio of rural to urban primary school completion rate (SDG 4.1.2, primary education), comparing the two in the latest year that has both?</question>
+    <answer>Central African Republic</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>How many distinct data series on the UN System Data Commons report SDG indicator 3.2.1?</question>
+    <answer>4</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>How many targets does Sustainable Development Goal 5 have?</question>
+    <answer>9</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>Which country in the UN M49 sub-region Middle Africa has the lowest proportion of its population with access to electricity, in its latest reported year?</question>
+    <answer>Chad</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>In 2015, the Southern Asian country with the highest maternal mortality ratio in the SDG Global Database recorded what ratio, per 100,000 live births? Round to the nearest whole number.</question>
+    <answer>741</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>According to the UN's current list, how many landlocked developing countries (LLDCs) are in Africa?</question>
+    <answer>16</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>Between 2015 and 2020, which of Bangladesh, Bhutan and Nepal had the largest percentage fall in its maternal mortality ratio, according to the SDG Global Database?</question>
+    <answer>Nepal</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>The primary school completion rate (SDG 4.1.2) can be broken down by household wealth. Into how many wealth groups?</question>
+    <answer>5</answer>
+  </qa_pair>
+</evaluation>

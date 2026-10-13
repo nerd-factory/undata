@@ -6,6 +6,25 @@ All notable changes are recorded here. The format follows
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-10-13
+
+undata as an MCP connector, so AI assistants such as Claude can use it directly.
+
+### Added
+
+- `undata-mcp`, a Model Context Protocol server (`pip install "undata[mcp]"`), over stdio
+  for Claude Desktop, Claude Code and other local clients, or Streamable HTTP with
+  `--http`. Fourteen read-only tools cover finding indicators (by words or through the SDG
+  framework), places, data by year with paging, latest values, official group totals,
+  change, comparisons, availability, and the analyses: progress by the UN Statistics
+  Division's method, country profiles, gaps between groups and group benchmarks.
+- Answers carry what a careful analyst would say: the table, the `describe()` sentence,
+  undata's data-quality warnings as notes, and the sources. `response_format="json"`
+  returns exact values. The analysis tools can attach their chart as a PNG.
+- Errors name the tool that helps (for an unknown place, `undata_list_places`; for an SDG
+  number several series report, `undata_browse_sdg`).
+- The server keeps responses in undata's disk cache (`--no-cache` to turn it off).
+
 ## [0.3.0] - 2026-10-13
 
 The analyses UN reports run most often, one function each, and charts ready for a
@@ -164,7 +183,8 @@ First release.
 - Spaces in query strings are sent as `%20`. httpx sends `+`, which this server reads
   literally, so `resolve("Viet Nam")` reached it as `Viet+Nam`.
 
-[Unreleased]: https://github.com/nerd-factory/undata/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/nerd-factory/undata/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/nerd-factory/undata/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/nerd-factory/undata/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/nerd-factory/undata/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/nerd-factory/undata/releases/tag/v0.1.0

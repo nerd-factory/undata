@@ -197,6 +197,7 @@ figure.block img { display: block; width: 100%; height: auto; background: #fff; 
       <a href="#use-cases">use cases</a>
       <a href="#start" class="opt">start</a>
       <a href="#functions" class="opt">functions</a>
+      <a href="#claude" class="opt">claude</a>
       <a href="https://pypi.org/project/undata/" class="opt">pypi</a>
       <a href="https://github.com/nerd-factory/undata">github</a>
     </nav>
@@ -891,9 +892,51 @@ un.save(table, "maternal-mortality.xlsx")</code></pre></div>
   </div>
 </section>
 
+<section class="sec" id="claude">
+  <div class="wrap">
+    <p class="anno">// 05 — in Claude</p>
+    <h2>Ask Claude, and it uses undata</h2>
+    <p>undata is also an <a href="https://modelcontextprotocol.io">MCP</a> connector. Add it to
+    Claude Desktop or Claude Code and ask in plain words: <em>"Which least developed countries are
+    on track to bring maternal mortality below 70 by 2030? Show me a chart."</em> Claude finds the
+    indicator, runs the UN Statistics Division's progress method and answers with the table, the
+    chart, the caveats and the sources, all from the same tested functions on this page.</p>
+    <div class="cols">
+      <div>
+        <h3>Claude Desktop</h3>
+        <p>Install <a href="https://docs.astral.sh/uv/getting-started/installation/">uv</a>, then in
+        <em>Settings → Developer → Edit Config</em> add:</p>
+        <pre><code>{
+  "mcpServers": {
+    "undata": {
+      "command": "uvx",
+      "args": ["--from", "undata[mcp]",
+               "undata-mcp"]
+    }
+  }
+}</code></pre>
+      </div>
+      <div>
+        <h3>Claude Code</h3>
+        <p>One command:</p>
+        <pre><code>claude mcp add undata -- \
+  uvx --from "undata[mcp]" undata-mcp</code></pre>
+        <p class="muted">Other MCP clients: <code>pip install "undata[mcp]"</code>, then run
+        <code>undata-mcp</code> (stdio) or <code>undata-mcp --http</code>.</p>
+      </div>
+      <div>
+        <h3>What Claude can do</h3>
+        <p>Fourteen read-only tools: find indicators by words or SDG number, list countries and
+        groups, fetch data, and run progress, profile, gap and benchmark analyses, with charts.
+        No account, no key.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="sec" id="install">
   <div class="wrap">
-    <p class="anno">// 05 — install</p>
+    <p class="anno">// 06 — install</p>
     <h2>Getting it</h2>
     <div class="cols">
       <div>

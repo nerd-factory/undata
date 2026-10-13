@@ -256,8 +256,15 @@ Division's published progress method), `profile`, `gap`, `trend`, `benchmark` an
 of production charts (static and interactive) with one shared style and checked
 palettes, and `style()` extends that look to users' own matplotlib and seaborn charts.
 Maps are tile maps only: equal squares, no borders, so no position on disputed
-boundaries. Next: a YouTube series built on the use cases, and a decision on an MCP
-connector or `un.analyse()` for AI assistants.
+boundaries.
+
+## 10c. Shipped in 0.4 (2026-10-13)
+
+Mafi chose an MCP connector over `un.analyse()`. `undata-mcp` exposes the friendly
+functions as fourteen read-only tools, over stdio and Streamable HTTP, answering with
+tables, sentences, notes, sources and charts. Open: hosting a public HTTPS endpoint so
+the connector can be added on claude.ai without installing anything, listing it in the
+MCP registry, and a one-click Claude Desktop bundle. Then the YouTube series.
 
 ## 11. Requirements for 1.0
 

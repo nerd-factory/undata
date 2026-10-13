@@ -70,6 +70,7 @@ src/undata/_interactive.py chart(interactive=True), with Plotly
 src/undata/style.py        style() and the checked palettes
 src/undata/tiles.csv       the tile-map grid; rebuild with scripts/build_tile_grid.py
 src/undata/cli.py          the undata command
+src/undata/mcp_server.py   the undata-mcp connector: one read-only MCP tool per function
 src/undata/_http.py        the only module that touches the network
 src/undata/_endpoints.py   one thin wrapper per API route, no interpretation
 src/undata/dcid.py         the identifier grammar
