@@ -1,6 +1,6 @@
 """Transport: the only module that talks to the network.
 
-It exists to make three of the platform's behaviours impossible to trip over:
+It exists to make the platform's request traps impossible to trip over:
 
 * A line break anywhere in a POST body is answered with 403, so bodies are always
   serialised compactly here rather than left to the caller.
@@ -9,6 +9,9 @@ It exists to make three of the platform's behaviours impossible to trip over:
 * Relation expressions (``->``, ``<-``, ``+``, ``{typeOf:Country}``) must be
   percent-encoded or the API answers 400. Query strings are built here with every
   reserved character percent-encoded, ``+`` included.
+* Any GET whose query string contains the word ``ESH`` (Western Sahara's country
+  code) is answered with 403: the firewall mistakes it for the ``esh`` shell. The
+  friendly functions therefore fetch data by POST (see ``data._collect``).
 * The server does not decode ``+`` as a space in a query string: ``nodes=Viet+Nam``
   reaches it as ``Viet+Nam``. Spaces are therefore sent as ``%20``, never ``+``,
   which is what httpx would do by default.
@@ -42,9 +45,11 @@ QueryValue = str | Sequence[str]
 
 _BLOCKED_MESSAGE: Final = (
     "The data.un.org firewall refused this request. No API key exists or is needed, "
-    "so this is not an authentication problem. The firewall is known to block POST "
-    'bodies that contain a line break or a "select" key; undata avoids both, so the '
-    "rules may have changed. Please report it at "
+    "so this is not an authentication problem. The firewall is known to refuse a POST "
+    'body containing a line break or a "select" key, and any GET request whose query '
+    "contains the word ESH (Western Sahara's country code), which it mistakes for a "
+    "shell command. undata's own functions avoid all three; if one of them raised this, "
+    "the rules have changed. Please report it at "
     "https://github.com/nerd-factory/undata/issues with the URL above."
 )
 

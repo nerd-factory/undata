@@ -39,6 +39,12 @@ nightly.
 
 ## 3. Public API
 
+> **Update, 2026-10-13.** The friendly API below shipped with a flatter, simpler shape
+> than first sketched, because the main audience is UN colleagues with little data
+> experience: `un.get(indicator, countries, years)`, `un.latest`, `un.search`,
+> `un.about`, `un.countries`, `un.regions`, `un.sdg.*`, `un.ask`, `un.save`, `un.cite`.
+> See the README for the current list. The sketch is kept for the parts not built yet.
+
 ```python
 import undata as un
 
@@ -225,8 +231,8 @@ Estimates assume part-time work, about 15 hours a week.
 |---|---|---|
 | 0. Decisions | 0 | Repo, name, licence ✅. Still to do: register the trusted publishers on pypi.org and test.pypi.org. |
 | 1. Foundation | 1–2 | Tooling, CI, transport, endpoints, dcid, live contract ✅. Recorded response cassettes still to do. |
-| 2. Data core | 2–4 | `Client`; strict `place`; `data.fetch` with pandas and polars output; missing-data handling; `latest`; warnings → **0.1.0** |
-| 3. Discovery | 4–6 | `search`, `variable.info` and `disaggregations`, `sdg`, `source`, `graph`, `ask` → **0.2.0** |
+| 2. Data core | 2–4 | ✅ Shipped as the friendly API: `un.get`, `un.latest`, strict places with UN names, missing-data and mixed-year warnings, `save`, `cite`. Next: tag **0.1.0** and publish to PyPI. |
+| 3. Discovery | 4–6 | ✅ `search`, `about`, `sdg`, `ask` shipped. Still to do: `disaggregations`, polars output, async client, on-disk cache, command-line tool → **0.2.0** |
 | 4. Experience | 6–8 | Notebook and terminal display, `cite`, the command-line tool, async, cache → **0.3.0**, then conda-forge |
 | 5. Docs and hardening | 8–10 | Docs site, notebook gallery, `llms.txt`, performance → **0.4.0 beta** |
 | 6. Stability | 10–14 | API changes from feedback; pyOpenSci review → **1.0.0** |
@@ -252,3 +258,5 @@ Estimates assume part-time work, about 15 hours a week.
 | Status | Unofficial | Said in the README and on PyPI. Revisit if UNSD wants to endorse it. |
 | Licence | MIT | Matches the rest of Nerd Lab |
 | Models | dataclasses | Keeps the install light; no pydantic |
+| Audience | UN colleagues with little data experience first | Decided 2026-10-13. Flat namespace (`un.get`), names not ids for places, tables not JSON, plain-English warnings. |
+| pandas, openpyxl | Required, not extras | Every result is a table and Excel is the common destination; an extra install step is a barrier for the main audience. |

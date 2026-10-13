@@ -34,6 +34,7 @@ def test_observation_uses_get_because_a_select_body_is_blocked(transport: Transp
         ("select", "value"),
         ("select", "variable"),
         ("select", "entity"),
+        ("select", "facet"),
     ]
 
 

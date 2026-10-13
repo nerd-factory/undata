@@ -8,88 +8,97 @@
 
 # undata
 
-**A Python client for the UN System Data Commons that refuses to guess.**
+**UN data in Python, without the guessing.**
 
 [![CI](https://github.com/nerd-factory/undata/actions/workflows/ci.yml/badge.svg)](https://github.com/nerd-factory/undata/actions/workflows/ci.yml)
 [![Live API contract](https://github.com/nerd-factory/undata/actions/workflows/live.yml/badge.svg)](https://github.com/nerd-factory/undata/actions/workflows/live.yml)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](pyproject.toml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
+**[Ten examples, with real output →](https://nerd-factory.github.io/undata/)**
+
 </div>
 
-**[Use cases, with real output →](https://nerd-factory.github.io/undata/)**
+Type a country's name, get a table. undata is a Python package for the
+[UN System Data Commons](https://data.un.org), which holds statistics from 26 UN System
+entities. It is written for colleagues who need numbers for a report, not a course in APIs.
 
-> **Status: pre-alpha.** The foundation is built and tested; the friendly public API is
-> not yet. Nothing is on PyPI. Read [PLAN.md](PLAN.md) for where this is going.
->
-> **Unofficial.** A [Nerd Lab](https://github.com/nerd-factory) experiment. Not affiliated
-> with or endorsed by the United Nations. The data belongs to the agencies that publish it.
+> **Alpha.** It works today; install it from GitHub until it reaches PyPI.
+> **Unofficial.** A [Nerd Lab](https://github.com/nerd-factory) experiment, not affiliated with
+> or endorsed by the United Nations. The data belongs to the agencies that publish it.
 
-## Why this exists
-
-[data.un.org](https://data.un.org) unifies public statistics from 26 UN System entities
-into one Data Commons knowledge graph. It is open — no key, no licence negotiation — and it
-has three habits that make naive client code wrong in ways nobody notices:
-
-1. **The official `datacommons-client` cannot fetch data from it.** The deployment's
-   firewall answers `403 Forbidden` to any POST body containing a `"select"` key, and the
-   observation endpoint needs one. That client always POSTs. undata uses GET.
-2. **The search resolver always commits to a place.** Ask about child mortality in
-   *Bengal* and you get a chart of the United States, titled as if nothing happened.
-   undata will raise rather than substitute.
-3. **Missing data is silently absent.** A country with no observations is simply not in
-   the response, which is how a gap ends up charted as a zero. undata reports it.
-
-There are eight more, documented in the
-[UN Data Commons Field Guide](https://mafiatun.github.io/un-data-commons-field-guide/cookbook),
-which is where this package's knowledge of the platform comes from.
-
-## What works today
+## Three lines to a spreadsheet
 
 ```bash
 pip install "git+https://github.com/nerd-factory/undata"
 ```
 
 ```python
-import undata
-from undata import _endpoints as api  # low-level, will be wrapped by the public API
-
-with undata.Transport() as t:
-    body = api.observation(t, "Count_Person", entities=["country/BGD", "country/NPL"])
-
-undata.parse_dcid("undata/sdg/VC_DTH_TOTN.AGE--Y0T17__SEX--F")
-# ParsedDcid(namespace='undata', agency='sdg', code='VC_DTH_TOTN',
-#            dimensions=(Dimension(name='AGE', value='Y0T17'), Dimension(name='SEX', value='F')))
-```
-
-- **Transport** — compact JSON bodies, GET for observations, percent-encoded relation
-  expressions, retries with back-off on 429/5xx, and errors that explain themselves
-  (a 403 tells you it is not an API key problem, because there are no API keys).
-- **One wrapper per route** — observations, graph walks (with automatic paging past the
-  500-value cap), resolve, series, variable search, variable info, place names, the
-  variable-group tree, and the natural-language resolver.
-- **The dcid grammar** — parse, build and describe variable identifiers.
-
-Ten runnable scripts in [examples/](examples/) show what it can do today. They run against
-the live API every night, and the [use-cases page](https://nerd-factory.github.io/undata/)
-is built from them.
-
-## What it will look like
-
-```python
 import undata as un
 
-un.place.get("Bengal")  # raises PlaceNotFound with suggestions; never the USA
-un.sdg.target("16.1").indicators()  # from a target your mandate names to fetchable variables
-obs = un.data.fetch(variables, places=["BGD", "NPL"], time=range(2010, 2025))
-obs.to_pandas()  # tidy, with provenance on every row
-obs.missing  # the gaps, listed rather than hidden
-obs.cite("apa")
+table = un.get("undata/sdg/SH_STA_MORT.SEX--F", ["Bangladesh", "Viet Nam"])
+un.save(table, "maternal-mortality.xlsx")  # data on one sheet, citations on the next
 ```
 
-The full design, the rules it enforces and the road to 1.0 are in [PLAN.md](PLAN.md).
+Don't know the indicator's id? `un.search("maternal mortality")` lists matching indicators
+with their names. Copy the id from the first column.
 
-## Developing
+## Everything on one screen
+
+| Function | What it does |
+|---|---|
+| `un.search("words")` | Find indicators by what they measure. UN collections only, best match first. |
+| `un.about(indicator)` | What an indicator is, whose it is, its unit, and which years it covers. |
+| `un.get(indicator, countries, years)` | The numbers: one row per country and year, with unit and source. |
+| `un.latest(indicator, countries)` | Each country's most recent value, with a warning if those years differ. |
+| `un.countries(region)` · `un.regions()` | The names it knows, with UN names and ISO codes. |
+| `un.sdg.goals()` · `targets(16)` · `indicators("16.1")` · `series("16.1.2")` | Walk from an SDG goal down to indicators you can fetch. |
+| `un.ask("a question")` | See what data.un.org's search box decided, including whether it guessed the place. |
+| `un.save(table, "file.xlsx")` · `un.cite(table)` | Save to Excel or CSV with sources; write citations for a report. |
+
+Wherever a function asks for countries you can write names the way you would in an email
+(`"Viet Nam"`, `"Vietnam"`, `"VNM"`), a list of them, or a region such as `"Southern Asia"`
+or `"Africa"`. Every function explains itself: `help(un.get)`.
+
+Every table has the same columns:
+
+```
+country  iso3  year  value  unit  indicator_name  indicator  source  source_url
+```
+
+## The careful parts are built in
+
+- **It never guesses a place.** data.un.org's search box answers a question about "Bengal"
+  with figures for the United States. undata stops and says it does not know "Bengal".
+- **Gaps are named, never zero.** Countries without data are left out of the table and listed
+  in a `MissingDataWarning`, so a chart cannot show them as zeros.
+- **UN names in, UN names out.** Tables say Türkiye, Viet Nam and Côte d'Ivoire, whatever
+  spelling you typed.
+- **The source is on every row.** The same statistic can come from several agencies with
+  different numbers.
+- **Mixed years are flagged.** "Latest" means each country's own latest year; a
+  `MixedYearsWarning` says when those differ.
+- **It works where other clients fail.** The platform's firewall blocks Google's official
+  `datacommons-client` (any POST body containing `"select"`) and any GET request that
+  mentions Western Sahara (`ESH`, mistaken for a shell command). undata routes around both.
+
+Each behaviour is pinned by a test in [tests/live/](tests/live/) that runs against the real
+platform every night and opens an issue if the platform changes. Most of them were found
+while writing the [UN Data Commons Field Guide](https://mafiatun.github.io/un-data-commons-field-guide/).
+
+## Examples
+
+Ten runnable scripts in [examples/](examples/): a first table, comparing a region, a whole
+continent, an SDG target to its numbers, gaps, names, the search box, sources, Excel and
+citations, and checking an indicator. They run against the live platform every night, and
+[the examples page](https://nerd-factory.github.io/undata/) shows each with its real output.
+
+## For developers
+
+The friendly functions sit on three layers you can use directly: `undata.Transport` (the
+only code that touches the network), `undata._endpoints` (one thin wrapper per API route),
+and `undata.dcid` (the identifier grammar). [PLAN.md](PLAN.md) covers the design and the
+road to 1.0.
 
 ```bash
 git clone https://github.com/nerd-factory/undata && cd undata

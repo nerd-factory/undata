@@ -1,17 +1,11 @@
-"""From an SDG target to variables you can fetch, by walking the framework."""
+"""From an SDG target your mandate names, to the numbers."""
 
-import undata
-from undata import _endpoints as api
+import undata as un
 
+print(un.sdg.indicators("16.1").to_string(index=False))
 
-def children(t: undata.Transport, node: str) -> list[dict[str, str]]:
-    body = api.node(t, node, "<-specializationOf")
-    return body["data"][node]["arcs"]["specializationOf"]["nodes"]
+series = un.sdg.series("16.1.2")
+print(series[series["total"]][["indicator", "name"]].to_string(index=False))
 
-
-with undata.Transport() as t:
-    for indicator in children(t, "undata/g/sdgf/target-16-1"):
-        print(indicator["name"][:72])
-    print()
-    for group in children(t, "undata/g/sdgf/ind-16-1-2"):
-        print(f"{group['dcid']:<26} {group['name']}")
+rates = un.latest("undata/sdg/VC_DTH_TOTR", ["Ukraine", "Sudan", "Myanmar"])
+print(rates[["country", "year", "value"]].to_string(index=False))

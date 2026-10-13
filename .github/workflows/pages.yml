@@ -1,7 +1,7 @@
 name: Pages
 
 # Publishes site/public/ as https://nerd-factory.github.io/undata/. The page is
-# built locally with `uv run --with pandas python site/build.py`, which reruns the
+# built locally with `uv run python site/build.py`, which reruns the
 # examples against the live API, and the result is committed; this only deploys it.
 
 on:

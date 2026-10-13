@@ -111,3 +111,18 @@ def test_search_ranks_the_base_import_above_the_un_series(live: Transport) -> No
 
     assert hits[0] == "sdg/SH_STA_MORT.SEX--F"
     assert hits.index("undata/sdg/SH_STA_MORT.SEX--F") > 0
+
+
+def test_a_get_mentioning_western_sahara_is_blocked_but_post_is_not() -> None:
+    """Why latest() fetches by POST. ESH is matched as the "esh" shell by the firewall."""
+    get = httpx.get(
+        f"{DEFAULT_BASE_URL}/core/api/v2/node?nodes=country%2FESH&property=-%3Ename", timeout=30
+    )
+    post = httpx.post(
+        f"{DEFAULT_BASE_URL}/api/observations/series",
+        json={"variables": ["Count_Person"], "entities": ["country/ESH"]},
+        timeout=30,
+    )
+
+    assert get.status_code == 403
+    assert post.status_code == 200

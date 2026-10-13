@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>undata · use cases</title>
-<meta name="description" content="undata is a Python client for the UN System Data Commons that refuses to guess. Ten things you can do with it, each with real output from the live API.">
+<title>undata · UN data in Python</title>
+<meta name="description" content="undata is a Python package for the UN System Data Commons: type a country's name, get a table, with sources, UN country names and no guessing. Ten examples with real output.">
 <meta name="theme-color" content="#141419">
 <meta property="og:title" content="undata — UN data in Python, without the guessing">
-<meta property="og:description" content="A Python client for the UN System Data Commons. Ten use cases, each with real output from the live API. A Nerd Lab experiment.">
+<meta property="og:description" content="Type a country's name, get a table. A Python package for the UN System Data Commons, for colleagues who need numbers for a report. A Nerd Lab experiment.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://nerd-factory.github.io/undata/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23141419'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='15' font-weight='700' text-anchor='middle' fill='%23C8F531'%3Eun%3C/text%3E%3C/svg%3E">
@@ -110,6 +110,23 @@ pre .c { color: var(--muted); }
 .foot { padding-block: 2.5rem 3.5rem; font-size: 0.9rem; color: var(--muted); }
 .foot p { margin: 0 0 0.6rem; }
 
+/* cheat sheet */
+.cheat { width: 100%; border-collapse: collapse; margin-top: 1.5rem; font-size: 0.95rem; }
+.cheat th, .cheat td { text-align: left; vertical-align: top; padding: 0.7rem 0.9rem 0.7rem 0; border-top: 1px solid var(--line); }
+.cheat th { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 400; }
+.cheat td:first-child { font-family: var(--mono); font-size: 0.85rem; white-space: nowrap; padding-right: 1.5rem; }
+.cheat td:last-child { color: var(--muted); }
+@media (max-width: 40rem) {
+  .cheat, .cheat tbody { display: block; }
+  .cheat thead { display: none; }
+  .cheat tr { display: block; border-top: 1px solid var(--line); padding: 0.6rem 0; }
+  .cheat td, .cheat td:first-child { display: block; border: 0; padding: 0.15rem 0; white-space: normal; overflow-wrap: anywhere; }
+}
+.does { list-style: none; margin: 1.5rem 0 0; padding: 0; display: grid; gap: 0.75rem 2rem; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); }
+.does li { border-top: 1px solid var(--line); padding-top: 0.75rem; }
+.does strong { display: block; font-weight: 600; margin-bottom: 0.15rem; }
+.does span { color: var(--muted); font-size: 0.95rem; }
+
 @media (forced-colors: active) { .block, .facts li, .cols > div, .copy { border: 1px solid CanvasText; } }
 </style>
 </head>
@@ -120,9 +137,9 @@ pre .c { color: var(--muted); }
   <div class="wrap">
     <a class="brand" href="https://nerd-factory.github.io/nerd-lab/"><span>nerd lab /</span> undata</a>
     <nav aria-label="Page">
-      <a href="#why" class="opt">why</a>
-      <a href="#use-cases">use cases</a>
-      <a href="#install" class="opt">install</a>
+      <a href="#start" class="opt">start</a>
+      <a href="#functions" class="opt">functions</a>
+      <a href="#examples">examples</a>
       <a href="https://github.com/nerd-factory/undata">github</a>
     </nav>
   </div>
@@ -134,193 +151,213 @@ pre .c { color: var(--muted); }
   <div class="wrap">
     <p class="anno">// a nerd lab experiment · unofficial</p>
     <h1>UN data in Python, without the guessing.</h1>
-    <p class="lede">undata is a Python client for the <a href="https://data.un.org">UN System Data Commons</a>:
-    statistics from 26 UN System entities in one knowledge graph, no API key required. It is built
-    around the platform's habits that make ordinary client code quietly wrong.</p>
+    <p class="lede">Type a country's name, get a table. undata is a Python package for the
+    <a href="https://data.un.org">UN System Data Commons</a>, which holds statistics from 26 UN System
+    entities. It is written for colleagues who need numbers for a report, not a course in APIs.</p>
 
     <div class="install">
       <pre><code>pip install "git+https://github.com/nerd-factory/undata"</code></pre>
     </div>
 
-    <p class="status"><strong>Pre-alpha, and honest about it.</strong> Every block marked
-    <em>works today</em> is a script in <a href="https://github.com/nerd-factory/undata/tree/main/examples">examples/</a>,
-    and the output under it is what that script printed against the live API on <!--generated-->.
-    Blocks marked <em>from 0.1</em> show the planned API in the
-    <a href="https://github.com/nerd-factory/undata/blob/main/PLAN.md">plan</a>; they do not run yet.</p>
+    <p class="status"><strong>Alpha.</strong> It works today; install it from GitHub as above until
+    it reaches PyPI. Every output on this page is real: each example below is a script in
+    <a href="https://github.com/nerd-factory/undata/tree/main/examples">examples/</a>, run against the
+    live platform on <!--generated-->, and the same scripts run again every night.</p>
+  </div>
+</section>
+
+<section class="sec" id="start">
+  <div class="wrap">
+    <p class="anno">// 01 — start</p>
+    <h2>Three lines to a spreadsheet</h2>
+    <p>Open a notebook (Jupyter, VS Code or <a href="https://colab.research.google.com">Google Colab</a>),
+    install the package, and run this. You get an Excel file with the numbers on one sheet and
+    a citation for each source on the next.</p>
+    <div class="block"><div class="head"><span class="tag">python</span></div><pre><code>import undata as un
+
+table = un.get("undata/sdg/SH_STA_MORT.SEX--F", ["Bangladesh", "Viet Nam"])
+un.save(table, "maternal-mortality.xlsx")</code></pre></div>
+    <p class="muted">Don't know the indicator's id? <code>un.search("maternal mortality")</code> lists
+    matching indicators with their names; copy the id from the first column. In Colab, install with
+    <code>!pip install "git+https://github.com/nerd-factory/undata"</code>.</p>
+  </div>
+</section>
+
+<section class="sec" id="functions">
+  <div class="wrap">
+    <p class="anno">// 02 — functions</p>
+    <h2>Everything on one screen</h2>
+    <p>Wherever a function asks for countries you can write names the way you would in an email
+    (<code>"Viet Nam"</code>, <code>"Vietnam"</code>, <code>"VNM"</code>), a list of them, or a region
+    such as <code>"Southern Asia"</code> or <code>"Africa"</code>. Every function explains itself:
+    <code>help(un.get)</code>.</p>
+    <table class="cheat">
+      <thead><tr><th scope="col">function</th><th scope="col">what it does</th></tr></thead>
+      <tbody>
+        <tr><td>un.search("words")</td><td>Find indicators by what they measure. UN collections only, best match first.</td></tr>
+        <tr><td>un.about(indicator)</td><td>What an indicator is, whose it is, its unit, and which years it covers.</td></tr>
+        <tr><td>un.get(indicator, countries, years)</td><td>The numbers: one row per country and year, with unit and source.</td></tr>
+        <tr><td>un.latest(indicator, countries)</td><td>Each country's most recent value, and a warning if those years differ.</td></tr>
+        <tr><td>un.countries(region)<br>un.regions()</td><td>The country and region names it knows, with UN names and ISO codes.</td></tr>
+        <tr><td>un.sdg.goals()<br>un.sdg.targets(16)<br>un.sdg.indicators("16.1")<br>un.sdg.series("16.1.2")</td><td>Walk from an SDG goal down to indicators you can fetch.</td></tr>
+        <tr><td>un.ask("a question")</td><td>See what data.un.org's search box decided, including whether it guessed the place.</td></tr>
+        <tr><td>un.save(table, "file.xlsx")<br>un.cite(table)</td><td>Save to Excel or CSV with sources; write citations for a report.</td></tr>
+      </tbody>
+    </table>
   </div>
 </section>
 
 <section class="sec" id="why">
   <div class="wrap">
-    <p class="anno">// 01 — why it exists</p>
-    <h2>Four things the platform will not tell you</h2>
-    <p>Each was found by calling the live API, and each is pinned by a test that runs every night,
-    so the package notices when the platform changes.</p>
-    <ul class="facts">
-      <li><span class="num">403</span><p>Google's official <code>datacommons-client</code> cannot fetch data from data.un.org: the firewall blocks any POST body containing <code>"select"</code>, and that client always POSTs. undata uses GET.</p></li>
-      <li><span class="num">USA</span><p>Ask the search box about child mortality in Bengal and it answers about the United States, under a title that does not say so.</p></li>
-      <li><span class="num">20 / 210</span><p>20 countries report the conflict death rate; 210 report GDP per capita. The other 190 are absent from the response, not zero.</p></li>
-      <li><span class="num">#23</span><p>Search ranks an older copy of the SDG data first. The UN's own maternal mortality series is result 23 of 65, and its latest figure is three years newer.</p></li>
+    <p class="anno">// 03 — what it does for you</p>
+    <h2>The careful parts are built in</h2>
+    <p>Each of these was found by calling the live platform, and each is checked by a test that
+    runs every night.</p>
+    <ul class="does">
+      <li><strong>It never guesses a place.</strong><span>data.un.org's search box answers a question about "Bengal" with figures for the United States. undata stops and says it does not know "Bengal".</span></li>
+      <li><strong>Gaps are named, never zero.</strong><span>Only 20 countries report the conflict death rate. The rest are listed in a warning, not charted as peaceful zeros.</span></li>
+      <li><strong>UN names in, UN names out.</strong><span>Tables say Türkiye, Viet Nam and Côte d'Ivoire, ready for a UN document, whatever spelling you typed.</span></li>
+      <li><strong>The source is on every row.</strong><span>The same statistic can come from three agencies with different numbers. The source column says whose you have.</span></li>
+      <li><strong>Mixed years are flagged.</strong><span>"Latest" means each country's own latest year. When those differ, a warning says so.</span></li>
+      <li><strong>It works where other clients fail.</strong><span>The platform's firewall blocks Google's own client, and any request that mentions Western Sahara. undata routes around both.</span></li>
     </ul>
   </div>
 </section>
 
-<section class="sec" id="use-cases">
+<section class="sec" id="examples">
   <div class="wrap">
-    <p class="anno">// 02 — use cases</p>
+    <p class="anno">// 04 — examples</p>
     <h2>Ten things to do with it</h2>
     <ol class="toc">
-      <li><a href="#compare"><span class="n">01</span>Compare countries on one indicator</a></li>
-      <li><a href="#region"><span class="n">02</span>A whole region in one request</a></li>
-      <li><a href="#missing"><span class="n">03</span>Count who reports before you join</a></li>
-      <li><a href="#sdg"><span class="n">04</span>From an SDG target to data</a></li>
-      <li><a href="#resolver"><span class="n">05</span>Check what the search box decided</a></li>
-      <li><a href="#names"><span class="n">06</span>Turn names into identifiers</a></li>
-      <li><a href="#whose"><span class="n">07</span>Know whose series you are publishing</a></li>
-      <li><a href="#trend"><span class="n">08</span>A full time series for a trend line</a></li>
-      <li><a href="#identifiers"><span class="n">09</span>Read and build identifiers</a></li>
-      <li><a href="#pandas"><span class="n">10</span>A tidy DataFrame with sources</a></li>
+      <li><a href="#first"><span class="n">01</span>Your first table</a></li>
+      <li><a href="#compare"><span class="n">02</span>Compare the countries of a region</a></li>
+      <li><a href="#continent"><span class="n">03</span>A whole continent in one line</a></li>
+      <li><a href="#sdg"><span class="n">04</span>From an SDG target to the numbers</a></li>
+      <li><a href="#gaps"><span class="n">05</span>Gaps are named, never zero</a></li>
+      <li><a href="#names"><span class="n">06</span>Names the way you write them</a></li>
+      <li><a href="#searchbox"><span class="n">07</span>Check what the search box decided</a></li>
+      <li><a href="#source"><span class="n">08</span>Know whose number you are using</a></li>
+      <li><a href="#save"><span class="n">09</span>Save to Excel and cite it</a></li>
+      <li><a href="#about"><span class="n">10</span>Look before you use an indicator</a></li>
     </ol>
 
-    <article class="case" id="compare">
-      <p class="for">01 · for analysts and report writers</p>
-      <h3>Compare countries on one indicator</h3>
-      <p>Five South Asian countries on the Human Development Index, each at its latest year. India and
-      Bangladesh tie at 0.685. That is the data, not a rounding bug.</p>
-      <div class="block"><div class="head"><span class="tag">works today</span><span class="file"><!--name:01--></span></div><pre><code><!--example:01--></code></pre></div>
+    <article class="case" id="first">
+      <p class="for">01 · for anyone new to this</p>
+      <h3>Your first table</h3>
+      <p>Search for an indicator in plain words, copy its id, and ask for the countries you need.
+      The result is an ordinary table: sort it, filter it, chart it, or save it.</p>
+      <div class="block"><div class="head"><span class="tag">example</span><span class="file"><!--name:01--></span></div><pre><code><!--example:01--></code></pre></div>
       <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:01--></samp></pre></div>
-      <div class="block planned"><div class="head"><span class="tag">from 0.1 · planned</span></div><pre><code>un.data.latest("undata/undphdro/HDI_hdi", places=["BGD", "IND", "LKA", "NPL", "PAK"])</code></pre></div>
     </article>
 
-    <article class="case" id="region">
-      <p class="for">02 · for dashboards and regional reports</p>
-      <h3>A whole region in one request</h3>
-      <p>A containment expression is evaluated inside the graph, so one call replaces a loop over 54
-      country codes. The script also counts which year each value is from, because "latest" means each
-      country's own latest. Here every country happens to report 2024. Often they do not.</p>
-      <div class="block"><div class="head"><span class="tag">works today</span><span class="file"><!--name:02--></span></div><pre><code><!--example:02--></code></pre></div>
+    <article class="case" id="compare">
+      <p class="for">02 · for analysts and report writers</p>
+      <h3>Compare the countries of a region</h3>
+      <p>A region name stands for every country in it. Here, the Human Development Index across
+      Southern Asia, each country at its latest year. Note that India and Bangladesh tie: that is the
+      data, not a rounding error.</p>
+      <div class="block"><div class="head"><span class="tag">example</span><span class="file"><!--name:02--></span></div><pre><code><!--example:02--></code></pre></div>
       <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:02--></samp></pre></div>
-      <div class="block planned"><div class="head"><span class="tag">from 0.1 · planned</span></div><pre><code>africa = un.place.countries(within="africa")
-un.data.latest("undata/sdg/EG_ACS_ELEC", places=africa)  <span class="c"># warns when the years differ widely</span></code></pre></div>
     </article>
 
-    <article class="case" id="missing">
-      <p class="for">03 · for researchers, and anyone about to draw a scatter</p>
-      <h3>Count who reports before you join</h3>
-      <p>Norway is not zero on conflict deaths. It is not in the response at all, because a country
-      with no conflict files no conflict-death return. Join these two indicators and every peaceful
-      country drops out before the chart is drawn, so the scatter answers a different question from
-      the one you asked.</p>
-      <div class="block"><div class="head"><span class="tag">works today</span><span class="file"><!--name:03--></span></div><pre><code><!--example:03--></code></pre></div>
+    <article class="case" id="continent">
+      <p class="for">03 · for dashboards and regional reports</p>
+      <h3>A whole continent in one line</h3>
+      <p>Access to electricity for every country in Africa. This request used to fail outright: the
+      platform's firewall refuses any request that mentions Western Sahara, and undata now asks in
+      a way the firewall accepts.</p>
+      <div class="block"><div class="head"><span class="tag">example</span><span class="file"><!--name:03--></span></div><pre><code><!--example:03--></code></pre></div>
       <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:03--></samp></pre></div>
-      <div class="block planned"><div class="head"><span class="tag">from 0.1 · planned</span></div><pre><code>obs = un.data.fetch(["undata/unicef/SPP_GDPPC", "undata/sdg/VC_DTH_TOTR"], places="world")
-obs.missing  <span class="c"># every absent place/variable pair, listed rather than hidden</span></code></pre></div>
     </article>
 
     <article class="case" id="sdg">
       <p class="for">04 · for SDG reporting officers</p>
-      <h3>From an SDG target to data you can fetch</h3>
-      <p>Mandates name targets, not variable codes. The SDG framework is a branch of the graph you can
-      walk exactly: target 16.1, then indicator 16.1.2, then six groups, one of which is a
-      per-100,000 rate you might not have known existed.</p>
-      <div class="block"><div class="head"><span class="tag">works today</span><span class="file"><!--name:04--></span></div><pre><code><!--example:04--></code></pre></div>
+      <h3>From an SDG target to the numbers</h3>
+      <p>Mandates name targets, not data codes. Start from the target, list its indicators, pick the
+      series that reports the one you need, and fetch it.</p>
+      <div class="block"><div class="head"><span class="tag">example</span><span class="file"><!--name:04--></span></div><pre><code><!--example:04--></code></pre></div>
       <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:04--></samp></pre></div>
-      <div class="block planned"><div class="head"><span class="tag">from 0.1 · planned</span></div><pre><code>un.sdg.target("16.1").indicators()
-un.sdg.indicator("16.1.2").variables()</code></pre></div>
     </article>
 
-    <article class="case" id="resolver">
-      <p class="for">05 · for anyone who uses, or builds on, data.un.org's search</p>
-      <h3>Check what the search box decided</h3>
-      <p>The natural-language resolver always commits to a place. Given one it does not recognise, it
-      substitutes another without saying so. The chart it draws is titled "Total Child Mortality, by
-      Age" either way.</p>
-      <div class="block"><div class="head"><span class="tag">works today</span><span class="file"><!--name:05--></span></div><pre><code><!--example:05--></code></pre></div>
+    <article class="case" id="gaps">
+      <p class="for">05 · for anyone about to draw a chart</p>
+      <h3>Gaps are named, never zero</h3>
+      <p>Norway and Japan have no conflict death rate on the platform, because a country without
+      conflict files no conflict-death return. They are not zero. undata leaves them out of the table
+      and says so, so a chart cannot quietly show them as peaceful zeros.</p>
+      <div class="block"><div class="head"><span class="tag">example</span><span class="file"><!--name:05--></span></div><pre><code><!--example:05--></code></pre></div>
       <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:05--></samp></pre></div>
-      <div class="block planned"><div class="head"><span class="tag">from 0.1 · planned</span></div><pre><code>r = un.ask("child mortality in Bengal")
-r.place_was_inferred  <span class="c"># True, and an InferredPlaceWarning is raised</span></code></pre></div>
     </article>
 
     <article class="case" id="names">
-      <p class="for">06 · for pipelines that start from a spreadsheet of country names</p>
-      <h3>Turn names into identifiers</h3>
-      <p>Official names resolve, accents and apostrophes included. "Bengal" resolves to nothing, which
-      is the honest answer and the one the search box does not give.</p>
-      <div class="block"><div class="head"><span class="tag">works today</span><span class="file"><!--name:06--></span></div><pre><code><!--example:06--></code></pre></div>
+      <p class="for">06 · for everyone</p>
+      <h3>Names the way you write them</h3>
+      <p>UN names, everyday names and ISO codes all work, and tables always use the UN name. A name
+      it does not know stops with suggestions. It never becomes some other country.</p>
+      <div class="block"><div class="head"><span class="tag">example</span><span class="file"><!--name:06--></span></div><pre><code><!--example:06--></code></pre></div>
       <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:06--></samp></pre></div>
-      <div class="block planned"><div class="head"><span class="tag">from 0.1 · planned</span></div><pre><code>un.place.get("Viet Nam")  <span class="c"># Place(dcid='country/VNM', ...)</span>
-un.place.get("Bengal")    <span class="c"># PlaceNotFound, with suggestions. Never a substitute.</span></code></pre></div>
     </article>
 
-    <article class="case" id="whose">
-      <p class="for">07 · for anyone who cites a number</p>
-      <h3>Know whose series you are publishing</h3>
-      <p>Search ranks Data Commons' own older copy of the SDG database first. Both copies link to the
-      same UN portal, so nothing on the surface tells them apart, but they disagree on the year and the
-      value. The source field does tell them apart.</p>
-      <div class="block"><div class="head"><span class="tag">works today</span><span class="file"><!--name:07--></span></div><pre><code><!--example:07--></code></pre></div>
+    <article class="case" id="searchbox">
+      <p class="for">07 · for anyone who uses data.un.org's search box</p>
+      <h3>Check what the search box decided</h3>
+      <p>The search box always answers about some place. When it does not recognise yours, it picks
+      one and titles the chart as if nothing happened. <code>un.ask</code> shows its choice and
+      warns when it was a guess.</p>
+      <div class="block"><div class="head"><span class="tag">example</span><span class="file"><!--name:07--></span></div><pre><code><!--example:07--></code></pre></div>
       <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:07--></samp></pre></div>
-      <div class="block planned"><div class="head"><span class="tag">from 0.1 · planned</span></div><pre><code>un.search("maternal mortality")  <span class="c"># UN collections first, every hit labelled with its source</span></code></pre></div>
     </article>
 
-    <article class="case" id="trend">
-      <p class="for">08 · for charts</p>
-      <h3>A full time series for a trend line</h3>
-      <p>Every year for every variable and place pair, in one call. Bangladesh's maternal mortality
-      ratio fell by more than three quarters between 2000 and 2023.</p>
-      <div class="block"><div class="head"><span class="tag">works today</span><span class="file"><!--name:08--></span></div><pre><code><!--example:08--></code></pre></div>
+    <article class="case" id="source">
+      <p class="for">08 · for anyone who cites a number</p>
+      <h3>Know whose number you are using</h3>
+      <p>Bangladesh's maternal mortality ratio for 2023, as published by three UN entities. Two agree;
+      one does not. Quote the source along with the figure.</p>
+      <div class="block"><div class="head"><span class="tag">example</span><span class="file"><!--name:08--></span></div><pre><code><!--example:08--></code></pre></div>
       <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:08--></samp></pre></div>
-      <div class="block planned"><div class="head"><span class="tag">from 0.1 · planned</span></div><pre><code>un.data.fetch("undata/sdg/SH_STA_MORT.SEX--F", places=["BGD", "NOR"], time="all").to_pandas()</code></pre></div>
     </article>
 
-    <article class="case" id="identifiers">
-      <p class="for">09 · for developers</p>
-      <h3>Read and build identifiers</h3>
-      <p>The identifier grammar, offline. One warning it encodes: the "unknown" age band is a slice of
-      its own, so adding up the named age bands will not reproduce the total.</p>
-      <div class="block"><div class="head"><span class="tag">works today</span><span class="file"><!--name:09--></span></div><pre><code><!--example:09--></code></pre></div>
-      <div class="block out"><div class="head"><span class="tag">output</span><span>offline</span></div><pre><samp><!--output:09--></samp></pre></div>
-      <div class="block planned"><div class="head"><span class="tag">from 0.1 · planned</span></div><pre><code>un.variable.disaggregations("undata/sdg/VC_DTH_TOTN")  <span class="c"># every slice, the unknown band included</span></code></pre></div>
+    <article class="case" id="save">
+      <p class="for">09 · for reports and briefings</p>
+      <h3>Save to Excel and cite it</h3>
+      <p>The Excel file has the data on one sheet, a citation for every source on the next, and,
+      when some countries had no data, a third sheet listing them. The citation credits the agency
+      that produced the figures.</p>
+      <div class="block"><div class="head"><span class="tag">example</span><span class="file"><!--name:09--></span></div><pre><code><!--example:09--></code></pre></div>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:09--></samp></pre></div>
     </article>
 
-    <article class="case" id="pandas">
-      <p class="for">10 · for notebooks and data teams</p>
-      <h3>A tidy DataFrame with sources</h3>
-      <p>The flattening everyone writes today, with the empty-series branch written first and the
-      source carried onto every row. In 0.1 the whole script becomes one line.</p>
-      <div class="block"><div class="head"><span class="tag">works today</span><span class="file"><!--name:10--></span></div><pre><code><!--example:10--></code></pre></div>
+    <article class="case" id="about">
+      <p class="for">10 · before you commit to an indicator</p>
+      <h3>Look before you use an indicator</h3>
+      <p>What it measures, who publishes it, its unit, and how much data exists, in one call.</p>
+      <div class="block"><div class="head"><span class="tag">example</span><span class="file"><!--name:10--></span></div><pre><code><!--example:10--></code></pre></div>
       <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:10--></samp></pre></div>
-      <div class="block planned"><div class="head"><span class="tag">from 0.1 · planned</span></div><pre><code>un.data.frame(
-    ["undata/sdg/SH_STA_MORT.SEX--F", "undata/sdg/EG_ACS_ELEC"],
-    places=["BGD", "NPL", "SSD"],
-    time="all",
-)  <span class="c"># tidy columns: variable, place, date, value, unit, source, provenance_url</span></code></pre></div>
     </article>
   </div>
 </section>
 
 <section class="sec" id="install">
   <div class="wrap">
-    <p class="anno">// 03 — install</p>
+    <p class="anno">// 05 — install</p>
     <h2>Getting it</h2>
     <div class="cols">
       <div>
-        <h3>Today, from GitHub</h3>
-        <p>The foundation: transport, one wrapper per route, the identifier grammar.</p>
+        <h3>On your computer</h3>
+        <p>Needs Python 3.11 or newer. Comes with pandas and Excel support.</p>
         <pre><code>pip install "git+https://github.com/nerd-factory/undata"</code></pre>
       </div>
       <div>
-        <h3>Run the examples</h3>
-        <p>Needs <a href="https://docs.astral.sh/uv/">uv</a>. It fetches the right Python itself.</p>
-        <pre><code>git clone https://github.com/nerd-factory/undata
-cd undata
-uv run python examples/01_compare_countries.py</code></pre>
+        <h3>In Google Colab</h3>
+        <p>Nothing to install on your machine. Run this in the first cell.</p>
+        <pre><code>!pip install "git+https://github.com/nerd-factory/undata"</code></pre>
       </div>
       <div>
-        <h3>From 0.1, from PyPI</h3>
-        <p>Not published yet. The release pipeline is ready and waiting for the API it ships.</p>
-        <pre><code>pip install undata
-pip install "undata[pandas]"</code></pre>
+        <h3>Run these examples</h3>
+        <p>With <a href="https://docs.astral.sh/uv/">uv</a>, which fetches the right Python itself.</p>
+        <pre><code>git clone https://github.com/nerd-factory/undata
+cd undata
+uv run python examples/01_first_table.py</code></pre>
       </div>
     </div>
   </div>
@@ -337,8 +374,8 @@ pip install "undata[pandas]"</code></pre>
     <a href="https://mafiatun.github.io/un-data-commons-field-guide/">UN Data Commons Field Guide</a>.</p>
     <p><a href="https://github.com/nerd-factory/undata">Source</a> ·
     <a href="https://github.com/nerd-factory/undata/blob/main/PLAN.md">Plan</a> ·
-    <a href="https://github.com/nerd-factory/undata/issues">Issues</a> ·
-    <a href="https://github.com/nerd-factory/nerd-lab/discussions">Questions</a> · Code: MIT</p>
+    <a href="https://github.com/nerd-factory/undata/issues">Report a problem</a> ·
+    <a href="https://github.com/nerd-factory/nerd-lab/discussions">Ask a question</a> · Code: MIT</p>
   </div>
 </footer>
 

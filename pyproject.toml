@@ -5,14 +5,14 @@ build-backend = "hatchling.build"
 [project]
 name = "undata"
 dynamic = ["version"]
-description = "Unofficial Python client for the UN System Data Commons (data.un.org). Safe by default."
+description = "UN data in Python, without the guessing: a friendly, unofficial client for the UN System Data Commons (data.un.org)."
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
 authors = [{ name = "Mafizul Islam", email = "islam50@un.org" }]
 maintainers = [{ name = "Nerd Lab contributors" }]
 requires-python = ">=3.11"
-dependencies = ["httpx>=0.27"]
+dependencies = ["httpx>=0.27", "pandas>=2.2.2", "openpyxl>=3.1"]
 keywords = [
   "united-nations",
   "data-commons",
@@ -22,7 +22,7 @@ keywords = [
   "api-client",
 ]
 classifiers = [
-  "Development Status :: 2 - Pre-Alpha",
+  "Development Status :: 3 - Alpha",
   "Intended Audience :: Developers",
   "Intended Audience :: Science/Research",
   "Operating System :: OS Independent",
@@ -35,10 +35,6 @@ classifiers = [
   "Topic :: Scientific/Engineering :: Information Analysis",
   "Typing :: Typed",
 ]
-
-[project.optional-dependencies]
-pandas = ["pandas>=2.1"]
-polars = ["polars>=1.0"]
 
 [project.urls]
 Homepage = "https://github.com/nerd-factory/undata"
@@ -55,6 +51,7 @@ dev = [
   "hypothesis>=6.120",
   "mypy>=1.13",
   "ruff>=0.8",
+  "pandas-stubs>=2.2",
 ]
 
 [tool.hatch.version]

@@ -4,7 +4,7 @@ Every "works today" block on the page is the exact source of an example script, 
 every output block is what that script printed when this ran. Run it from the repo
 root with network access:
 
-    uv run --with pandas python site/build.py
+    uv run python site/build.py
 
 It writes site/public/index.html, which is committed; deploying needs no build step.
 """
@@ -17,6 +17,7 @@ import io
 import re
 import subprocess
 import sys
+import tempfile
 import tokenize
 from pathlib import Path
 
@@ -58,25 +59,31 @@ def highlight(source: str) -> str:
     return "".join(out).rstrip("\n")
 
 
-def run(script: Path) -> str:
-    """Run one example and return what it printed to stdout."""
+def run(script: Path, workdir: Path) -> str:
+    """Run one example and return what a user would see: output and warnings, in order.
+
+    It runs in a scratch directory, so examples that save files leave nothing behind,
+    and the scratch path is trimmed from warning locations.
+    """
     result = subprocess.run(  # noqa: S603 — a fixed interpreter on our own scripts
-        [sys.executable, str(script)],
-        capture_output=True,
+        [sys.executable, "-u", str(script)],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
         text=True,
         check=False,
-        timeout=120,
-        cwd=ROOT,
+        timeout=180,
+        cwd=workdir,
     )
     if result.returncode != 0:
-        raise SystemExit(f"{script.name} failed:\n{result.stderr}")
-    return result.stdout.rstrip("\n")
+        raise SystemExit(f"{script.name} failed:\n{result.stdout}")
+    return result.stdout.replace(f"{EXAMPLES}/", "").rstrip("\n")
 
 
 def main() -> None:
     """Fill the template and write the page."""
     scripts = {path.name[:2]: path for path in sorted(EXAMPLES.glob("[0-9][0-9]_*.py"))}
-    outputs = {number: run(path) for number, path in scripts.items()}
+    with tempfile.TemporaryDirectory() as scratch:
+        outputs = {number: run(path, Path(scratch)) for number, path in scripts.items()}
 
     def fill(match: re.Match[str]) -> str:
         kind, number = match.groups()

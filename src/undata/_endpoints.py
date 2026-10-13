@@ -21,7 +21,7 @@ from ._http import Transport
 #: Fields requested from the observation endpoint. Without ``select`` it returns
 #: an empty shell, and with ``select`` in a POST body the firewall answers 403,
 #: which is why :func:`observation` is GET-only.
-OBSERVATION_FIELDS: Final = ("date", "value", "variable", "entity")
+OBSERVATION_FIELDS: Final = ("date", "value", "variable", "entity", "facet")
 
 #: Graph walks return at most this many values per page and set ``nextToken``.
 NODE_PAGE_SIZE: Final = 500

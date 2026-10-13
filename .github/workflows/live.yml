@@ -29,7 +29,7 @@ jobs:
         run: |
           for example in examples/*.py; do
             echo "=== $example" | tee -a live.log
-            uv run --with pandas python "$example" 2>&1 | tee -a live.log
+            uv run python "$example" 2>&1 | tee -a live.log
           done
       - name: Open an issue if the platform changed
         if: failure()

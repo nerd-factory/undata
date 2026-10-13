@@ -45,12 +45,22 @@ CI runs the same four on Linux, macOS and Windows, on every supported Python.
   `tests/live/`, so the nightly run notices when the platform changes.
 - **Typed and documented.** Every public function has type hints and a docstring with a
   runnable example; doctests run as part of the suite.
-- **No dependency arrives without a reason attached.** The core depends on `httpx` only.
+- **Written for someone new to data.** Function names are plain verbs, arguments accept
+  names rather than codes, results are tables, and every warning or error says what to
+  do next in plain English.
+- **No dependency arrives without a reason attached.** The core needs httpx, pandas and
+  openpyxl, and nothing else.
 - **Does it sound like us?** Dry, exact, unhurried. No hype.
 
 ## Layout
 
 ```
+src/undata/data.py         get() and latest(): the numbers
+src/undata/places.py       countries and regions by name, UN names
+src/undata/indicators.py   search() and about()
+src/undata/sdg.py          the SDG tree, goal to fetchable series
+src/undata/ask.py          what data.un.org's search box decided
+src/undata/export.py       save() and cite()
 src/undata/_http.py        the only module that touches the network
 src/undata/_endpoints.py   one thin wrapper per API route, no interpretation
 src/undata/dcid.py         the identifier grammar
@@ -67,7 +77,7 @@ site/                      the use-cases page, built from examples/
 against the live API):
 
 ```bash
-uv run --with pandas python site/build.py
+uv run python site/build.py
 ```
 
 Pushing the result to `main` deploys it to https://nerd-factory.github.io/undata/.
