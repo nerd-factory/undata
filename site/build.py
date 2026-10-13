@@ -21,25 +21,34 @@ import tempfile
 import tokenize
 from pathlib import Path
 
+from charts import render_chart
+
 ROOT = Path(__file__).resolve().parent.parent
 EXAMPLES = ROOT / "examples"
 TEMPLATE = ROOT / "site" / "template.html"
 OUTPUT = ROOT / "site" / "public" / "index.html"
 
-PLACEHOLDER = re.compile(r"<!--(example|output|name):(\d\d)-->")
+PLACEHOLDER = re.compile(r"<!--(example|output|name|chart|report):(\d\d)-->")
 
 
 def highlight(source: str) -> str:
     """Escape Python source for HTML, wrapping comments and docstrings in spans."""
     spans: list[tuple[tuple[int, int], tuple[int, int], str]] = []
-    previous = tokenize.NEWLINE
-    for token in tokenize.generate_tokens(io.StringIO(source).readline):
+    tokens = list(tokenize.generate_tokens(io.StringIO(source).readline))
+    starts_line = True
+    for i, token in enumerate(tokens):
         if token.type == tokenize.COMMENT:
             spans.append((token.start, token.end, "c"))
-        elif token.type == tokenize.STRING and previous in (tokenize.NEWLINE, tokenize.NL):
-            spans.append((token.start, token.end, "c"))  # a docstring statement
-        if token.type not in (tokenize.INDENT, tokenize.DEDENT, tokenize.COMMENT):
-            previous = token.type
+        elif token.type == tokenize.STRING and starts_line:
+            following = next(
+                (t for t in tokens[i + 1 :] if t.type not in (tokenize.COMMENT, tokenize.NL)), None
+            )
+            if following is None or following.type in (tokenize.NEWLINE, tokenize.ENDMARKER):
+                spans.append((token.start, token.end, "c"))  # a docstring statement
+        if token.type in (tokenize.NEWLINE, tokenize.NL):
+            starts_line = True
+        elif token.type not in (tokenize.INDENT, tokenize.DEDENT, tokenize.COMMENT):
+            starts_line = False
 
     lines = source.splitlines(keepends=True)
     offsets = [0]
@@ -92,6 +101,10 @@ def main() -> None:
             return highlight(script.read_text(encoding="utf-8"))
         if kind == "output":
             return html.escape(outputs[number])
+        if kind == "report":
+            return html.escape(outputs[number].split("\n\n")[-1].strip())
+        if kind == "chart":
+            return render_chart(number)
         return f"examples/{script.name}"
 
     page = PLACEHOLDER.sub(fill, TEMPLATE.read_text(encoding="utf-8"))

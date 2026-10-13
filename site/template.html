@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>undata · UN data in Python</title>
-<meta name="description" content="undata is a Python package for the UN System Data Commons: type a country's name, get a table, with sources, UN country names and no guessing. Ten examples with real output.">
+<meta name="description" content="undata is a Python package for UN colleagues who need numbers for a report. Nine real use cases, from a country briefing to an SDG progress check, each with the code, a chart, the real output and a sentence ready for your report.">
 <meta name="theme-color" content="#141419">
 <meta property="og:title" content="undata — UN data in Python, without the guessing">
-<meta property="og:description" content="Type a country's name, get a table. A Python package for the UN System Data Commons, for colleagues who need numbers for a report. A Nerd Lab experiment.">
+<meta property="og:description" content="Nine real use cases: a country briefing, SDG progress, women in parliament, refugees, conflict and homicide, and more. Real data, real output, a sentence for your report.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://nerd-factory.github.io/undata/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23141419'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='15' font-weight='700' text-anchor='middle' fill='%23C8F531'%3Eun%3C/text%3E%3C/svg%3E">
@@ -127,6 +127,62 @@ pre .c { color: var(--muted); }
 .does strong { display: block; font-weight: 600; margin-bottom: 0.15rem; }
 .does span { color: var(--muted); font-size: 0.95rem; }
 
+/* use-case overview */
+.cards { list-style: none; margin: 2rem 0 0; padding: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); }
+.cards li { border: 1px solid var(--line); background: var(--ink-2); transition: border-color 120ms ease; }
+.cards li:hover, .cards li:focus-within { border-color: var(--volt); }
+.cards a { display: block; height: 100%; padding: 1.15rem 1.15rem 1.25rem; color: inherit; text-decoration: none; }
+.cards .role { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 0.6rem; }
+.cards .role b { color: var(--volt); font-weight: 400; margin-right: 0.5rem; }
+.cards h3 { font-size: 1rem; margin: 0 0 0.5rem; }
+.cards p { margin: 0; color: var(--muted); font-size: 0.92rem; line-height: 1.5; }
+
+/* a use case, in full */
+.case-meta { display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin: 0 0 0.75rem; }
+.case-meta .n { color: var(--volt); }
+.case h3 { font-family: var(--display); font-size: clamp(1.3rem, 1.1rem + 0.9vw, 1.75rem); font-weight: 700; letter-spacing: 0; margin-bottom: 1rem; }
+.ask { margin: 0 0 1.5rem; padding: 0.2rem 0 0.2rem 1.1rem; border-left: 2px solid var(--volt); max-width: 44rem; }
+.ask p { margin: 0; font-size: 1.08rem; }
+.ask cite { display: block; margin-top: 0.4rem; font-style: normal; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.step { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 1.75rem 0 0; }
+.step + .block { margin-top: 0.6rem; }
+figure.block { margin: 0.6rem 0 0; padding: 1rem 1rem 0.75rem; background: transparent; }
+figcaption { font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem; }
+.multiples { display: grid; gap: 1.25rem 2rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
+.panel-title { font-size: 0.9rem; margin: 0 0 0.25rem; }
+.scroll { overflow-x: auto; }
+.scroll .chart { min-width: 34rem; }
+.report { margin-top: 1.25rem; border: 1px solid var(--volt); padding: 1rem 1.15rem; }
+.report .tag { display: block; color: var(--volt); font-family: var(--mono); font-size: 0.72rem; margin-bottom: 0.4rem; }
+.report p { margin: 0; font-size: 1.05rem; max-width: none; }
+.caught { list-style: none; margin: 1.25rem 0 0; padding: 0; display: grid; gap: 0.6rem; }
+.caught li { padding-left: 1.4rem; position: relative; color: var(--muted); font-size: 0.95rem; max-width: 46rem; }
+.caught li::before { content: "✓"; position: absolute; left: 0; color: var(--volt); }
+.caught strong { color: var(--offwhite); font-weight: 600; }
+.extra pre { font-size: 0.8rem; }
+.report .copy { margin-top: 0.75rem; }
+
+/* charts (site/charts.py) */
+.chart { display: block; width: 100%; height: auto; font-family: var(--display); }
+.chart .label { fill: var(--offwhite); font-size: 13px; }
+.chart .bar { fill: var(--muted); }
+.chart .row.hi .bar { fill: var(--volt); }
+.chart .value { fill: var(--muted); font-family: var(--mono); font-size: 12px; }
+.chart text { paint-order: stroke; stroke: var(--ink); stroke-width: 3px; stroke-linejoin: round; }
+.chart .col-head { fill: var(--muted); font-family: var(--mono); font-size: 11px; }
+.chart .row.hi .value, .chart .row.hi .label { fill: var(--offwhite); font-weight: 600; }
+.chart .tick { fill: var(--muted); font-family: var(--mono); font-size: 11px; }
+.chart .grid { stroke: var(--line); stroke-width: 1; }
+.chart .baseline { stroke: #4a4a55; stroke-width: 1; }
+.chart .ref { stroke: var(--offwhite); stroke-width: 1; stroke-dasharray: 4 4; opacity: 0.75; }
+.chart .ref-label { fill: var(--offwhite); font-family: var(--mono); font-size: 11px; }
+.chart .hit { fill: transparent; }
+.chart .row:hover .hit { fill: rgba(244, 241, 234, 0.05); }
+.chart .link { stroke: #4a4a55; stroke-width: 2; stroke-linecap: round; }
+.chart .dot-before { fill: var(--ink); stroke: var(--muted); stroke-width: 2; }
+.chart .dot-after { fill: var(--volt); stroke: var(--ink); stroke-width: 2; }
+.chart .legend text { fill: var(--muted); font-family: var(--mono); font-size: 12px; }
+
 @media (forced-colors: active) { .block, .facts li, .cols > div, .copy { border: 1px solid CanvasText; } }
 </style>
 </head>
@@ -137,9 +193,10 @@ pre .c { color: var(--muted); }
   <div class="wrap">
     <a class="brand" href="https://nerd-factory.github.io/nerd-lab/"><span>nerd lab /</span> undata</a>
     <nav aria-label="Page">
+      <a href="#use-cases">use cases</a>
       <a href="#start" class="opt">start</a>
       <a href="#functions" class="opt">functions</a>
-      <a href="#examples">examples</a>
+      <a href="https://pypi.org/project/undata/" class="opt">pypi</a>
       <a href="https://github.com/nerd-factory/undata">github</a>
     </nav>
   </div>
@@ -151,23 +208,202 @@ pre .c { color: var(--muted); }
   <div class="wrap">
     <p class="anno">// a nerd lab experiment · unofficial</p>
     <h1>UN data in Python, without the guessing.</h1>
-    <p class="lede">Type a country's name, get a table. undata is a Python package for the
-    <a href="https://data.un.org">UN System Data Commons</a>, which holds statistics from 26 UN System
-    entities. It is written for colleagues who need numbers for a report, not a course in APIs.</p>
+    <p class="lede">Type a country's name, get a table with its source on every row. undata is a
+    Python package for the <a href="https://data.un.org">UN System Data Commons</a>, which holds
+    statistics from 26 UN System entities, and it is written for colleagues who need numbers for a
+    report, not a course in APIs.</p>
 
     <div class="install">
       <pre><code>pip install undata</code></pre>
     </div>
 
-    <p class="status"><strong>Alpha</strong>, <a href="https://pypi.org/project/undata/">on PyPI</a>: the API may still change before 1.0. Every output on this page is real: each example below is a script in
-    <a href="https://github.com/nerd-factory/undata/tree/main/examples">examples/</a>, run against the
+    <p class="status"><strong>Everything on this page is real.</strong> Each use case below is a
+    script in <a href="https://github.com/nerd-factory/undata/tree/main/examples">examples/</a>. The
+    output, the charts and the sentence for your report are what those scripts produced against the
     live platform on <!--generated-->, and the same scripts run again every night.</p>
+  </div>
+</section>
+
+<section class="sec" id="use-cases">
+  <div class="wrap">
+    <p class="anno">// 01 — use cases</p>
+    <h2>Nine requests, as they actually arrive</h2>
+    <p>Each one starts from a real kind of request in UN work and ends with something you can
+    send: a table, a chart, an Excel file, or a sentence for the report. Each takes a few lines of
+    Python and a few minutes.</p>
+    <ul class="cards">
+      <li><a href="#briefing"><p class="role"><b>01</b>Resident Coordinator's Office</p><h3>A briefing note before a country visit</h3><p>Chad against its Sahel neighbours on electricity, child mortality and schooling.</p></a></li>
+      <li><a href="#sdg-progress"><p class="role"><b>02</b>SDG reporting</p><h3>Is a target moving?</h3><p>Maternal mortality in Southern Asia since 2015, against the Target 3.1 level.</p></a></li>
+      <li><a href="#parliament"><p class="role"><b>03</b>Gender focal point</p><h3>Women in parliament, by region</h3><p>Who has passed 30%, and who has reached parity, in Eastern Africa.</p></a></li>
+      <li><a href="#refugees"><p class="role"><b>04</b>Humanitarian coordination</p><h3>Refugees: count or share?</h3><p>The most refugees in number is not the most per person.</p></a></li>
+      <li><a href="#conflict"><p class="role"><b>05</b>Peace and security</p><h3>Conflict deaths in context</h3><p>Who reports them, and how they compare with homicide.</p></a></li>
+      <li><a href="#sources"><p class="role"><b>06</b>Statistics focal point</p><h3>When agencies disagree</h3><p>One statistic, three UN sources, two different numbers.</p></a></li>
+      <li><a href="#data-pack"><p class="role"><b>07</b>Publications team</p><h3>A regional data pack in Excel</h3><p>Three indicators, one file, citations and gaps on their own sheets.</p></a></li>
+      <li><a href="#dashboard"><p class="role"><b>08</b>Monitoring and evaluation</p><h3>A dashboard that refreshes itself</h3><p>A file Power BI or Excel reads, updated on a schedule.</p></a></li>
+      <li><a href="#search-box"><p class="role"><b>09</b>Communications</p><h3>Check a chart before you share it</h3><p>See what data.un.org's search box decided, including whether it guessed.</p></a></li>
+    </ul>
+
+    <article class="case" id="briefing">
+      <p class="case-meta"><span class="n">01</span><span>Resident Coordinator's Office</span><span>briefing note</span></p>
+      <h3>A briefing note before a country visit</h3>
+      <blockquote class="ask"><p>"The RC is in N'Djamena on Monday. I need one page: electricity, child mortality and schooling in Chad, compared with the other Sahel countries."</p><cite>The ask</cite></blockquote>
+      <p class="step">The code</p>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:01--></span></div><pre><code><!--example:01--></code></pre></div>
+      <p class="step">The picture</p>
+      <figure class="block"><!--chart:01--></figure>
+      <p class="step">What came back</p>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:01--></samp></pre></div>
+      <div class="report"><span class="tag">For your note</span><p><!--report:01--></p></div>
+      <ul class="caught">
+        <li><strong>Mixed years, flagged.</strong> "Latest" school completion ranges across a decade between these six countries. The warning says so before the table can mislead anyone, and the year is on every row.</li>
+        <li><strong>Names as you write them.</strong> Six country names, no codes. Three indicators come back in one request.</li>
+      </ul>
+    </article>
+
+    <article class="case" id="sdg-progress">
+      <p class="case-meta"><span class="n">02</span><span>SDG reporting</span><span>progress report</span></p>
+      <h3>Is a target moving?</h3>
+      <blockquote class="ask"><p>"For the regional SDG progress report: has maternal mortality in Southern Asia fallen since 2015, and where is it already below 70?"</p><cite>The ask</cite></blockquote>
+      <p class="step">The code</p>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:02--></span></div><pre><code><!--example:02--></code></pre></div>
+      <p class="step">The picture</p>
+      <figure class="block"><!--chart:02--></figure>
+      <p class="step">What came back</p>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:02--></samp></pre></div>
+      <div class="report"><span class="tag">For your report</span><p><!--report:02--></p></div>
+      <ul class="caught">
+        <li><strong>From the SDG number to the data.</strong> <code>un.sdg.series("3.1.1")</code> finds the series that reports the indicator, so nobody has to guess a code.</li>
+        <li><strong>Careful wording, built in.</strong> 70 per 100,000 is the level Target 3.1 sets for the world as a whole, not a national target, and the sentence says so.</li>
+      </ul>
+    </article>
+
+    <article class="case" id="parliament">
+      <p class="case-meta"><span class="n">03</span><span>Gender focal point</span><span>International Women's Day</span></p>
+      <h3>Women in parliament, by region</h3>
+      <blockquote class="ask"><p>"For our 8 March piece: which parliaments in Eastern Africa have at least 30% women, and has anyone reached parity?"</p><cite>The ask</cite></blockquote>
+      <p class="step">The code</p>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:03--></span></div><pre><code><!--example:03--></code></pre></div>
+      <p class="step">The picture</p>
+      <figure class="block"><!--chart:03--></figure>
+      <p class="step">What came back</p>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:03--></samp></pre></div>
+      <div class="report"><span class="tag">For your piece</span><p><!--report:03--></p></div>
+      <ul class="caught">
+        <li><strong>A region is a list of countries.</strong> "Eastern Africa" expands to every country the UN places there, so no one has to type eighteen names.</li>
+        <li><strong>The odd one out is visible.</strong> One country's latest figure is years older than the rest; the year column and the warning show which.</li>
+      </ul>
+    </article>
+
+    <article class="case" id="refugees">
+      <p class="case-meta"><span class="n">04</span><span>Humanitarian coordination</span><span>situation overview</span></p>
+      <h3>Refugees: count or share?</h3>
+      <blockquote class="ask"><p>"Which countries in the region have the most people living as refugees abroad, and does the picture change once you account for population?"</p><cite>The ask</cite></blockquote>
+      <p class="step">The code</p>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:04--></span></div><pre><code><!--example:04--></code></pre></div>
+      <p class="step">The picture</p>
+      <figure class="block"><!--chart:04--></figure>
+      <p class="step">What came back</p>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:04--></samp></pre></div>
+      <div class="report"><span class="tag">For your overview</span><p><!--report:04--></p></div>
+      <ul class="caught">
+        <li><strong>Regions and countries mix.</strong> Sudan sits in Northern Africa in the UN's regions, so it is added by name next to "Eastern Africa".</li>
+        <li><strong>Two measures, two charts.</strong> A count and a rate never share an axis; that is how a chart invents a pattern.</li>
+      </ul>
+    </article>
+
+    <article class="case" id="conflict">
+      <p class="case-meta"><span class="n">05</span><span>Peace and security</span><span>Council briefing</span></p>
+      <h3>Conflict deaths in context</h3>
+      <blockquote class="ask"><p>"For the briefing: where are conflict-related deaths highest, and how do they compare with ordinary homicide in the same countries?"</p><cite>The ask</cite></blockquote>
+      <p class="step">The code</p>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:05--></span></div><pre><code><!--example:05--></code></pre></div>
+      <p class="step">What came back</p>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:05--></samp></pre></div>
+      <div class="report"><span class="tag">For your briefing</span><p><!--report:05--></p></div>
+      <ul class="caught">
+        <li><strong>Absent is not zero.</strong> Asking for the whole world shows how few countries report conflict deaths at all. Peaceful countries are missing, not zero, and a chart of "all countries" would be a chart of countries at war.</li>
+        <li><strong>Gaps stay gaps.</strong> Where homicide data is missing, the table shows a blank, not a zero, and the warning names the countries.</li>
+      </ul>
+    </article>
+
+    <article class="case" id="sources">
+      <p class="case-meta"><span class="n">06</span><span>Statistics focal point</span><span>quoting a figure</span></p>
+      <h3>When agencies disagree</h3>
+      <blockquote class="ask"><p>"Two reports quote different maternal mortality figures for Bangladesh. Which is right, and what should we cite?"</p><cite>The ask</cite></blockquote>
+      <p class="step">The code</p>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:06--></span></div><pre><code><!--example:06--></code></pre></div>
+      <p class="step">What came back</p>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:06--></samp></pre></div>
+      <div class="report"><span class="tag">For your reply</span><p><!--report:06--></p></div>
+      <ul class="caught">
+        <li><strong>The source is on every row.</strong> The platform holds the same statistic from several agencies. undata never blends them, and the source column says whose number you have.</li>
+      </ul>
+    </article>
+
+    <article class="case" id="data-pack">
+      <p class="case-meta"><span class="n">07</span><span>Publications team</span><span>data pack</span></p>
+      <h3>A regional data pack in Excel</h3>
+      <blockquote class="ask"><p>"Send the publications team an Excel file for South-Eastern Asia: electricity, drinking water and primary completion, with sources."</p><cite>The ask</cite></blockquote>
+      <p class="step">The code</p>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:07--></span></div><pre><code><!--example:07--></code></pre></div>
+      <p class="step">What came back</p>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:07--></samp></pre></div>
+      <ul class="caught">
+        <li><strong>Citations travel with the data.</strong> The <code>sources</code> sheet holds a citation for each indicator, crediting the agency that produced it.</li>
+        <li><strong>Gaps get their own sheet.</strong> The <code>no data</code> sheet lists every country and indicator with nothing to report, so a blank cell is never mistaken for a zero.</li>
+      </ul>
+    </article>
+
+    <article class="case" id="dashboard">
+      <p class="case-meta"><span class="n">08</span><span>Monitoring and evaluation</span><span>dashboard</span></p>
+      <h3>A dashboard that refreshes itself</h3>
+      <blockquote class="ask"><p>"Our Power BI dashboard needs fresh numbers every month, without anyone remembering to update it."</p><cite>The ask</cite></blockquote>
+      <p class="step">The code</p>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:08--></span></div><pre><code><!--example:08--></code></pre></div>
+      <p class="step">What came back</p>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:08--></samp></pre></div>
+      <p class="step">Then schedule it</p>
+      <div class="block extra"><div class="head"><span class="tag">schedule</span><span class="file">.github/workflows/refresh.yml, or your computer's scheduler</span></div><pre><code><span class="c"># In a GitHub repository: runs on the 1st of every month and commits the new file.</span>
+on:
+  schedule:
+    - cron: "0 6 1 * *"
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+      - run: pip install undata &amp;&amp; python 08_dashboard_refresh.py
+      - run: |
+          git config user.name "dashboard bot" &amp;&amp; git config user.email "bot@example.org"
+          git add dashboard-data.csv &amp;&amp; git commit -m "Refresh dashboard data" || true
+          git push
+
+<span class="c"># On Windows instead: Task Scheduler, "Start a program", python 08_dashboard_refresh.py</span></code></pre></div>
+      <ul class="caught">
+        <li><strong>Same shape every month.</strong> The columns never change, so the dashboard's queries keep working after every refresh.</li>
+      </ul>
+    </article>
+
+    <article class="case" id="search-box">
+      <p class="case-meta"><span class="n">09</span><span>Communications</span><span>checking a chart</span></p>
+      <h3>Check a chart before you share it</h3>
+      <blockquote class="ask"><p>"A colleague made a chart in data.un.org's search box for a social media post. Is it really about the country they asked for?"</p><cite>The ask</cite></blockquote>
+      <p class="step">The code</p>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:09--></span></div><pre><code><!--example:09--></code></pre></div>
+      <p class="step">What came back</p>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:09--></samp></pre></div>
+      <ul class="caught">
+        <li><strong>The guess, caught.</strong> The search box answered a question about "Bengal" with figures for the United States, under a title that does not mention either. undata reads the platform's own record of where the place came from, and warns.</li>
+      </ul>
+    </article>
   </div>
 </section>
 
 <section class="sec" id="start">
   <div class="wrap">
-    <p class="anno">// 01 — start</p>
+    <p class="anno">// 02 — start</p>
     <h2>Three lines to a spreadsheet</h2>
     <p>Open a notebook (Jupyter, VS Code or <a href="https://colab.research.google.com">Google Colab</a>),
     install the package, and run this. You get an Excel file with the numbers on one sheet and
@@ -184,7 +420,7 @@ un.save(table, "maternal-mortality.xlsx")</code></pre></div>
 
 <section class="sec" id="functions">
   <div class="wrap">
-    <p class="anno">// 02 — functions</p>
+    <p class="anno">// 03 — functions</p>
     <h2>Everything on one screen</h2>
     <p>Wherever a function asks for countries you can write names the way you would in an email
     (<code>"Viet Nam"</code>, <code>"Vietnam"</code>, <code>"VNM"</code>), a list of them, or a region
@@ -208,131 +444,18 @@ un.save(table, "maternal-mortality.xlsx")</code></pre></div>
 
 <section class="sec" id="why">
   <div class="wrap">
-    <p class="anno">// 03 — what it does for you</p>
+    <p class="anno">// 04 — what it does for you</p>
     <h2>The careful parts are built in</h2>
     <p>Each of these was found by calling the live platform, and each is checked by a test that
     runs every night.</p>
     <ul class="does">
       <li><strong>It never guesses a place.</strong><span>data.un.org's search box answers a question about "Bengal" with figures for the United States. undata stops and says it does not know "Bengal".</span></li>
-      <li><strong>Gaps are named, never zero.</strong><span>Only 20 countries report the conflict death rate. The rest are listed in a warning, not charted as peaceful zeros.</span></li>
+      <li><strong>Gaps are named, never zero.</strong><span>Countries without data are listed in a warning and on their own Excel sheet, never charted as zeros.</span></li>
       <li><strong>UN names in, UN names out.</strong><span>Tables say Türkiye, Viet Nam and Côte d'Ivoire, ready for a UN document, whatever spelling you typed.</span></li>
-      <li><strong>The source is on every row.</strong><span>The same statistic can come from three agencies with different numbers. The source column says whose you have.</span></li>
+      <li><strong>The source is on every row.</strong><span>The same statistic can come from several agencies with different numbers. The source column says whose you have.</span></li>
       <li><strong>Mixed years are flagged.</strong><span>"Latest" means each country's own latest year. When those differ, a warning says so.</span></li>
       <li><strong>It works where other clients fail.</strong><span>The platform's firewall blocks Google's own client, and any request that mentions Western Sahara. undata routes around both.</span></li>
     </ul>
-  </div>
-</section>
-
-<section class="sec" id="examples">
-  <div class="wrap">
-    <p class="anno">// 04 — examples</p>
-    <h2>Ten things to do with it</h2>
-    <ol class="toc">
-      <li><a href="#first"><span class="n">01</span>Your first table</a></li>
-      <li><a href="#compare"><span class="n">02</span>Compare the countries of a region</a></li>
-      <li><a href="#continent"><span class="n">03</span>A whole continent in one line</a></li>
-      <li><a href="#sdg"><span class="n">04</span>From an SDG target to the numbers</a></li>
-      <li><a href="#gaps"><span class="n">05</span>Gaps are named, never zero</a></li>
-      <li><a href="#names"><span class="n">06</span>Names the way you write them</a></li>
-      <li><a href="#searchbox"><span class="n">07</span>Check what the search box decided</a></li>
-      <li><a href="#source"><span class="n">08</span>Know whose number you are using</a></li>
-      <li><a href="#save"><span class="n">09</span>Save to Excel and cite it</a></li>
-      <li><a href="#about"><span class="n">10</span>Look before you use an indicator</a></li>
-    </ol>
-
-    <article class="case" id="first">
-      <p class="for">01 · for anyone new to this</p>
-      <h3>Your first table</h3>
-      <p>Search for an indicator in plain words, copy its id, and ask for the countries you need.
-      The result is an ordinary table: sort it, filter it, chart it, or save it.</p>
-      <div class="block"><div class="head"><span class="tag">example</span><span class="file"><!--name:01--></span></div><pre><code><!--example:01--></code></pre></div>
-      <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:01--></samp></pre></div>
-    </article>
-
-    <article class="case" id="compare">
-      <p class="for">02 · for analysts and report writers</p>
-      <h3>Compare the countries of a region</h3>
-      <p>A region name stands for every country in it. Here, the Human Development Index across
-      Southern Asia, each country at its latest year. Note that India and Bangladesh tie: that is the
-      data, not a rounding error.</p>
-      <div class="block"><div class="head"><span class="tag">example</span><span class="file"><!--name:02--></span></div><pre><code><!--example:02--></code></pre></div>
-      <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:02--></samp></pre></div>
-    </article>
-
-    <article class="case" id="continent">
-      <p class="for">03 · for dashboards and regional reports</p>
-      <h3>A whole continent in one line</h3>
-      <p>Access to electricity for every country in Africa. This request used to fail outright: the
-      platform's firewall refuses any request that mentions Western Sahara, and undata now asks in
-      a way the firewall accepts.</p>
-      <div class="block"><div class="head"><span class="tag">example</span><span class="file"><!--name:03--></span></div><pre><code><!--example:03--></code></pre></div>
-      <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:03--></samp></pre></div>
-    </article>
-
-    <article class="case" id="sdg">
-      <p class="for">04 · for SDG reporting officers</p>
-      <h3>From an SDG target to the numbers</h3>
-      <p>Mandates name targets, not data codes. Start from the target, list its indicators, pick the
-      series that reports the one you need, and fetch it.</p>
-      <div class="block"><div class="head"><span class="tag">example</span><span class="file"><!--name:04--></span></div><pre><code><!--example:04--></code></pre></div>
-      <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:04--></samp></pre></div>
-    </article>
-
-    <article class="case" id="gaps">
-      <p class="for">05 · for anyone about to draw a chart</p>
-      <h3>Gaps are named, never zero</h3>
-      <p>Norway and Japan have no conflict death rate on the platform, because a country without
-      conflict files no conflict-death return. They are not zero. undata leaves them out of the table
-      and says so, so a chart cannot quietly show them as peaceful zeros.</p>
-      <div class="block"><div class="head"><span class="tag">example</span><span class="file"><!--name:05--></span></div><pre><code><!--example:05--></code></pre></div>
-      <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:05--></samp></pre></div>
-    </article>
-
-    <article class="case" id="names">
-      <p class="for">06 · for everyone</p>
-      <h3>Names the way you write them</h3>
-      <p>UN names, everyday names and ISO codes all work, and tables always use the UN name. A name
-      it does not know stops with suggestions. It never becomes some other country.</p>
-      <div class="block"><div class="head"><span class="tag">example</span><span class="file"><!--name:06--></span></div><pre><code><!--example:06--></code></pre></div>
-      <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:06--></samp></pre></div>
-    </article>
-
-    <article class="case" id="searchbox">
-      <p class="for">07 · for anyone who uses data.un.org's search box</p>
-      <h3>Check what the search box decided</h3>
-      <p>The search box always answers about some place. When it does not recognise yours, it picks
-      one and titles the chart as if nothing happened. <code>un.ask</code> shows its choice and
-      warns when it was a guess.</p>
-      <div class="block"><div class="head"><span class="tag">example</span><span class="file"><!--name:07--></span></div><pre><code><!--example:07--></code></pre></div>
-      <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:07--></samp></pre></div>
-    </article>
-
-    <article class="case" id="source">
-      <p class="for">08 · for anyone who cites a number</p>
-      <h3>Know whose number you are using</h3>
-      <p>Bangladesh's maternal mortality ratio for 2023, as published by three UN entities. Two agree;
-      one does not. Quote the source along with the figure.</p>
-      <div class="block"><div class="head"><span class="tag">example</span><span class="file"><!--name:08--></span></div><pre><code><!--example:08--></code></pre></div>
-      <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:08--></samp></pre></div>
-    </article>
-
-    <article class="case" id="save">
-      <p class="for">09 · for reports and briefings</p>
-      <h3>Save to Excel and cite it</h3>
-      <p>The Excel file has the data on one sheet, a citation for every source on the next, and,
-      when some countries had no data, a third sheet listing them. The citation credits the agency
-      that produced the figures.</p>
-      <div class="block"><div class="head"><span class="tag">example</span><span class="file"><!--name:09--></span></div><pre><code><!--example:09--></code></pre></div>
-      <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:09--></samp></pre></div>
-    </article>
-
-    <article class="case" id="about">
-      <p class="for">10 · before you commit to an indicator</p>
-      <h3>Look before you use an indicator</h3>
-      <p>What it measures, who publishes it, its unit, and how much data exists, in one call.</p>
-      <div class="block"><div class="head"><span class="tag">example</span><span class="file"><!--name:10--></span></div><pre><code><!--example:10--></code></pre></div>
-      <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:10--></samp></pre></div>
-    </article>
   </div>
 </section>
 
@@ -352,11 +475,11 @@ un.save(table, "maternal-mortality.xlsx")</code></pre></div>
         <pre><code>!pip install undata</code></pre>
       </div>
       <div>
-        <h3>Run these examples</h3>
+        <h3>Run these use cases</h3>
         <p>With <a href="https://docs.astral.sh/uv/">uv</a>, which fetches the right Python itself.</p>
         <pre><code>git clone https://github.com/nerd-factory/undata
 cd undata
-uv run python examples/01_first_table.py</code></pre>
+uv run python examples/01_country_briefing.py</code></pre>
       </div>
     </div>
   </div>
@@ -368,37 +491,42 @@ uv run python examples/01_first_table.py</code></pre>
   <div class="wrap">
     <p>undata is a <a href="https://nerd-factory.github.io/nerd-lab/">Nerd Lab</a> experiment. Unofficial:
     not affiliated with or endorsed by the United Nations. The data belongs to the agencies that publish it, under the
-    <a href="https://data.un.org/undatacommons/terms-of-use">UN Data Commons terms of use</a>.</p>
+    <a href="https://data.un.org/undatacommons/terms-of-use">UN Data Commons terms of use</a>. The requests on this page are
+    illustrations of common tasks, not quotes from any office.</p>
     <p>Most of what the package knows about the platform was found while writing the
     <a href="https://mafiatun.github.io/un-data-commons-field-guide/">UN Data Commons Field Guide</a>.</p>
-    <p><a href="https://github.com/nerd-factory/undata">Source</a> ·
-    <a href="https://github.com/nerd-factory/undata/blob/main/PLAN.md">Plan</a> ·
+    <p><a href="https://pypi.org/project/undata/">PyPI</a> ·
+    <a href="https://github.com/nerd-factory/undata">Source</a> ·
+    <a href="https://github.com/nerd-factory/undata/blob/main/CHANGELOG.md">Changelog</a> ·
     <a href="https://github.com/nerd-factory/undata/issues">Report a problem</a> ·
     <a href="https://github.com/nerd-factory/nerd-lab/discussions">Ask a question</a> · Code: MIT</p>
   </div>
 </footer>
 
 <script>
-/* Copy buttons: added only when the clipboard is available, so the page needs no JS. */
+/* Copy buttons, on code and on the report sentence: added only when the clipboard is
+   available, so the page needs no JS. */
 if (navigator.clipboard) {
-  for (const block of document.querySelectorAll(".block:not(.out)")) {
-    const head = block.querySelector(".head");
-    const code = block.querySelector("pre code");
-    if (!head || !code) continue;
+  const targets = [
+    ...[...document.querySelectorAll(".block:not(.out)")].map((b) => [b.querySelector(".head"), b.querySelector("pre code")]),
+    ...[...document.querySelectorAll(".report")].map((r) => [r, r.querySelector("p")]),
+  ];
+  for (const [anchor, source] of targets) {
+    if (!anchor || !source) continue;
     const button = document.createElement("button");
     button.type = "button";
     button.className = "copy";
     button.textContent = "copy";
     button.addEventListener("click", async () => {
       try {
-        await navigator.clipboard.writeText(code.innerText);
+        await navigator.clipboard.writeText(source.innerText);
         button.textContent = "copied";
       } catch {
         button.textContent = "select and copy";
       }
       setTimeout(() => { button.textContent = "copy"; }, 1600);
     });
-    head.append(button);
+    anchor.append(button);
   }
 }
 </script>

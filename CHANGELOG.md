@@ -6,6 +6,15 @@ All notable changes are recorded here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- The examples are now nine use cases written from real kinds of UN requests (a
+  country briefing, SDG progress, women in parliament, refugees, conflict and homicide,
+  disagreeing sources, an Excel data pack, a self-refreshing dashboard, checking the
+  search box). Each ends with a sentence for the report, computed from the data.
+- The use-cases page leads with them, with charts drawn from the same live data.
+- The README's fallback logo is the ink version, which shows on PyPI's white page.
+
 ## [0.1.0] - 2026-10-13
 
 First release.

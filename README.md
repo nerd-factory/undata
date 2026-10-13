@@ -16,7 +16,7 @@
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://github.com/nerd-factory/undata/blob/main/pyproject.toml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://github.com/nerd-factory/undata/blob/main/LICENSE)
 
-**[Ten examples, with real output →](https://nerd-factory.github.io/undata/)**
+**[Nine use cases, with real output →](https://nerd-factory.github.io/undata/)**
 
 </div>
 
@@ -90,12 +90,26 @@ Each behaviour is pinned by a test in [tests/live/](https://github.com/nerd-fact
 platform every night and opens an issue if the platform changes. Most of them were found
 while writing the [UN Data Commons Field Guide](https://mafiatun.github.io/un-data-commons-field-guide/).
 
-## Examples
+## Use cases
 
-Ten runnable scripts in [examples/](https://github.com/nerd-factory/undata/tree/main/examples): a first table, comparing a region, a whole
-continent, an SDG target to its numbers, gaps, names, the search box, sources, Excel and
-citations, and checking an indicator. They run against the live platform every night, and
-[the examples page](https://nerd-factory.github.io/undata/) shows each with its real output.
+Nine requests as they arrive in UN work, each a runnable script in
+[examples/](https://github.com/nerd-factory/undata/tree/main/examples) that ends with a
+sentence ready for the report:
+
+| # | Who | What |
+|---|---|---|
+| 01 | Resident Coordinator's Office | A briefing note: Chad against its Sahel neighbours |
+| 02 | SDG reporting | Maternal mortality in Southern Asia since 2015, against the Target 3.1 level |
+| 03 | Gender focal point | Women in parliament in Eastern Africa: who has passed 30%, who reached parity |
+| 04 | Humanitarian coordination | Refugees by country of origin, in number and per person |
+| 05 | Peace and security | Conflict deaths against homicide, and who reports at all |
+| 06 | Statistics focal point | One statistic, three agencies, two numbers: what to cite |
+| 07 | Publications team | A regional data pack in Excel, with citations and gaps on their own sheets |
+| 08 | Monitoring and evaluation | A dashboard file that refreshes itself on a schedule |
+| 09 | Communications | Checking what data.un.org's search box decided before sharing its chart |
+
+They run against the live platform every night. [The use-cases page](https://nerd-factory.github.io/undata/)
+shows each with its code, a chart, the real output and the sentence.
 
 ## For developers
 

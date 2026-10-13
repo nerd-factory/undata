@@ -67,7 +67,7 @@ src/undata/dcid.py         the identifier grammar
 src/undata/errors.py       every exception, each with a message that helps
 tests/                     offline tests; tests/live/ calls the real API
 examples/                  runnable use cases, run nightly against the live API
-site/                      the use-cases page, built from examples/
+site/                      the use-cases page: template, build.py, charts.py
 ```
 
 ## The use-cases page

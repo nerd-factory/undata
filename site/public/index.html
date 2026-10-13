@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>undata · UN data in Python</title>
-<meta name="description" content="undata is a Python package for the UN System Data Commons: type a country's name, get a table, with sources, UN country names and no guessing. Ten examples with real output.">
+<meta name="description" content="undata is a Python package for UN colleagues who need numbers for a report. Nine real use cases, from a country briefing to an SDG progress check, each with the code, a chart, the real output and a sentence ready for your report.">
 <meta name="theme-color" content="#141419">
 <meta property="og:title" content="undata — UN data in Python, without the guessing">
-<meta property="og:description" content="Type a country's name, get a table. A Python package for the UN System Data Commons, for colleagues who need numbers for a report. A Nerd Lab experiment.">
+<meta property="og:description" content="Nine real use cases: a country briefing, SDG progress, women in parliament, refugees, conflict and homicide, and more. Real data, real output, a sentence for your report.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://nerd-factory.github.io/undata/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23141419'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='15' font-weight='700' text-anchor='middle' fill='%23C8F531'%3Eun%3C/text%3E%3C/svg%3E">
@@ -127,6 +127,62 @@ pre .c { color: var(--muted); }
 .does strong { display: block; font-weight: 600; margin-bottom: 0.15rem; }
 .does span { color: var(--muted); font-size: 0.95rem; }
 
+/* use-case overview */
+.cards { list-style: none; margin: 2rem 0 0; padding: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); }
+.cards li { border: 1px solid var(--line); background: var(--ink-2); transition: border-color 120ms ease; }
+.cards li:hover, .cards li:focus-within { border-color: var(--volt); }
+.cards a { display: block; height: 100%; padding: 1.15rem 1.15rem 1.25rem; color: inherit; text-decoration: none; }
+.cards .role { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 0.6rem; }
+.cards .role b { color: var(--volt); font-weight: 400; margin-right: 0.5rem; }
+.cards h3 { font-size: 1rem; margin: 0 0 0.5rem; }
+.cards p { margin: 0; color: var(--muted); font-size: 0.92rem; line-height: 1.5; }
+
+/* a use case, in full */
+.case-meta { display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin: 0 0 0.75rem; }
+.case-meta .n { color: var(--volt); }
+.case h3 { font-family: var(--display); font-size: clamp(1.3rem, 1.1rem + 0.9vw, 1.75rem); font-weight: 700; letter-spacing: 0; margin-bottom: 1rem; }
+.ask { margin: 0 0 1.5rem; padding: 0.2rem 0 0.2rem 1.1rem; border-left: 2px solid var(--volt); max-width: 44rem; }
+.ask p { margin: 0; font-size: 1.08rem; }
+.ask cite { display: block; margin-top: 0.4rem; font-style: normal; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.step { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 1.75rem 0 0; }
+.step + .block { margin-top: 0.6rem; }
+figure.block { margin: 0.6rem 0 0; padding: 1rem 1rem 0.75rem; background: transparent; }
+figcaption { font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem; }
+.multiples { display: grid; gap: 1.25rem 2rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
+.panel-title { font-size: 0.9rem; margin: 0 0 0.25rem; }
+.scroll { overflow-x: auto; }
+.scroll .chart { min-width: 34rem; }
+.report { margin-top: 1.25rem; border: 1px solid var(--volt); padding: 1rem 1.15rem; }
+.report .tag { display: block; color: var(--volt); font-family: var(--mono); font-size: 0.72rem; margin-bottom: 0.4rem; }
+.report p { margin: 0; font-size: 1.05rem; max-width: none; }
+.caught { list-style: none; margin: 1.25rem 0 0; padding: 0; display: grid; gap: 0.6rem; }
+.caught li { padding-left: 1.4rem; position: relative; color: var(--muted); font-size: 0.95rem; max-width: 46rem; }
+.caught li::before { content: "✓"; position: absolute; left: 0; color: var(--volt); }
+.caught strong { color: var(--offwhite); font-weight: 600; }
+.extra pre { font-size: 0.8rem; }
+.report .copy { margin-top: 0.75rem; }
+
+/* charts (site/charts.py) */
+.chart { display: block; width: 100%; height: auto; font-family: var(--display); }
+.chart .label { fill: var(--offwhite); font-size: 13px; }
+.chart .bar { fill: var(--muted); }
+.chart .row.hi .bar { fill: var(--volt); }
+.chart .value { fill: var(--muted); font-family: var(--mono); font-size: 12px; }
+.chart text { paint-order: stroke; stroke: var(--ink); stroke-width: 3px; stroke-linejoin: round; }
+.chart .col-head { fill: var(--muted); font-family: var(--mono); font-size: 11px; }
+.chart .row.hi .value, .chart .row.hi .label { fill: var(--offwhite); font-weight: 600; }
+.chart .tick { fill: var(--muted); font-family: var(--mono); font-size: 11px; }
+.chart .grid { stroke: var(--line); stroke-width: 1; }
+.chart .baseline { stroke: #4a4a55; stroke-width: 1; }
+.chart .ref { stroke: var(--offwhite); stroke-width: 1; stroke-dasharray: 4 4; opacity: 0.75; }
+.chart .ref-label { fill: var(--offwhite); font-family: var(--mono); font-size: 11px; }
+.chart .hit { fill: transparent; }
+.chart .row:hover .hit { fill: rgba(244, 241, 234, 0.05); }
+.chart .link { stroke: #4a4a55; stroke-width: 2; stroke-linecap: round; }
+.chart .dot-before { fill: var(--ink); stroke: var(--muted); stroke-width: 2; }
+.chart .dot-after { fill: var(--volt); stroke: var(--ink); stroke-width: 2; }
+.chart .legend text { fill: var(--muted); font-family: var(--mono); font-size: 12px; }
+
 @media (forced-colors: active) { .block, .facts li, .cols > div, .copy { border: 1px solid CanvasText; } }
 </style>
 </head>
@@ -137,9 +193,10 @@ pre .c { color: var(--muted); }
   <div class="wrap">
     <a class="brand" href="https://nerd-factory.github.io/nerd-lab/"><span>nerd lab /</span> undata</a>
     <nav aria-label="Page">
+      <a href="#use-cases">use cases</a>
       <a href="#start" class="opt">start</a>
       <a href="#functions" class="opt">functions</a>
-      <a href="#examples">examples</a>
+      <a href="https://pypi.org/project/undata/" class="opt">pypi</a>
       <a href="https://github.com/nerd-factory/undata">github</a>
     </nav>
   </div>
@@ -151,23 +208,492 @@ pre .c { color: var(--muted); }
   <div class="wrap">
     <p class="anno">// a nerd lab experiment · unofficial</p>
     <h1>UN data in Python, without the guessing.</h1>
-    <p class="lede">Type a country's name, get a table. undata is a Python package for the
-    <a href="https://data.un.org">UN System Data Commons</a>, which holds statistics from 26 UN System
-    entities. It is written for colleagues who need numbers for a report, not a course in APIs.</p>
+    <p class="lede">Type a country's name, get a table with its source on every row. undata is a
+    Python package for the <a href="https://data.un.org">UN System Data Commons</a>, which holds
+    statistics from 26 UN System entities, and it is written for colleagues who need numbers for a
+    report, not a course in APIs.</p>
 
     <div class="install">
       <pre><code>pip install undata</code></pre>
     </div>
 
-    <p class="status"><strong>Alpha</strong>, <a href="https://pypi.org/project/undata/">on PyPI</a>: the API may still change before 1.0. Every output on this page is real: each example below is a script in
-    <a href="https://github.com/nerd-factory/undata/tree/main/examples">examples/</a>, run against the
+    <p class="status"><strong>Everything on this page is real.</strong> Each use case below is a
+    script in <a href="https://github.com/nerd-factory/undata/tree/main/examples">examples/</a>. The
+    output, the charts and the sentence for your report are what those scripts produced against the
     live platform on 13 October 2026, and the same scripts run again every night.</p>
+  </div>
+</section>
+
+<section class="sec" id="use-cases">
+  <div class="wrap">
+    <p class="anno">// 01 — use cases</p>
+    <h2>Nine requests, as they actually arrive</h2>
+    <p>Each one starts from a real kind of request in UN work and ends with something you can
+    send: a table, a chart, an Excel file, or a sentence for the report. Each takes a few lines of
+    Python and a few minutes.</p>
+    <ul class="cards">
+      <li><a href="#briefing"><p class="role"><b>01</b>Resident Coordinator's Office</p><h3>A briefing note before a country visit</h3><p>Chad against its Sahel neighbours on electricity, child mortality and schooling.</p></a></li>
+      <li><a href="#sdg-progress"><p class="role"><b>02</b>SDG reporting</p><h3>Is a target moving?</h3><p>Maternal mortality in Southern Asia since 2015, against the Target 3.1 level.</p></a></li>
+      <li><a href="#parliament"><p class="role"><b>03</b>Gender focal point</p><h3>Women in parliament, by region</h3><p>Who has passed 30%, and who has reached parity, in Eastern Africa.</p></a></li>
+      <li><a href="#refugees"><p class="role"><b>04</b>Humanitarian coordination</p><h3>Refugees: count or share?</h3><p>The most refugees in number is not the most per person.</p></a></li>
+      <li><a href="#conflict"><p class="role"><b>05</b>Peace and security</p><h3>Conflict deaths in context</h3><p>Who reports them, and how they compare with homicide.</p></a></li>
+      <li><a href="#sources"><p class="role"><b>06</b>Statistics focal point</p><h3>When agencies disagree</h3><p>One statistic, three UN sources, two different numbers.</p></a></li>
+      <li><a href="#data-pack"><p class="role"><b>07</b>Publications team</p><h3>A regional data pack in Excel</h3><p>Three indicators, one file, citations and gaps on their own sheets.</p></a></li>
+      <li><a href="#dashboard"><p class="role"><b>08</b>Monitoring and evaluation</p><h3>A dashboard that refreshes itself</h3><p>A file Power BI or Excel reads, updated on a schedule.</p></a></li>
+      <li><a href="#search-box"><p class="role"><b>09</b>Communications</p><h3>Check a chart before you share it</h3><p>See what data.un.org's search box decided, including whether it guessed.</p></a></li>
+    </ul>
+
+    <article class="case" id="briefing">
+      <p class="case-meta"><span class="n">01</span><span>Resident Coordinator's Office</span><span>briefing note</span></p>
+      <h3>A briefing note before a country visit</h3>
+      <blockquote class="ask"><p>"The RC is in N'Djamena on Monday. I need one page: electricity, child mortality and schooling in Chad, compared with the other Sahel countries."</p><cite>The ask</cite></blockquote>
+      <p class="step">The code</p>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file">examples/01_country_briefing.py</span></div><pre><code><span class="c">&quot;&quot;&quot;Briefing note: Chad against its Sahel neighbours, in one table and one sentence.&quot;&quot;&quot;</span>
+
+import undata as un
+
+SAHEL = [&quot;Chad&quot;, &quot;Niger&quot;, &quot;Mali&quot;, &quot;Burkina Faso&quot;, &quot;Mauritania&quot;, &quot;Sudan&quot;]
+MEASURES = {
+    &quot;undata/sdg/EG_ACS_ELEC&quot;: &quot;electricity %&quot;,
+    &quot;undata/unicef/CME_MR.AGE--Y0T4&quot;: &quot;under-5 deaths per 1,000&quot;,
+    &quot;undata/sdg/SE_TOT_CPLR.EDUCATION_LEVEL--ISCED11_1&quot;: &quot;primary completion %&quot;,
+}
+
+table = un.latest(list(MEASURES), SAHEL)
+table[&quot;measure&quot;] = table[&quot;indicator&quot;].map(MEASURES)
+brief = table.pivot(index=&quot;country&quot;, columns=&quot;measure&quot;, values=&quot;value&quot;)
+print(brief[list(MEASURES.values())].round(1).to_string(), &quot;\n&quot;)
+
+<span class="c"># The sentence for the note, worked out from the numbers rather than typed in.</span>
+RANK = {1: &quot;&quot;, 2: &quot;second-&quot;, 3: &quot;third-&quot;, 4: &quot;fourth-&quot;, 5: &quot;fifth-&quot;, 6: &quot;sixth-&quot;}
+chad = table[table[&quot;country&quot;] == &quot;Chad&quot;].set_index(&quot;measure&quot;)
+power, deaths = chad.loc[&quot;electricity %&quot;], chad.loc[&quot;under-5 deaths per 1,000&quot;]
+<span class="c"># Rank 1 means the lowest electricity, and the highest child mortality.</span>
+power_rank = int(brief[&quot;electricity %&quot;].rank()[&quot;Chad&quot;])
+deaths_rank = int(brief[&quot;under-5 deaths per 1,000&quot;].rank(ascending=False)[&quot;Chad&quot;])
+print(
+    f&quot;In {power.year}, {power.value:.0f}% of people in Chad had electricity, the &quot;
+    f&quot;{RANK[power_rank]}lowest of the six Sahel countries compared, and {deaths.value:.0f} of &quot;
+    f&quot;every 1,000 children died before their fifth birthday, the {RANK[deaths_rank]}highest.&quot;
+)</code></pre></div>
+      <p class="step">The picture</p>
+      <figure class="block"><div class="multiples"><div class="panel"><p class="panel-title">Access to electricity</p><svg class="chart" viewBox="0 0 320 224" role="img" aria-label="Access to electricity, Sahel" preserveAspectRatio="xMinYMin meet" style="--label:107.6px"><title>Access to electricity, Sahel</title><line class="grid" x1="107.6" x2="107.6" y1="30" y2="198"/><text class="tick" x="107.6" y="214" text-anchor="middle">0%</text><line class="grid" x1="185.8" x2="185.8" y1="30" y2="198"/><text class="tick" x="185.8" y="214" text-anchor="middle">50%</text><line class="grid" x1="264.0" x2="264.0" y1="30" y2="198"/><text class="tick" x="264.0" y="214" text-anchor="middle">100%</text><g class="row"><title>Sudan: 66% (2024)</title><rect class="hit" x="0" y="30" width="320" height="28"/><text class="label" x="97.6" y="48.0" text-anchor="end">Sudan</text><g class="bar"><path d="M107.6,36.0 h99.2 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-99.2 z"/></g><text class="value" x="216.8" y="48.0">66%</text></g><g class="row"><title>Mauritania: 52% (2024)</title><rect class="hit" x="0" y="58" width="320" height="28"/><text class="label" x="97.6" y="76.0" text-anchor="end">Mauritania</text><g class="bar"><path d="M107.6,64.0 h77.6 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-77.6 z"/></g><text class="value" x="195.2" y="76.0">52%</text></g><g class="row"><title>Mali: 50% (2024)</title><rect class="hit" x="0" y="86" width="320" height="28"/><text class="label" x="97.6" y="104.0" text-anchor="end">Mali</text><g class="bar"><path d="M107.6,92.0 h73.4 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-73.4 z"/></g><text class="value" x="191.0" y="104.0">50%</text></g><g class="row"><title>Burkina Faso: 34% (2024)</title><rect class="hit" x="0" y="114" width="320" height="28"/><text class="label" x="97.6" y="132.0" text-anchor="end">Burkina Faso</text><g class="bar"><path d="M107.6,120.0 h49.2 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-49.2 z"/></g><text class="value" x="166.8" y="132.0">34%</text></g><g class="row"><title>Niger: 21% (2024)</title><rect class="hit" x="0" y="142" width="320" height="28"/><text class="label" x="97.6" y="160.0" text-anchor="end">Niger</text><g class="bar"><path d="M107.6,148.0 h29.3 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-29.3 z"/></g><text class="value" x="146.9" y="160.0">21%</text></g><g class="row hi"><title>Chad: 13% (2024)</title><rect class="hit" x="0" y="170" width="320" height="28"/><text class="label" x="97.6" y="188.0" text-anchor="end">Chad</text><g class="bar"><path d="M107.6,176.0 h17.0 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-17.0 z"/></g><text class="value" x="134.6" y="188.0">13%</text></g><line class="baseline" x1="107.6" x2="107.6" y1="30" y2="198"/></svg></div><div class="panel"><p class="panel-title">Under-5 deaths per 1,000 live births</p><svg class="chart" viewBox="0 0 320 224" role="img" aria-label="Under-5 deaths per 1,000 live births, Sahel" preserveAspectRatio="xMinYMin meet" style="--label:107.6px"><title>Under-5 deaths per 1,000 live births, Sahel</title><line class="grid" x1="107.6" x2="107.6" y1="30" y2="198"/><text class="tick" x="107.6" y="214" text-anchor="middle">0</text><line class="grid" x1="185.8" x2="185.8" y1="30" y2="198"/><text class="tick" x="185.8" y="214" text-anchor="middle">100</text><line class="grid" x1="264.0" x2="264.0" y1="30" y2="198"/><text class="tick" x="264.0" y="214" text-anchor="middle">200</text><g class="row"><title>Niger: 111 (2024)</title><rect class="hit" x="0" y="30" width="320" height="28"/><text class="label" x="97.6" y="48.0" text-anchor="end">Niger</text><g class="bar"><path d="M107.6,36.0 h82.6 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-82.6 z"/></g><text class="value" x="200.2" y="48.0">111</text></g><g class="row hi"><title>Chad: 97 (2024)</title><rect class="hit" x="0" y="58" width="320" height="28"/><text class="label" x="97.6" y="76.0" text-anchor="end">Chad</text><g class="bar"><path d="M107.6,64.0 h72.1 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-72.1 z"/></g><text class="value" x="189.7" y="76.0">97</text></g><g class="row"><title>Burkina Faso: 75 (2024)</title><rect class="hit" x="0" y="86" width="320" height="28"/><text class="label" x="97.6" y="104.0" text-anchor="end">Burkina Faso</text><g class="bar"><path d="M107.6,92.0 h54.6 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-54.6 z"/></g><text class="value" x="172.2" y="104.0">75</text></g><g class="row"><title>Mali: 73 (2024)</title><rect class="hit" x="0" y="114" width="320" height="28"/><text class="label" x="97.6" y="132.0" text-anchor="end">Mali</text><g class="bar"><path d="M107.6,120.0 h53.1 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-53.1 z"/></g><text class="value" x="170.7" y="132.0">73</text></g><g class="row"><title>Sudan: 62 (2024)</title><rect class="hit" x="0" y="142" width="320" height="28"/><text class="label" x="97.6" y="160.0" text-anchor="end">Sudan</text><g class="bar"><path d="M107.6,148.0 h44.2 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-44.2 z"/></g><text class="value" x="161.8" y="160.0">62</text></g><g class="row"><title>Mauritania: 37 (2024)</title><rect class="hit" x="0" y="170" width="320" height="28"/><text class="label" x="97.6" y="188.0" text-anchor="end">Mauritania</text><g class="bar"><path d="M107.6,176.0 h24.9 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-24.9 z"/></g><text class="value" x="142.5" y="188.0">37</text></g><line class="baseline" x1="107.6" x2="107.6" y1="30" y2="198"/></svg></div><div class="panel"><p class="panel-title">Primary completion</p><svg class="chart" viewBox="0 0 320 224" role="img" aria-label="Primary completion, Sahel" preserveAspectRatio="xMinYMin meet" style="--label:107.6px"><title>Primary completion, Sahel</title><line class="grid" x1="107.6" x2="107.6" y1="30" y2="198"/><text class="tick" x="107.6" y="214" text-anchor="middle">0%</text><line class="grid" x1="185.8" x2="185.8" y1="30" y2="198"/><text class="tick" x="185.8" y="214" text-anchor="middle">50%</text><line class="grid" x1="264.0" x2="264.0" y1="30" y2="198"/><text class="tick" x="264.0" y="214" text-anchor="middle">100%</text><g class="row"><title>Sudan: 65% (2014)</title><rect class="hit" x="0" y="30" width="320" height="28"/><text class="label" x="97.6" y="48.0" text-anchor="end">Sudan</text><g class="bar"><path d="M107.6,36.0 h98.3 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-98.3 z"/></g><text class="value" x="215.9" y="48.0">65%</text></g><g class="row"><title>Burkina Faso: 60% (2021)</title><rect class="hit" x="0" y="58" width="320" height="28"/><text class="label" x="97.6" y="76.0" text-anchor="end">Burkina Faso</text><g class="bar"><path d="M107.6,64.0 h90.2 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-90.2 z"/></g><text class="value" x="207.8" y="76.0">60%</text></g><g class="row"><title>Mauritania: 58% (2015)</title><rect class="hit" x="0" y="86" width="320" height="28"/><text class="label" x="97.6" y="104.0" text-anchor="end">Mauritania</text><g class="bar"><path d="M107.6,92.0 h86.6 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-86.6 z"/></g><text class="value" x="204.2" y="104.0">58%</text></g><g class="row"><title>Mali: 48% (2024)</title><rect class="hit" x="0" y="114" width="320" height="28"/><text class="label" x="97.6" y="132.0" text-anchor="end">Mali</text><g class="bar"><path d="M107.6,120.0 h70.3 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-70.3 z"/></g><text class="value" x="187.9" y="132.0">48%</text></g><g class="row"><title>Niger: 36% (2022)</title><rect class="hit" x="0" y="142" width="320" height="28"/><text class="label" x="97.6" y="160.0" text-anchor="end">Niger</text><g class="bar"><path d="M107.6,148.0 h52.0 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-52.0 z"/></g><text class="value" x="169.6" y="160.0">36%</text></g><g class="row hi"><title>Chad: 27% (2019)</title><rect class="hit" x="0" y="170" width="320" height="28"/><text class="label" x="97.6" y="188.0" text-anchor="end">Chad</text><g class="bar"><path d="M107.6,176.0 h38.1 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-38.1 z"/></g><text class="value" x="155.7" y="188.0">27%</text></g><line class="baseline" x1="107.6" x2="107.6" y1="30" y2="198"/></svg></div></div><figcaption>Chad in green. Latest year for each country; hover a bar for its year.</figcaption></figure>
+      <p class="step">What came back</p>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 13 October 2026</span></div><pre><samp>01_country_briefing.py:12: MixedYearsWarning: The latest values for School completion rate [Education level=Primary education (ISCED11 - 1)] come from different years, 2014 to 2024. Values from different years are not directly comparable; the year column shows which is which.
+  table = un.latest(list(MEASURES), SAHEL)
+measure       electricity %  under-5 deaths per 1,000  primary completion %
+country                                                                    
+Burkina Faso           34.0                      74.9                  60.3
+Chad                   13.4                      97.3                  26.9
+Mali                   49.5                      73.0                  47.5
+Mauritania             52.2                      36.9                  57.9
+Niger                  21.3                     110.7                  35.8
+Sudan                  66.0                      61.6                  65.4 
+
+In 2024, 13% of people in Chad had electricity, the lowest of the six Sahel countries compared, and 97 of every 1,000 children died before their fifth birthday, the second-highest.</samp></pre></div>
+      <div class="report"><span class="tag">For your note</span><p>In 2024, 13% of people in Chad had electricity, the lowest of the six Sahel countries compared, and 97 of every 1,000 children died before their fifth birthday, the second-highest.</p></div>
+      <ul class="caught">
+        <li><strong>Mixed years, flagged.</strong> "Latest" school completion ranges across a decade between these six countries. The warning says so before the table can mislead anyone, and the year is on every row.</li>
+        <li><strong>Names as you write them.</strong> Six country names, no codes. Three indicators come back in one request.</li>
+      </ul>
+    </article>
+
+    <article class="case" id="sdg-progress">
+      <p class="case-meta"><span class="n">02</span><span>SDG reporting</span><span>progress report</span></p>
+      <h3>Is a target moving?</h3>
+      <blockquote class="ask"><p>"For the regional SDG progress report: has maternal mortality in Southern Asia fallen since 2015, and where is it already below 70?"</p><cite>The ask</cite></blockquote>
+      <p class="step">The code</p>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file">examples/02_sdg_progress.py</span></div><pre><code><span class="c">&quot;&quot;&quot;SDG 3.1: has maternal mortality fallen since 2015, and where is it below 70?&quot;&quot;&quot;</span>
+
+import undata as un
+
+<span class="c"># From the indicator your mandate names to the series that reports it.</span>
+print(un.sdg.series(&quot;3.1.1&quot;)[[&quot;indicator&quot;, &quot;name&quot;]].to_string(index=False), &quot;\n&quot;)
+
+MMR = &quot;undata/sdg/SH_STA_MORT.SEX--F&quot;
+table = un.get(MMR, &quot;Southern Asia&quot;, years=[2015, 2023])
+
+change = table.pivot(index=&quot;country&quot;, columns=&quot;year&quot;, values=&quot;value&quot;)
+change[&quot;change %&quot;] = (change[2023] / change[2015] - 1) * 100
+print(change.sort_values(2023).round(0).to_string(), &quot;\n&quot;)
+
+fell = int((change[&quot;change %&quot;] &lt; 0).sum())
+fell_in = f&quot;all {fell}&quot; if fell == len(change) else f&quot;{fell} of the {len(change)}&quot;
+below = change.index[change[2023] &lt; 70].tolist()
+print(
+    f&quot;Between 2015 and 2023, maternal mortality fell in {fell_in} countries &quot;
+    f&quot;of Southern Asia. {len(below)} were below 70 deaths per 100,000 live births in 2023 &quot;
+    f&quot;({&#x27;, &#x27;.join(below)}), the level Target 3.1 sets for the world as a whole.&quot;
+)</code></pre></div>
+      <p class="step">The picture</p>
+      <figure class="block"><div class="scroll"><svg class="chart" viewBox="0 0 640 326" role="img" aria-label="Maternal deaths per 100,000 live births, Southern Asia, 2015 and 2023" preserveAspectRatio="xMinYMin meet" style="--label:216.79999999999998px"><title>Maternal deaths per 100,000 live births, Southern Asia, 2015 and 2023</title><g class="legend" transform="translate(216.79999999999998,14)"><circle class="dot-before" cx="5" cy="0" r="5"/><text x="16" y="4">2015</text><circle class="dot-after" cx="76" cy="0" r="5"/><text x="87" y="4">2023</text></g><text class="col-head" x="632" y="36" text-anchor="end">2023</text><line class="grid" x1="216.8" x2="216.8" y1="48" y2="300"/><text class="tick" x="216.8" y="316" text-anchor="middle">0</text><line class="grid" x1="304.6" x2="304.6" y1="48" y2="300"/><text class="tick" x="304.6" y="316" text-anchor="middle">250</text><line class="grid" x1="392.4" x2="392.4" y1="48" y2="300"/><text class="tick" x="392.4" y="316" text-anchor="middle">500</text><line class="grid" x1="480.2" x2="480.2" y1="48" y2="300"/><text class="tick" x="480.2" y="316" text-anchor="middle">750</text><line class="grid" x1="568.0" x2="568.0" y1="48" y2="300"/><text class="tick" x="568.0" y="316" text-anchor="middle">1,000</text><line class="ref" x1="241.4" x2="241.4" y1="40" y2="300"/><text class="ref-label" x="241.4" y="36" text-anchor="middle">70</text><g class="row"><title>Afghanistan: 741 in 2015, 521 in 2023 (-30%)</title><rect class="hit" x="0" y="48.0" width="640" height="28"/><text class="label" x="206.79999999999998" y="66.0" text-anchor="end">Afghanistan</text><line class="link" x1="477.1" x2="399.6" y1="62.0" y2="62.0"/><circle class="dot-before" cx="477.1" cy="62.0" r="5"/><circle class="dot-after" cx="399.6" cy="62.0" r="5"/><text class="value" x="632" y="66.0" text-anchor="end">521</text></g><g class="row"><title>Pakistan: 202 in 2015, 155 in 2023 (-23%)</title><rect class="hit" x="0" y="76.0" width="640" height="28"/><text class="label" x="206.79999999999998" y="94.0" text-anchor="end">Pakistan</text><line class="link" x1="287.9" x2="271.2" y1="90.0" y2="90.0"/><circle class="dot-before" cx="287.9" cy="90.0" r="5"/><circle class="dot-after" cx="271.2" cy="90.0" r="5"/><text class="value" x="632" y="94.0" text-anchor="end">155</text></g><g class="row"><title>Nepal: 236 in 2015, 142 in 2023 (-40%)</title><rect class="hit" x="0" y="104.0" width="640" height="28"/><text class="label" x="206.79999999999998" y="122.0" text-anchor="end">Nepal</text><line class="link" x1="299.6" x2="266.7" y1="118.0" y2="118.0"/><circle class="dot-before" cx="299.6" cy="118.0" r="5"/><circle class="dot-after" cx="266.7" cy="118.0" r="5"/><text class="value" x="632" y="122.0" text-anchor="end">142</text></g><g class="row"><title>Bangladesh: 204 in 2015, 115 in 2023 (-43%)</title><rect class="hit" x="0" y="132.0" width="640" height="28"/><text class="label" x="206.79999999999998" y="150.0" text-anchor="end">Bangladesh</text><line class="link" x1="288.3" x2="257.2" y1="146.0" y2="146.0"/><circle class="dot-before" cx="288.3" cy="146.0" r="5"/><circle class="dot-after" cx="257.2" cy="146.0" r="5"/><text class="value" x="632" y="150.0" text-anchor="end">115</text></g><g class="row"><title>India: 129 in 2015, 80 in 2023 (-37%)</title><rect class="hit" x="0" y="160.0" width="640" height="28"/><text class="label" x="206.79999999999998" y="178.0" text-anchor="end">India</text><line class="link" x1="261.9" x2="245.1" y1="174.0" y2="174.0"/><circle class="dot-before" cx="261.9" cy="174.0" r="5"/><circle class="dot-after" cx="245.1" cy="174.0" r="5"/><text class="value" x="632" y="178.0" text-anchor="end">80</text></g><g class="row"><title>Bhutan: 68 in 2015, 47 in 2023 (-32%)</title><rect class="hit" x="0" y="188.0" width="640" height="28"/><text class="label" x="206.79999999999998" y="206.0" text-anchor="end">Bhutan</text><line class="link" x1="240.8" x2="233.2" y1="202.0" y2="202.0"/><circle class="dot-before" cx="240.8" cy="202.0" r="5"/><circle class="dot-after" cx="233.2" cy="202.0" r="5"/><text class="value" x="632" y="206.0" text-anchor="end">47</text></g><g class="row"><title>Maldives: 41 in 2015, 32 in 2023 (-22%)</title><rect class="hit" x="0" y="216.0" width="640" height="28"/><text class="label" x="206.79999999999998" y="234.0" text-anchor="end">Maldives</text><line class="link" x1="231.2" x2="228.0" y1="230.0" y2="230.0"/><circle class="dot-before" cx="231.2" cy="230.0" r="5"/><circle class="dot-after" cx="228.0" cy="230.0" r="5"/><text class="value" x="632" y="234.0" text-anchor="end">32</text></g><g class="row"><title>Sri Lanka: 22 in 2015, 18 in 2023 (-17%)</title><rect class="hit" x="0" y="244.0" width="640" height="28"/><text class="label" x="206.79999999999998" y="262.0" text-anchor="end">Sri Lanka</text><line class="link" x1="224.5" x2="223.2" y1="258.0" y2="258.0"/><circle class="dot-before" cx="224.5" cy="258.0" r="5"/><circle class="dot-after" cx="223.2" cy="258.0" r="5"/><text class="value" x="632" y="262.0" text-anchor="end">18</text></g><g class="row"><title>Iran (Islamic Republic of): 22 in 2015, 16 in 2023 (-29%)</title><rect class="hit" x="0" y="272.0" width="640" height="28"/><text class="label" x="206.79999999999998" y="290.0" text-anchor="end">Iran (Islamic Republic of)</text><line class="link" x1="224.6" x2="222.4" y1="286.0" y2="286.0"/><circle class="dot-before" cx="224.6" cy="286.0" r="5"/><circle class="dot-after" cx="222.4" cy="286.0" r="5"/><text class="value" x="632" y="290.0" text-anchor="end">16</text></g></svg></div><figcaption>Maternal deaths per 100,000 live births. The dashed line marks 70, the level Target 3.1 sets for the world.</figcaption></figure>
+      <p class="step">What came back</p>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 13 October 2026</span></div><pre><samp>                    indicator                                  name
+undata/sdg/SH_STA_MORT.SEX--F Maternal mortality ratio [Sex=Female] 
+
+year                         2015   2023  change %
+country                                           
+Iran (Islamic Republic of)   22.0   16.0     -29.0
+Sri Lanka                    22.0   18.0     -17.0
+Maldives                     41.0   32.0     -22.0
+Bhutan                       68.0   47.0     -32.0
+India                       129.0   80.0     -37.0
+Bangladesh                  204.0  115.0     -43.0
+Nepal                       236.0  142.0     -40.0
+Pakistan                    202.0  155.0     -23.0
+Afghanistan                 741.0  521.0     -30.0 
+
+Between 2015 and 2023, maternal mortality fell in all 9 countries of Southern Asia. 4 were below 70 deaths per 100,000 live births in 2023 (Bhutan, Iran (Islamic Republic of), Maldives, Sri Lanka), the level Target 3.1 sets for the world as a whole.</samp></pre></div>
+      <div class="report"><span class="tag">For your report</span><p>Between 2015 and 2023, maternal mortality fell in all 9 countries of Southern Asia. 4 were below 70 deaths per 100,000 live births in 2023 (Bhutan, Iran (Islamic Republic of), Maldives, Sri Lanka), the level Target 3.1 sets for the world as a whole.</p></div>
+      <ul class="caught">
+        <li><strong>From the SDG number to the data.</strong> <code>un.sdg.series("3.1.1")</code> finds the series that reports the indicator, so nobody has to guess a code.</li>
+        <li><strong>Careful wording, built in.</strong> 70 per 100,000 is the level Target 3.1 sets for the world as a whole, not a national target, and the sentence says so.</li>
+      </ul>
+    </article>
+
+    <article class="case" id="parliament">
+      <p class="case-meta"><span class="n">03</span><span>Gender focal point</span><span>International Women's Day</span></p>
+      <h3>Women in parliament, by region</h3>
+      <blockquote class="ask"><p>"For our 8 March piece: which parliaments in Eastern Africa have at least 30% women, and has anyone reached parity?"</p><cite>The ask</cite></blockquote>
+      <p class="step">The code</p>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file">examples/03_women_in_parliament.py</span></div><pre><code><span class="c">&quot;&quot;&quot;Women in parliament: who has passed 30%, and who has reached parity?&quot;&quot;&quot;</span>
+
+import undata as un
+
+SEATS = &quot;undata/sdg/SG_GEN_PARL.SEX--F&quot;  <span class="c"># % of seats held by women, SDG 5.5.1</span>
+
+table = un.latest(SEATS, &quot;Eastern Africa&quot;).sort_values(&quot;value&quot;, ascending=False)
+print(table[[&quot;country&quot;, &quot;year&quot;, &quot;value&quot;]].round(1).to_string(index=False), &quot;\n&quot;)
+
+thirty = table[table[&quot;value&quot;] &gt;= 30]
+parity = table[table[&quot;value&quot;] &gt;= 50]
+print(
+    f&quot;{len(thirty)} of the {len(table)} Eastern African parliaments with data have at least &quot;
+    f&quot;30% women. {&#x27;, &#x27;.join(parity[&#x27;country&#x27;])} passed parity, with &quot;
+    f&quot;{parity[&#x27;value&#x27;].iloc[0]:.0f}% of seats held by women.&quot;
+)</code></pre></div>
+      <p class="step">The picture</p>
+      <figure class="block"><div class="scroll"><svg class="chart" viewBox="0 0 640 560" role="img" aria-label="Share of parliamentary seats held by women, Eastern Africa" preserveAspectRatio="xMinYMin meet" style="--label:224.6px"><title>Share of parliamentary seats held by women, Eastern Africa</title><line class="grid" x1="224.6" x2="224.6" y1="30" y2="534"/><text class="tick" x="224.6" y="550" text-anchor="middle">0%</text><line class="grid" x1="314.4" x2="314.4" y1="30" y2="534"/><text class="tick" x="314.4" y="550" text-anchor="middle">25%</text><line class="grid" x1="404.3" x2="404.3" y1="30" y2="534"/><text class="tick" x="404.3" y="550" text-anchor="middle">50%</text><line class="grid" x1="494.1" x2="494.1" y1="30" y2="534"/><text class="tick" x="494.1" y="550" text-anchor="middle">75%</text><line class="grid" x1="584.0" x2="584.0" y1="30" y2="534"/><text class="tick" x="584.0" y="550" text-anchor="middle">100%</text><line class="ref" x1="332.4" x2="332.4" y1="22" y2="534"/><text class="ref-label" x="332.4" y="18" text-anchor="middle">30%</text><line class="ref" x1="404.3" x2="404.3" y1="22" y2="534"/><text class="ref-label" x="404.3" y="18" text-anchor="middle">parity</text><g class="row hi"><title>Rwanda: 64% (2026)</title><rect class="hit" x="0" y="30" width="640" height="28"/><text class="label" x="214.6" y="48.0" text-anchor="end">Rwanda</text><g class="bar"><path d="M224.6,36.0 h225.1 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-225.1 z"/></g><text class="value" x="459.7" y="48.0">64%</text></g><g class="row"><title>Ethiopia: 42% (2026)</title><rect class="hit" x="0" y="58" width="640" height="28"/><text class="label" x="214.6" y="76.0" text-anchor="end">Ethiopia</text><g class="bar"><path d="M224.6,64.0 h146.6 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-146.6 z"/></g><text class="value" x="381.2" y="76.0">42%</text></g><g class="row"><title>Burundi: 40% (2026)</title><rect class="hit" x="0" y="86" width="640" height="28"/><text class="label" x="214.6" y="104.0" text-anchor="end">Burundi</text><g class="bar"><path d="M224.6,92.0 h138.5 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-138.5 z"/></g><text class="value" x="373.1" y="104.0">40%</text></g><g class="row"><title>Mozambique: 38% (2026)</title><rect class="hit" x="0" y="114" width="640" height="28"/><text class="label" x="214.6" y="132.0" text-anchor="end">Mozambique</text><g class="bar"><path d="M224.6,120.0 h132.6 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-132.6 z"/></g><text class="value" x="367.2" y="132.0">38%</text></g><g class="row"><title>United Republic of Tanzania: 38% (2026)</title><rect class="hit" x="0" y="142" width="640" height="28"/><text class="label" x="214.6" y="160.0" text-anchor="end">United Republic of Tanzania</text><g class="bar"><path d="M224.6,148.0 h131.1 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-131.1 z"/></g><text class="value" x="365.7" y="160.0">38%</text></g><g class="row"><title>Uganda: 34% (2026)</title><rect class="hit" x="0" y="170" width="640" height="28"/><text class="label" x="214.6" y="188.0" text-anchor="end">Uganda</text><g class="bar"><path d="M224.6,176.0 h118.2 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-118.2 z"/></g><text class="value" x="352.8" y="188.0">34%</text></g><g class="row"><title>South Sudan: 32% (2026)</title><rect class="hit" x="0" y="198" width="640" height="28"/><text class="label" x="214.6" y="216.0" text-anchor="end">South Sudan</text><g class="bar"><path d="M224.6,204.0 h112.3 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-112.3 z"/></g><text class="value" x="346.9" y="216.0">32%</text></g><g class="row"><title>Zimbabwe: 30% (2026)</title><rect class="hit" x="0" y="226" width="640" height="28"/><text class="label" x="214.6" y="244.0" text-anchor="end">Zimbabwe</text><g class="bar"><path d="M224.6,232.0 h104.2 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-104.2 z"/></g><text class="value" x="338.8" y="244.0">30%</text></g><g class="row"><title>Seychelles: 26% (2026)</title><rect class="hit" x="0" y="254" width="640" height="28"/><text class="label" x="214.6" y="272.0" text-anchor="end">Seychelles</text><g class="bar"><path d="M224.6,260.0 h91.1 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-91.1 z"/></g><text class="value" x="325.7" y="272.0">26%</text></g><g class="row"><title>Djibouti: 26% (2026)</title><rect class="hit" x="0" y="282" width="640" height="28"/><text class="label" x="214.6" y="300.0" text-anchor="end">Djibouti</text><g class="bar"><path d="M224.6,288.0 h90.0 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-90.0 z"/></g><text class="value" x="324.6" y="300.0">26%</text></g><g class="row"><title>Kenya: 23% (2026)</title><rect class="hit" x="0" y="310" width="640" height="28"/><text class="label" x="214.6" y="328.0" text-anchor="end">Kenya</text><g class="bar"><path d="M224.6,316.0 h78.6 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-78.6 z"/></g><text class="value" x="313.2" y="328.0">23%</text></g><g class="row"><title>Eritrea: 22% (2019)</title><rect class="hit" x="0" y="338" width="640" height="28"/><text class="label" x="214.6" y="356.0" text-anchor="end">Eritrea</text><g class="bar"><path d="M224.6,344.0 h75.1 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-75.1 z"/></g><text class="value" x="309.7" y="356.0">22%</text></g><g class="row"><title>Malawi: 21% (2026)</title><rect class="hit" x="0" y="366" width="640" height="28"/><text class="label" x="214.6" y="384.0" text-anchor="end">Malawi</text><g class="bar"><path d="M224.6,372.0 h73.0 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-73.0 z"/></g><text class="value" x="307.6" y="384.0">21%</text></g><g class="row"><title>Somalia: 19% (2026)</title><rect class="hit" x="0" y="394" width="640" height="28"/><text class="label" x="214.6" y="412.0" text-anchor="end">Somalia</text><g class="bar"><path d="M224.6,400.0 h64.2 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-64.2 z"/></g><text class="value" x="298.8" y="412.0">19%</text></g><g class="row"><title>Comoros: 18% (2026)</title><rect class="hit" x="0" y="422" width="640" height="28"/><text class="label" x="214.6" y="440.0" text-anchor="end">Comoros</text><g class="bar"><path d="M224.6,428.0 h61.3 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-61.3 z"/></g><text class="value" x="295.9" y="440.0">18%</text></g><g class="row"><title>Mauritius: 18% (2026)</title><rect class="hit" x="0" y="450" width="640" height="28"/><text class="label" x="214.6" y="468.0" text-anchor="end">Mauritius</text><g class="bar"><path d="M224.6,456.0 h60.4 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-60.4 z"/></g><text class="value" x="295.0" y="468.0">18%</text></g><g class="row"><title>Madagascar: 16% (2026)</title><rect class="hit" x="0" y="478" width="640" height="28"/><text class="label" x="214.6" y="496.0" text-anchor="end">Madagascar</text><g class="bar"><path d="M224.6,484.0 h53.3 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-53.3 z"/></g><text class="value" x="287.9" y="496.0">16%</text></g><g class="row"><title>Zambia: 15% (2026)</title><rect class="hit" x="0" y="506" width="640" height="28"/><text class="label" x="214.6" y="524.0" text-anchor="end">Zambia</text><g class="bar"><path d="M224.6,512.0 h49.8 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-49.8 z"/></g><text class="value" x="284.4" y="524.0">15%</text></g><line class="baseline" x1="224.6" x2="224.6" y1="30" y2="534"/></svg></div><figcaption>Share of seats held by women, latest year. The dashed lines mark 30% and parity; past parity in green.</figcaption></figure>
+      <p class="step">What came back</p>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 13 October 2026</span></div><pre><samp>03_women_in_parliament.py:7: MissingDataWarning: No data for 1 of 19 country/indicator combinations. They are left out of the table, not set to zero:
+  Proportion of seats in national parliaments held by women [Sex=Female]: French Southern Territories
+The full list is in table.attrs[&#x27;missing&#x27;].
+  table = un.latest(SEATS, &quot;Eastern Africa&quot;).sort_values(&quot;value&quot;, ascending=False)
+03_women_in_parliament.py:7: MixedYearsWarning: The latest values for Proportion of seats in national parliaments held by women [Sex=Female] come from different years, 2019 to 2026. Values from different years are not directly comparable; the year column shows which is which.
+  table = un.latest(SEATS, &quot;Eastern Africa&quot;).sort_values(&quot;value&quot;, ascending=False)
+                    country  year  value
+                     Rwanda  2026   63.8
+                   Ethiopia  2026   41.9
+                    Burundi  2026   39.6
+                 Mozambique  2026   38.0
+United Republic of Tanzania  2026   37.6
+                     Uganda  2026   34.0
+                South Sudan  2026   32.4
+                   Zimbabwe  2026   30.1
+                 Seychelles  2026   26.5
+                   Djibouti  2026   26.2
+                      Kenya  2026   23.0
+                    Eritrea  2019   22.0
+                     Malawi  2026   21.4
+                    Somalia  2026   19.0
+                    Comoros  2026   18.2
+                  Mauritius  2026   17.9
+                 Madagascar  2026   16.0
+                     Zambia  2026   15.0 
+
+8 of the 18 Eastern African parliaments with data have at least 30% women. Rwanda passed parity, with 64% of seats held by women.</samp></pre></div>
+      <div class="report"><span class="tag">For your piece</span><p>8 of the 18 Eastern African parliaments with data have at least 30% women. Rwanda passed parity, with 64% of seats held by women.</p></div>
+      <ul class="caught">
+        <li><strong>A region is a list of countries.</strong> "Eastern Africa" expands to every country the UN places there, so no one has to type eighteen names.</li>
+        <li><strong>The odd one out is visible.</strong> One country's latest figure is years older than the rest; the year column and the warning show which.</li>
+      </ul>
+    </article>
+
+    <article class="case" id="refugees">
+      <p class="case-meta"><span class="n">04</span><span>Humanitarian coordination</span><span>situation overview</span></p>
+      <h3>Refugees: count or share?</h3>
+      <blockquote class="ask"><p>"Which countries in the region have the most people living as refugees abroad, and does the picture change once you account for population?"</p><cite>The ask</cite></blockquote>
+      <p class="step">The code</p>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file">examples/04_refugees.py</span></div><pre><code><span class="c">&quot;&quot;&quot;Refugees by country of origin: the most in number is not the most per person.&quot;&quot;&quot;</span>
+
+import undata as un
+
+NUMBER = &quot;undata/unicef/MG_RFGS_CNTRY_ORIGIN&quot;  <span class="c"># refugees, by country of origin</span>
+PER_100K = &quot;undata/sdg/SM_POP_REFG_OR&quot;  <span class="c"># the same, per 100,000 population</span>
+
+<span class="c"># A region and a country together: Sudan is in Northern Africa in the UN&#x27;s regions.</span>
+table = un.latest([NUMBER, PER_100K], [&quot;Eastern Africa&quot;, &quot;Sudan&quot;])
+
+for indicator, label in [(NUMBER, &quot;Most refugees&quot;), (PER_100K, &quot;Most per 100,000 people&quot;)]:
+    top = table[table[&quot;indicator&quot;] == indicator].nlargest(5, &quot;value&quot;)
+    print(label)
+    print(top[[&quot;country&quot;, &quot;year&quot;, &quot;value&quot;]].to_string(index=False), &quot;\n&quot;)
+
+number = table[table[&quot;indicator&quot;] == NUMBER].set_index(&quot;country&quot;)[&quot;value&quot;]
+rate = table[table[&quot;indicator&quot;] == PER_100K].set_index(&quot;country&quot;)[&quot;value&quot;]
+print(
+    f&quot;{number.idxmax()} has the most refugees abroad ({number.max() / 1e6:.1f} million), but &quot;
+    f&quot;relative to population {rate.idxmax()} is hit hardest: {rate.max():,.0f} refugees &quot;
+    f&quot;for every 100,000 people, about one in {100_000 / rate.max():.0f}.&quot;
+)</code></pre></div>
+      <p class="step">The picture</p>
+      <figure class="block"><div class="multiples"><div class="panel"><p class="panel-title">Refugees, by country of origin</p><svg class="chart" viewBox="0 0 320 224" role="img" aria-label="Refugees, by country of origin" preserveAspectRatio="xMinYMin meet" style="--label:99.8px"><title>Refugees, by country of origin</title><line class="grid" x1="99.8" x2="99.8" y1="30" y2="198"/><text class="tick" x="99.8" y="214" text-anchor="middle">0</text><line class="grid" x1="181.9" x2="181.9" y1="30" y2="198"/><text class="tick" x="181.9" y="214" text-anchor="middle">2.0M</text><line class="grid" x1="264.0" x2="264.0" y1="30" y2="198"/><text class="tick" x="264.0" y="214" text-anchor="middle">4.0M</text><g class="row"><title>Sudan: 2.8M (2025)</title><rect class="hit" x="0" y="30" width="320" height="28"/><text class="label" x="89.8" y="48.0" text-anchor="end">Sudan</text><g class="bar"><path d="M99.8,36.0 h111.8 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-111.8 z"/></g><text class="value" x="221.6" y="48.0">2.8M</text></g><g class="row hi"><title>South Sudan: 2.4M (2025)</title><rect class="hit" x="0" y="58" width="320" height="28"/><text class="label" x="89.8" y="76.0" text-anchor="end">South Sudan</text><g class="bar"><path d="M99.8,64.0 h94.0 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-94.0 z"/></g><text class="value" x="203.8" y="76.0">2.4M</text></g><g class="row"><title>Somalia: 892K (2025)</title><rect class="hit" x="0" y="86" width="320" height="28"/><text class="label" x="89.8" y="104.0" text-anchor="end">Somalia</text><g class="bar"><path d="M99.8,92.0 h32.6 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-32.6 z"/></g><text class="value" x="142.4" y="104.0">892K</text></g><g class="row"><title>Eritrea: 555K (2025)</title><rect class="hit" x="0" y="114" width="320" height="28"/><text class="label" x="89.8" y="132.0" text-anchor="end">Eritrea</text><g class="bar"><path d="M99.8,120.0 h18.8 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-18.8 z"/></g><text class="value" x="128.6" y="132.0">555K</text></g><g class="row"><title>Burundi: 318K (2025)</title><rect class="hit" x="0" y="142" width="320" height="28"/><text class="label" x="89.8" y="160.0" text-anchor="end">Burundi</text><g class="bar"><path d="M99.8,148.0 h9.1 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-9.1 z"/></g><text class="value" x="118.9" y="160.0">318K</text></g><g class="row"><title>Rwanda: 244K (2025)</title><rect class="hit" x="0" y="170" width="320" height="28"/><text class="label" x="89.8" y="188.0" text-anchor="end">Rwanda</text><g class="bar"><path d="M99.8,176.0 h6.0 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-6.0 z"/></g><text class="value" x="115.8" y="188.0">244K</text></g><line class="baseline" x1="99.8" x2="99.8" y1="30" y2="198"/></svg></div><div class="panel"><p class="panel-title">Refugees per 100,000 people</p><svg class="chart" viewBox="0 0 320 224" role="img" aria-label="Refugees per 100,000 people" preserveAspectRatio="xMinYMin meet" style="--label:99.8px"><title>Refugees per 100,000 people</title><line class="grid" x1="99.8" x2="99.8" y1="30" y2="198"/><text class="tick" x="99.8" y="214" text-anchor="middle">0</text><line class="grid" x1="181.9" x2="181.9" y1="30" y2="198"/><text class="tick" x="181.9" y="214" text-anchor="middle">10,000</text><line class="grid" x1="264.0" x2="264.0" y1="30" y2="198"/><text class="tick" x="264.0" y="214" text-anchor="middle">20,000</text><g class="row hi"><title>South Sudan: 16,352 (2025)</title><rect class="hit" x="0" y="30" width="320" height="28"/><text class="label" x="89.8" y="48.0" text-anchor="end">South Sudan</text><g class="bar"><path d="M99.8,36.0 h130.2 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-130.2 z"/></g><text class="value" x="240.0" y="48.0">16,352</text></g><g class="row"><title>Eritrea: 13,442 (2025)</title><rect class="hit" x="0" y="58" width="320" height="28"/><text class="label" x="89.8" y="76.0" text-anchor="end">Eritrea</text><g class="bar"><path d="M99.8,64.0 h106.4 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-106.4 z"/></g><text class="value" x="216.2" y="76.0">13,442</text></g><g class="row"><title>Sudan: 4,556 (2025)</title><rect class="hit" x="0" y="86" width="320" height="28"/><text class="label" x="89.8" y="104.0" text-anchor="end">Sudan</text><g class="bar"><path d="M99.8,92.0 h33.4 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-33.4 z"/></g><text class="value" x="143.2" y="104.0">4,556</text></g><g class="row"><title>Somalia: 4,397 (2025)</title><rect class="hit" x="0" y="114" width="320" height="28"/><text class="label" x="89.8" y="132.0" text-anchor="end">Somalia</text><g class="bar"><path d="M99.8,120.0 h32.1 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-32.1 z"/></g><text class="value" x="141.9" y="132.0">4,397</text></g><g class="row"><title>Burundi: 2,206 (2025)</title><rect class="hit" x="0" y="142" width="320" height="28"/><text class="label" x="89.8" y="160.0" text-anchor="end">Burundi</text><g class="bar"><path d="M99.8,148.0 h14.1 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-14.1 z"/></g><text class="value" x="123.9" y="160.0">2,206</text></g><g class="row"><title>Rwanda: 1,664 (2025)</title><rect class="hit" x="0" y="170" width="320" height="28"/><text class="label" x="89.8" y="188.0" text-anchor="end">Rwanda</text><g class="bar"><path d="M99.8,176.0 h9.7 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-9.7 z"/></g><text class="value" x="119.5" y="188.0">1,664</text></g><line class="baseline" x1="99.8" x2="99.8" y1="30" y2="198"/></svg></div></div><figcaption>Two measures, two charts: never two scales on one axis. South Sudan in green.</figcaption></figure>
+      <p class="step">What came back</p>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 13 October 2026</span></div><pre><samp>04_refugees.py:9: MissingDataWarning: No data for 2 of 40 country/indicator combinations. They are left out of the table, not set to zero:
+  Number of refugees, by country of origin: French Southern Territories
+  Number of refugees per 100,000 population, by country of origin: French Southern Territories
+The full list is in table.attrs[&#x27;missing&#x27;].
+  table = un.latest([NUMBER, PER_100K], [&quot;Eastern Africa&quot;, &quot;Sudan&quot;])
+Most refugees
+    country  year     value
+      Sudan  2025 2820758.0
+South Sudan  2025 2386502.0
+    Somalia  2025  892043.0
+    Eritrea  2025  554902.0
+    Burundi  2025  318294.0 
+
+Most per 100,000 people
+    country  year       value
+South Sudan  2025 16351.75013
+    Eritrea  2025 13441.94796
+      Sudan  2025  4556.26252
+    Somalia  2025  4396.63137
+    Burundi  2025  2206.18452 
+
+Sudan has the most refugees abroad (2.8 million), but relative to population South Sudan is hit hardest: 16,352 refugees for every 100,000 people, about one in 6.</samp></pre></div>
+      <div class="report"><span class="tag">For your overview</span><p>Sudan has the most refugees abroad (2.8 million), but relative to population South Sudan is hit hardest: 16,352 refugees for every 100,000 people, about one in 6.</p></div>
+      <ul class="caught">
+        <li><strong>Regions and countries mix.</strong> Sudan sits in Northern Africa in the UN's regions, so it is added by name next to "Eastern Africa".</li>
+        <li><strong>Two measures, two charts.</strong> A count and a rate never share an axis; that is how a chart invents a pattern.</li>
+      </ul>
+    </article>
+
+    <article class="case" id="conflict">
+      <p class="case-meta"><span class="n">05</span><span>Peace and security</span><span>Council briefing</span></p>
+      <h3>Conflict deaths in context</h3>
+      <blockquote class="ask"><p>"For the briefing: where are conflict-related deaths highest, and how do they compare with ordinary homicide in the same countries?"</p><cite>The ask</cite></blockquote>
+      <p class="step">The code</p>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file">examples/05_conflict_and_homicide.py</span></div><pre><code><span class="c">&quot;&quot;&quot;Conflict deaths in context: who reports them, and how they compare with homicide.&quot;&quot;&quot;</span>
+
+import undata as un
+
+CONFLICT = &quot;undata/sdg/VC_DTH_TOTR&quot;  <span class="c"># conflict-related deaths per 100,000, SDG 16.1.2</span>
+HOMICIDE = &quot;undata/sdg/VC_IHR_PSRC&quot;  <span class="c"># intentional homicide per 100,000, SDG 16.1.1</span>
+
+<span class="c"># Ask for the whole world. The warning lists who has no data: absent, not zero.</span>
+reporting = un.latest(CONFLICT, &quot;World&quot;)[&quot;country&quot;].tolist()
+
+both = un.latest([CONFLICT, HOMICIDE], reporting)
+wide = both.pivot(index=&quot;country&quot;, columns=&quot;indicator&quot;, values=&quot;value&quot;)
+wide = wide.rename(columns={CONFLICT: &quot;conflict&quot;, HOMICIDE: &quot;homicide&quot;})
+wide = wide[[&quot;conflict&quot;, &quot;homicide&quot;]].sort_values(&quot;conflict&quot;, ascending=False)
+print(wide.round(1).to_string(), &quot;\n&quot;)
+
+higher = wide.index[wide[&quot;conflict&quot;] &gt; wide[&quot;homicide&quot;]].tolist()
+print(
+    f&quot;Only {len(reporting)} countries report conflict-related deaths. In {len(higher)} of &quot;
+    f&quot;them, conflict killed more people per 100,000 than homicide: {&#x27;, &#x27;.join(higher)}.&quot;
+)</code></pre></div>
+      <p class="step">What came back</p>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 13 October 2026</span></div><pre><samp>05_conflict_and_homicide.py:9: MissingDataWarning: No data for 237 of 257 country/indicator combinations. They are left out of the table, not set to zero:
+  Number of total conflict-related deaths per 100,000 population: Aruba, Angola, Anguilla, Åland Islands, Albania, Andorra, Netherlands Antilles, United Arab Emirates and 229 more
+The full list is in table.attrs[&#x27;missing&#x27;].
+  reporting = un.latest(CONFLICT, &quot;World&quot;)[&quot;country&quot;].tolist()
+05_conflict_and_homicide.py:11: MissingDataWarning: No data for 7 of 40 country/indicator combinations. They are left out of the table, not set to zero:
+  Number of victims of intentional homicide per 100,000 population: Burkina Faso, Central African Republic, Democratic Republic of the Congo, Libya, Mali, Somalia, Sudan
+The full list is in table.attrs[&#x27;missing&#x27;].
+  both = un.latest([CONFLICT, HOMICIDE], reporting)
+05_conflict_and_homicide.py:11: MixedYearsWarning: The latest values for Number of victims of intentional homicide per 100,000 population come from different years, 2010 to 2024. Values from different years are not directly comparable; the year column shows which is which.
+  both = un.latest([CONFLICT, HOMICIDE], reporting)
+indicator                         conflict  homicide
+country                                             
+State of Palestine                   121.2       0.3
+Syrian Arab Republic                  27.7       2.1
+Sudan                                 21.9       NaN
+South Sudan                           18.8      14.0
+Burkina Faso                           6.6       NaN
+Ukraine                                6.4       3.8
+Lebanon                                5.8       2.6
+Central African Republic               4.9       NaN
+Democratic Republic of the Congo       3.4       NaN
+Myanmar                                2.8       3.9
+Somalia                                1.8       NaN
+Mali                                   1.6       NaN
+Afghanistan                            0.5       4.2
+Ethiopia                               0.3       8.5
+Libya                                  0.3       NaN
+Cameroon                               0.2       6.8
+Yemen                                  0.1       5.8
+Colombia                               0.1      24.4
+Iraq                                   0.1       9.5
+Philippines                            0.0       4.3 
+
+Only 20 countries report conflict-related deaths. In 5 of them, conflict killed more people per 100,000 than homicide: State of Palestine, Syrian Arab Republic, South Sudan, Ukraine, Lebanon.</samp></pre></div>
+      <div class="report"><span class="tag">For your briefing</span><p>Only 20 countries report conflict-related deaths. In 5 of them, conflict killed more people per 100,000 than homicide: State of Palestine, Syrian Arab Republic, South Sudan, Ukraine, Lebanon.</p></div>
+      <ul class="caught">
+        <li><strong>Absent is not zero.</strong> Asking for the whole world shows how few countries report conflict deaths at all. Peaceful countries are missing, not zero, and a chart of "all countries" would be a chart of countries at war.</li>
+        <li><strong>Gaps stay gaps.</strong> Where homicide data is missing, the table shows a blank, not a zero, and the warning names the countries.</li>
+      </ul>
+    </article>
+
+    <article class="case" id="sources">
+      <p class="case-meta"><span class="n">06</span><span>Statistics focal point</span><span>quoting a figure</span></p>
+      <h3>When agencies disagree</h3>
+      <blockquote class="ask"><p>"Two reports quote different maternal mortality figures for Bangladesh. Which is right, and what should we cite?"</p><cite>The ask</cite></blockquote>
+      <p class="step">The code</p>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file">examples/06_agencies_disagree.py</span></div><pre><code><span class="c">&quot;&quot;&quot;One statistic, three agencies. Quote one figure, and name whose it is.&quot;&quot;&quot;</span>
+
+import undata as un
+
+MATERNAL_MORTALITY_RATIO = [
+    &quot;undata/sdg/SH_STA_MORT.SEX--F&quot;,  <span class="c"># Global SDG Indicators Database</span>
+    &quot;undata/unicef/MNCH_MMR.SEX--F&quot;,  <span class="c"># UNICEF</span>
+    &quot;undata/undphdro/GII_mmr.SEX--F&quot;,  <span class="c"># UNDP Human Development Report Office</span>
+]
+table = un.latest(MATERNAL_MORTALITY_RATIO, &quot;Bangladesh&quot;)
+print(table[[&quot;source&quot;, &quot;year&quot;, &quot;value&quot;]].round(1).to_string(index=False), &quot;\n&quot;)
+
+low, high = table[&quot;value&quot;].min(), table[&quot;value&quot;].max()
+odd = table.loc[table[&quot;value&quot;].idxmax(), &quot;source&quot;]
+print(
+    f&quot;For Bangladesh in {table[&#x27;year&#x27;].max()}, the three sources give {low:.0f} to {high:.0f} &quot;
+    f&quot;maternal deaths per 100,000 live births; {odd} is the outlier. A gap of &quot;
+    f&quot;{(high / low - 1) * 100:.0f}% is enough to change a headline, so cite the source.&quot;
+)</code></pre></div>
+      <p class="step">What came back</p>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 13 October 2026</span></div><pre><samp>             source  year  value
+SDG Global Database  2023  115.1
+          UNDP-HDRO  2023  123.0
+             UNICEF  2023  115.1 
+
+For Bangladesh in 2023, the three sources give 115 to 123 maternal deaths per 100,000 live births; UNDP-HDRO is the outlier. A gap of 7% is enough to change a headline, so cite the source.</samp></pre></div>
+      <div class="report"><span class="tag">For your reply</span><p>For Bangladesh in 2023, the three sources give 115 to 123 maternal deaths per 100,000 live births; UNDP-HDRO is the outlier. A gap of 7% is enough to change a headline, so cite the source.</p></div>
+      <ul class="caught">
+        <li><strong>The source is on every row.</strong> The platform holds the same statistic from several agencies. undata never blends them, and the source column says whose number you have.</li>
+      </ul>
+    </article>
+
+    <article class="case" id="data-pack">
+      <p class="case-meta"><span class="n">07</span><span>Publications team</span><span>data pack</span></p>
+      <h3>A regional data pack in Excel</h3>
+      <blockquote class="ask"><p>"Send the publications team an Excel file for South-Eastern Asia: electricity, drinking water and primary completion, with sources."</p><cite>The ask</cite></blockquote>
+      <p class="step">The code</p>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file">examples/07_regional_data_pack.py</span></div><pre><code><span class="c">&quot;&quot;&quot;A data pack for the publications team: three indicators, one Excel file, sources included.&quot;&quot;&quot;</span>
+
+import pandas as pd
+
+import undata as un
+
+INDICATORS = [
+    &quot;undata/sdg/EG_ACS_ELEC&quot;,  <span class="c"># access to electricity</span>
+    &quot;undata/sdg/SH_H2O_SAFE&quot;,  <span class="c"># safely managed drinking water</span>
+    &quot;undata/sdg/SE_TOT_CPLR.EDUCATION_LEVEL--ISCED11_1&quot;,  <span class="c"># primary completion</span>
+]
+
+table = un.latest(INDICATORS, &quot;South-Eastern Asia&quot;)
+path = un.save(table, &quot;south-eastern-asia-data-pack.xlsx&quot;)
+
+sheets = pd.ExcelFile(path).sheet_names
+print(f&quot;Saved {len(table)} values for {table[&#x27;country&#x27;].nunique()} countries to {path}&quot;)
+print(&quot;Sheets:&quot;, &quot;, &quot;.join(sheets), &quot;\n&quot;)
+print(un.cite(table))</code></pre></div>
+      <p class="step">What came back</p>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 13 October 2026</span></div><pre><samp>07_regional_data_pack.py:13: MissingDataWarning: No data for 6 of 33 country/indicator combinations. They are left out of the table, not set to zero:
+  Proportion of population using safely managed drinking water services: Brunei Darussalam, Thailand, Timor-Leste
+  School completion rate [Education level=Primary education (ISCED11 - 1)]: Brunei Darussalam, Malaysia, Singapore
+The full list is in table.attrs[&#x27;missing&#x27;].
+  table = un.latest(INDICATORS, &quot;South-Eastern Asia&quot;)
+07_regional_data_pack.py:13: MixedYearsWarning: The latest values for School completion rate [Education level=Primary education (ISCED11 - 1)] come from different years, 2016 to 2023. Values from different years are not directly comparable; the year column shows which is which.
+  table = un.latest(INDICATORS, &quot;South-Eastern Asia&quot;)
+Saved 27 values for 11 countries to south-eastern-asia-data-pack.xlsx
+Sheets: data, sources, no data 
+
+SDG Global Database. Proportion of population using safely managed drinking water services (undata/sdg/SH_H2O_SAFE). https://unstats.un.org/sdgs/dataportal. Retrieved 2026-10-13 from the UN System Data Commons, https://data.un.org.
+SDG Global Database. Proportion of population with access to electricity (undata/sdg/EG_ACS_ELEC). https://unstats.un.org/sdgs/dataportal. Retrieved 2026-10-13 from the UN System Data Commons, https://data.un.org.
+SDG Global Database. School completion rate [Education level=Primary education (ISCED11 - 1)] (undata/sdg/SE_TOT_CPLR.EDUCATION_LEVEL--ISCED11_1). https://unstats.un.org/sdgs/dataportal. Retrieved 2026-10-13 from the UN System Data Commons, https://data.un.org.</samp></pre></div>
+      <ul class="caught">
+        <li><strong>Citations travel with the data.</strong> The <code>sources</code> sheet holds a citation for each indicator, crediting the agency that produced it.</li>
+        <li><strong>Gaps get their own sheet.</strong> The <code>no data</code> sheet lists every country and indicator with nothing to report, so a blank cell is never mistaken for a zero.</li>
+      </ul>
+    </article>
+
+    <article class="case" id="dashboard">
+      <p class="case-meta"><span class="n">08</span><span>Monitoring and evaluation</span><span>dashboard</span></p>
+      <h3>A dashboard that refreshes itself</h3>
+      <blockquote class="ask"><p>"Our Power BI dashboard needs fresh numbers every month, without anyone remembering to update it."</p><cite>The ask</cite></blockquote>
+      <p class="step">The code</p>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file">examples/08_dashboard_refresh.py</span></div><pre><code><span class="c">&quot;&quot;&quot;Refresh the numbers behind a dashboard. Schedule this file; nobody has to run it.&quot;&quot;&quot;</span>
+
+from datetime import date
+
+import undata as un
+
+INDICATORS = [
+    &quot;undata/sdg/EG_ACS_ELEC&quot;,
+    &quot;undata/unicef/CME_MR.AGE--Y0T4&quot;,
+    &quot;undata/sdg/SG_GEN_PARL.SEX--F&quot;,
+]
+
+table = un.get(INDICATORS, &quot;Southern Asia&quot;, years=(2015, date.today().year))
+un.save(table, &quot;dashboard-data.csv&quot;)  <span class="c"># Power BI, Tableau or Excel reads this file</span>
+
+print(
+    f&quot;{date.today()}: wrote {len(table)} rows for {table[&#x27;country&#x27;].nunique()} countries, &quot;
+    f&quot;{table[&#x27;year&#x27;].min()} to {table[&#x27;year&#x27;].max()}, to dashboard-data.csv&quot;
+)</code></pre></div>
+      <p class="step">What came back</p>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 13 October 2026</span></div><pre><samp>2026-10-13: wrote 280 rows for 9 countries, 2015 to 2026, to dashboard-data.csv</samp></pre></div>
+      <p class="step">Then schedule it</p>
+      <div class="block extra"><div class="head"><span class="tag">schedule</span><span class="file">.github/workflows/refresh.yml, or your computer's scheduler</span></div><pre><code><span class="c"># In a GitHub repository: runs on the 1st of every month and commits the new file.</span>
+on:
+  schedule:
+    - cron: "0 6 1 * *"
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+      - run: pip install undata &amp;&amp; python 08_dashboard_refresh.py
+      - run: |
+          git config user.name "dashboard bot" &amp;&amp; git config user.email "bot@example.org"
+          git add dashboard-data.csv &amp;&amp; git commit -m "Refresh dashboard data" || true
+          git push
+
+<span class="c"># On Windows instead: Task Scheduler, "Start a program", python 08_dashboard_refresh.py</span></code></pre></div>
+      <ul class="caught">
+        <li><strong>Same shape every month.</strong> The columns never change, so the dashboard's queries keep working after every refresh.</li>
+      </ul>
+    </article>
+
+    <article class="case" id="search-box">
+      <p class="case-meta"><span class="n">09</span><span>Communications</span><span>checking a chart</span></p>
+      <h3>Check a chart before you share it</h3>
+      <blockquote class="ask"><p>"A colleague made a chart in data.un.org's search box for a social media post. Is it really about the country they asked for?"</p><cite>The ask</cite></blockquote>
+      <p class="step">The code</p>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file">examples/09_check_the_search_box.py</span></div><pre><code><span class="c">&quot;&quot;&quot;Before you trust a chart from data.un.org&#x27;s search box, see what it decided.&quot;&quot;&quot;</span>
+
+import undata as un
+
+for question in [&quot;child mortality in Bengal&quot;, &quot;child mortality in Bangladesh&quot;]:
+    answer = un.ask(question)
+    print(f&quot;{question!r}: answered about {answer.place}; guessed = {answer.place_was_guessed}&quot;)</code></pre></div>
+      <p class="step">What came back</p>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 13 October 2026</span></div><pre><samp>09_check_the_search_box.py:6: PlaceGuessedWarning: data.un.org answered &#x27;child mortality in Bengal&#x27; about United States of America, a place your question did not name. Name the country exactly, or use un.get() with a country you choose.
+  answer = un.ask(question)
+&#x27;child mortality in Bengal&#x27;: answered about United States of America; guessed = True
+&#x27;child mortality in Bangladesh&#x27;: answered about Bangladesh; guessed = False</samp></pre></div>
+      <ul class="caught">
+        <li><strong>The guess, caught.</strong> The search box answered a question about "Bengal" with figures for the United States, under a title that does not mention either. undata reads the platform's own record of where the place came from, and warns.</li>
+      </ul>
+    </article>
   </div>
 </section>
 
 <section class="sec" id="start">
   <div class="wrap">
-    <p class="anno">// 01 — start</p>
+    <p class="anno">// 02 — start</p>
     <h2>Three lines to a spreadsheet</h2>
     <p>Open a notebook (Jupyter, VS Code or <a href="https://colab.research.google.com">Google Colab</a>),
     install the package, and run this. You get an Excel file with the numbers on one sheet and
@@ -184,7 +710,7 @@ un.save(table, "maternal-mortality.xlsx")</code></pre></div>
 
 <section class="sec" id="functions">
   <div class="wrap">
-    <p class="anno">// 02 — functions</p>
+    <p class="anno">// 03 — functions</p>
     <h2>Everything on one screen</h2>
     <p>Wherever a function asks for countries you can write names the way you would in an email
     (<code>"Viet Nam"</code>, <code>"Vietnam"</code>, <code>"VNM"</code>), a list of them, or a region
@@ -208,282 +734,18 @@ un.save(table, "maternal-mortality.xlsx")</code></pre></div>
 
 <section class="sec" id="why">
   <div class="wrap">
-    <p class="anno">// 03 — what it does for you</p>
+    <p class="anno">// 04 — what it does for you</p>
     <h2>The careful parts are built in</h2>
     <p>Each of these was found by calling the live platform, and each is checked by a test that
     runs every night.</p>
     <ul class="does">
       <li><strong>It never guesses a place.</strong><span>data.un.org's search box answers a question about "Bengal" with figures for the United States. undata stops and says it does not know "Bengal".</span></li>
-      <li><strong>Gaps are named, never zero.</strong><span>Only 20 countries report the conflict death rate. The rest are listed in a warning, not charted as peaceful zeros.</span></li>
+      <li><strong>Gaps are named, never zero.</strong><span>Countries without data are listed in a warning and on their own Excel sheet, never charted as zeros.</span></li>
       <li><strong>UN names in, UN names out.</strong><span>Tables say Türkiye, Viet Nam and Côte d'Ivoire, ready for a UN document, whatever spelling you typed.</span></li>
-      <li><strong>The source is on every row.</strong><span>The same statistic can come from three agencies with different numbers. The source column says whose you have.</span></li>
+      <li><strong>The source is on every row.</strong><span>The same statistic can come from several agencies with different numbers. The source column says whose you have.</span></li>
       <li><strong>Mixed years are flagged.</strong><span>"Latest" means each country's own latest year. When those differ, a warning says so.</span></li>
       <li><strong>It works where other clients fail.</strong><span>The platform's firewall blocks Google's own client, and any request that mentions Western Sahara. undata routes around both.</span></li>
     </ul>
-  </div>
-</section>
-
-<section class="sec" id="examples">
-  <div class="wrap">
-    <p class="anno">// 04 — examples</p>
-    <h2>Ten things to do with it</h2>
-    <ol class="toc">
-      <li><a href="#first"><span class="n">01</span>Your first table</a></li>
-      <li><a href="#compare"><span class="n">02</span>Compare the countries of a region</a></li>
-      <li><a href="#continent"><span class="n">03</span>A whole continent in one line</a></li>
-      <li><a href="#sdg"><span class="n">04</span>From an SDG target to the numbers</a></li>
-      <li><a href="#gaps"><span class="n">05</span>Gaps are named, never zero</a></li>
-      <li><a href="#names"><span class="n">06</span>Names the way you write them</a></li>
-      <li><a href="#searchbox"><span class="n">07</span>Check what the search box decided</a></li>
-      <li><a href="#source"><span class="n">08</span>Know whose number you are using</a></li>
-      <li><a href="#save"><span class="n">09</span>Save to Excel and cite it</a></li>
-      <li><a href="#about"><span class="n">10</span>Look before you use an indicator</a></li>
-    </ol>
-
-    <article class="case" id="first">
-      <p class="for">01 · for anyone new to this</p>
-      <h3>Your first table</h3>
-      <p>Search for an indicator in plain words, copy its id, and ask for the countries you need.
-      The result is an ordinary table: sort it, filter it, chart it, or save it.</p>
-      <div class="block"><div class="head"><span class="tag">example</span><span class="file">examples/01_first_table.py</span></div><pre><code><span class="c">&quot;&quot;&quot;Your first table: find an indicator by name, then get it for two countries.&quot;&quot;&quot;</span>
-
-import undata as un
-
-<span class="c"># 1. Find the indicator. Copy its id from the &quot;indicator&quot; column.</span>
-print(un.search(&quot;maternal mortality&quot;).head(3).to_string(index=False))
-
-<span class="c"># 2. Get it. Country names work as you would write them.</span>
-table = un.get(&quot;undata/sdg/SH_STA_MORT.SEX--F&quot;, [&quot;Bangladesh&quot;, &quot;Viet Nam&quot;], years=(2020, 2023))
-print(table[[&quot;country&quot;, &quot;year&quot;, &quot;value&quot;, &quot;unit&quot;]].to_string(index=False))</code></pre></div>
-      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 13 October 2026</span></div><pre><samp>                                indicator                                                                                      name                         source
-            undata/unicef/MNCH_MMR.SEX--F Maternal mortality ratio (number of maternal deaths per 100,000 live births) [Sex=Female]                         UNICEF
-undata/who/GHE_YLL.GHE_CAUSE--GHE2019_I_C      Years of life lost from mortality [Global health estimate cause=Maternal conditions]                            WHO
-            undata/sdg/SH_STA_MORT.SEX--F                                                     Maternal mortality ratio [Sex=Female] Global SDG Indicators Database
-   country  year     value                          unit
-Bangladesh  2020 151.84625 Count per 100,000 live births
-Bangladesh  2021 193.89067 Count per 100,000 live births
-Bangladesh  2022 130.51897 Count per 100,000 live births
-Bangladesh  2023 115.11493 Count per 100,000 live births
-  Viet Nam  2020  51.33381 Count per 100,000 live births
-  Viet Nam  2021  52.23593 Count per 100,000 live births
-  Viet Nam  2022  49.10460 Count per 100,000 live births
-  Viet Nam  2023  47.61028 Count per 100,000 live births</samp></pre></div>
-    </article>
-
-    <article class="case" id="compare">
-      <p class="for">02 · for analysts and report writers</p>
-      <h3>Compare the countries of a region</h3>
-      <p>A region name stands for every country in it. Here, the Human Development Index across
-      Southern Asia, each country at its latest year. Note that India and Bangladesh tie: that is the
-      data, not a rounding error.</p>
-      <div class="block"><div class="head"><span class="tag">example</span><span class="file">examples/02_compare_countries.py</span></div><pre><code><span class="c">&quot;&quot;&quot;Compare the countries of a region on one indicator, each at its latest year.&quot;&quot;&quot;</span>
-
-import undata as un
-
-table = un.latest(&quot;undata/undphdro/HDI_hdi&quot;, &quot;Southern Asia&quot;)
-
-ranked = table.sort_values(&quot;value&quot;, ascending=False)
-print(ranked[[&quot;country&quot;, &quot;year&quot;, &quot;value&quot;]].to_string(index=False))</code></pre></div>
-      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 13 October 2026</span></div><pre><samp>                   country  year  value
-Iran (Islamic Republic of)  2023  0.799
-                 Sri Lanka  2023  0.776
-                  Maldives  2023  0.766
-                    Bhutan  2023  0.698
-                Bangladesh  2023  0.685
-                     India  2023  0.685
-                     Nepal  2023  0.622
-                  Pakistan  2023  0.544
-               Afghanistan  2023  0.496</samp></pre></div>
-    </article>
-
-    <article class="case" id="continent">
-      <p class="for">03 · for dashboards and regional reports</p>
-      <h3>A whole continent in one line</h3>
-      <p>Access to electricity for every country in Africa. This request used to fail outright: the
-      platform's firewall refuses any request that mentions Western Sahara, and undata now asks in
-      a way the firewall accepts.</p>
-      <div class="block"><div class="head"><span class="tag">example</span><span class="file">examples/03_whole_region.py</span></div><pre><code><span class="c">&quot;&quot;&quot;A whole continent in one line. Regions stand for every country in them.&quot;&quot;&quot;</span>
-
-import undata as un
-
-table = un.latest(&quot;undata/sdg/EG_ACS_ELEC&quot;, &quot;Africa&quot;)  <span class="c"># % with access to electricity</span>
-
-print(len(table), &quot;countries, latest years:&quot;, sorted(table[&quot;year&quot;].unique().tolist()))
-print(table.nsmallest(3, &quot;value&quot;)[[&quot;country&quot;, &quot;year&quot;, &quot;value&quot;, &quot;unit&quot;]].to_string(index=False))</code></pre></div>
-      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 13 October 2026</span></div><pre><samp>03_whole_region.py:5: MissingDataWarning: No data for 5 of 59 country/indicator combinations. They are left out of the table, not set to zero:
-  Proportion of population with access to electricity: French Southern Territories, Western Sahara, Mayotte, Réunion, Saint Helena
-The full list is in table.attrs[&#x27;missing&#x27;].
-  table = un.latest(&quot;undata/sdg/EG_ACS_ELEC&quot;, &quot;Africa&quot;)  # % with access to electricity
-54 countries, latest years: [2024]
-    country  year  value unit
-South Sudan  2024    5.4    %
-       Chad  2024   13.4    %
-     Malawi  2024   15.6    %</samp></pre></div>
-    </article>
-
-    <article class="case" id="sdg">
-      <p class="for">04 · for SDG reporting officers</p>
-      <h3>From an SDG target to the numbers</h3>
-      <p>Mandates name targets, not data codes. Start from the target, list its indicators, pick the
-      series that reports the one you need, and fetch it.</p>
-      <div class="block"><div class="head"><span class="tag">example</span><span class="file">examples/04_sdg_target.py</span></div><pre><code><span class="c">&quot;&quot;&quot;From an SDG target your mandate names, to the numbers.&quot;&quot;&quot;</span>
-
-import undata as un
-
-print(un.sdg.indicators(&quot;16.1&quot;).to_string(index=False))
-
-series = un.sdg.series(&quot;16.1.2&quot;)
-print(series[series[&quot;total&quot;]][[&quot;indicator&quot;, &quot;name&quot;]].to_string(index=False))
-
-rates = un.latest(&quot;undata/sdg/VC_DTH_TOTR&quot;, [&quot;Ukraine&quot;, &quot;Sudan&quot;, &quot;Myanmar&quot;])
-print(rates[[&quot;country&quot;, &quot;year&quot;, &quot;value&quot;]].to_string(index=False))</code></pre></div>
-      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 13 October 2026</span></div><pre><samp>indicator                                                                                                                                         name
-   16.1.1                                                             Number of victims of intentional homicide per 100,000 population, by sex and age
-   16.1.2                                                                        Conflict-related deaths per 100,000 population, by sex, age and cause
-   16.1.3 Proportion of population subjected to (a) physical violence, (b) psychological violence and/or (c) sexual violence in the previous 12 months
-   16.1.4                                                   Proportion of population that feel safe walking alone around the area they live after dark
-               indicator                                                           name
- undata/sdg/VC_DTH_TOCVN                  Number of conflict-related deaths (civilians)
-undata/sdg/VC_DTH_TONCVN              Number of conflict-related deaths (non-civilians)
-  undata/sdg/VC_DTH_TOTN                        Number of total conflict-related deaths
-  undata/sdg/VC_DTH_TOTR Number of total conflict-related deaths per 100,000 population
- undata/sdg/VC_DTH_TOUNN                    Number of conflict-related deaths (unknown)
-country  year    value
-Myanmar  2025  2.76022
-  Sudan  2025 21.86320
-Ukraine  2025  6.44940</samp></pre></div>
-    </article>
-
-    <article class="case" id="gaps">
-      <p class="for">05 · for anyone about to draw a chart</p>
-      <h3>Gaps are named, never zero</h3>
-      <p>Norway and Japan have no conflict death rate on the platform, because a country without
-      conflict files no conflict-death return. They are not zero. undata leaves them out of the table
-      and says so, so a chart cannot quietly show them as peaceful zeros.</p>
-      <div class="block"><div class="head"><span class="tag">example</span><span class="file">examples/05_missing_data.py</span></div><pre><code><span class="c">&quot;&quot;&quot;Countries without data are named, never turned into zeros.&quot;&quot;&quot;</span>
-
-import undata as un
-
-table = un.latest(&quot;undata/sdg/VC_DTH_TOTR&quot;, [&quot;Ukraine&quot;, &quot;Norway&quot;, &quot;Japan&quot;, &quot;Mali&quot;])
-
-print(table[[&quot;country&quot;, &quot;year&quot;, &quot;value&quot;]].to_string(index=False))
-print(&quot;No data for:&quot;, [row[&quot;country&quot;] for row in table.attrs[&quot;missing&quot;]])</code></pre></div>
-      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 13 October 2026</span></div><pre><samp>05_missing_data.py:5: MissingDataWarning: No data for 2 of 4 country/indicator combinations. They are left out of the table, not set to zero:
-  Number of total conflict-related deaths per 100,000 population: Norway, Japan
-The full list is in table.attrs[&#x27;missing&#x27;].
-  table = un.latest(&quot;undata/sdg/VC_DTH_TOTR&quot;, [&quot;Ukraine&quot;, &quot;Norway&quot;, &quot;Japan&quot;, &quot;Mali&quot;])
-country  year   value
-   Mali  2023 1.56926
-Ukraine  2025 6.44940
-No data for: [&#x27;Norway&#x27;, &#x27;Japan&#x27;]</samp></pre></div>
-    </article>
-
-    <article class="case" id="names">
-      <p class="for">06 · for everyone</p>
-      <h3>Names the way you write them</h3>
-      <p>UN names, everyday names and ISO codes all work, and tables always use the UN name. A name
-      it does not know stops with suggestions. It never becomes some other country.</p>
-      <div class="block"><div class="head"><span class="tag">example</span><span class="file">examples/06_names_and_regions.py</span></div><pre><code><span class="c">&quot;&quot;&quot;Names, UN names, codes and regions all work. Unknown names are never guessed.&quot;&quot;&quot;</span>
-
-import undata as un
-
-print(un.countries(&quot;Western Africa&quot;).head(4).to_string(index=False))
-
-for name in [&quot;Vietnam&quot;, &quot;Türkiye&quot;, &quot;Ivory Coast&quot;, &quot;COD&quot;, &quot;Bengal&quot;]:
-    try:
-        print(f&quot;{name!r:&lt;14} -&gt;&quot;, un.places.resolve(name).name)
-    except un.PlaceNotFoundError as error:
-        print(f&quot;{name!r:&lt;14} -&gt; {error}&quot;)</code></pre></div>
-      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 13 October 2026</span></div><pre><samp>     country iso3          id
-       Benin  BEN country/BEN
-Burkina Faso  BFA country/BFA
-  Cabo Verde  CPV country/CPV
-       Congo  COG country/COG
-&#x27;Vietnam&#x27;      -&gt; Viet Nam
-&#x27;Türkiye&#x27;      -&gt; Türkiye
-&#x27;Ivory Coast&#x27;  -&gt; Côte d&#x27;Ivoire
-&#x27;COD&#x27;          -&gt; Democratic Republic of the Congo
-&#x27;Bengal&#x27;       -&gt; &#x27;Bengal&#x27; is not a country or region undata recognises. Did you mean: &#x27;Senegal&#x27;? Run un.countries() or un.regions() to see every name it knows.</samp></pre></div>
-    </article>
-
-    <article class="case" id="searchbox">
-      <p class="for">07 · for anyone who uses data.un.org's search box</p>
-      <h3>Check what the search box decided</h3>
-      <p>The search box always answers about some place. When it does not recognise yours, it picks
-      one and titles the chart as if nothing happened. <code>un.ask</code> shows its choice and
-      warns when it was a guess.</p>
-      <div class="block"><div class="head"><span class="tag">example</span><span class="file">examples/07_check_the_search_box.py</span></div><pre><code><span class="c">&quot;&quot;&quot;See what data.un.org&#x27;s search box decided, before you trust its chart.&quot;&quot;&quot;</span>
-
-import undata as un
-
-answer = un.ask(&quot;child mortality in Bengal&quot;)
-print(answer.place, &quot;| guessed:&quot;, answer.place_was_guessed)
-
-answer = un.ask(&quot;child mortality in Bangladesh&quot;)
-print(answer.place, &quot;| guessed:&quot;, answer.place_was_guessed)</code></pre></div>
-      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 13 October 2026</span></div><pre><samp>07_check_the_search_box.py:5: PlaceGuessedWarning: data.un.org answered &#x27;child mortality in Bengal&#x27; about United States of America, a place your question did not name. Name the country exactly, or use un.get() with a country you choose.
-  answer = un.ask(&quot;child mortality in Bengal&quot;)
-United States of America | guessed: True
-Bangladesh | guessed: False</samp></pre></div>
-    </article>
-
-    <article class="case" id="source">
-      <p class="for">08 · for anyone who cites a number</p>
-      <h3>Know whose number you are using</h3>
-      <p>Bangladesh's maternal mortality ratio for 2023, as published by three UN entities. Two agree;
-      one does not. Quote the source along with the figure.</p>
-      <div class="block"><div class="head"><span class="tag">example</span><span class="file">examples/08_know_your_source.py</span></div><pre><code><span class="c">&quot;&quot;&quot;One statistic, three agencies. The source column says whose number you are using.&quot;&quot;&quot;</span>
-
-import undata as un
-
-MATERNAL_MORTALITY_RATIO = [
-    <span class="c">&quot;undata/sdg/SH_STA_MORT.SEX--F&quot;</span>,  <span class="c"># Global SDG Indicators Database</span>
-    <span class="c">&quot;undata/unicef/MNCH_MMR.SEX--F&quot;</span>,  <span class="c"># UNICEF</span>
-    <span class="c">&quot;undata/undphdro/GII_mmr.SEX--F&quot;</span>,  <span class="c"># UNDP Human Development Report Office</span>
-]
-table = un.latest(MATERNAL_MORTALITY_RATIO, &quot;Bangladesh&quot;)
-
-print(table[[&quot;source&quot;, &quot;year&quot;, &quot;value&quot;]].to_string(index=False))</code></pre></div>
-      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 13 October 2026</span></div><pre><samp>             source  year      value
-SDG Global Database  2023 115.114930
-          UNDP-HDRO  2023 123.028253
-             UNICEF  2023 115.110000</samp></pre></div>
-    </article>
-
-    <article class="case" id="save">
-      <p class="for">09 · for reports and briefings</p>
-      <h3>Save to Excel and cite it</h3>
-      <p>The Excel file has the data on one sheet, a citation for every source on the next, and,
-      when some countries had no data, a third sheet listing them. The citation credits the agency
-      that produced the figures.</p>
-      <div class="block"><div class="head"><span class="tag">example</span><span class="file">examples/09_save_and_cite.py</span></div><pre><code><span class="c">&quot;&quot;&quot;Save to Excel with a sheet of citations, and cite the data in a report.&quot;&quot;&quot;</span>
-
-import undata as un
-
-table = un.get(&quot;undata/sdg/SH_STA_MORT.SEX--F&quot;, &quot;Southern Asia&quot;, years=(2015, 2023))
-
-un.save(table, &quot;maternal-mortality.xlsx&quot;)  <span class="c"># sheets: data, sources</span>
-print(un.cite(table))</code></pre></div>
-      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 13 October 2026</span></div><pre><samp>SDG Global Database. Maternal mortality ratio [Sex=Female] (undata/sdg/SH_STA_MORT.SEX--F). https://unstats.un.org/sdgs/dataportal. Retrieved 2026-10-13 from the UN System Data Commons, https://data.un.org.</samp></pre></div>
-    </article>
-
-    <article class="case" id="about">
-      <p class="for">10 · before you commit to an indicator</p>
-      <h3>Look before you use an indicator</h3>
-      <p>What it measures, who publishes it, its unit, and how much data exists, in one call.</p>
-      <div class="block"><div class="head"><span class="tag">example</span><span class="file">examples/10_about_an_indicator.py</span></div><pre><code><span class="c">&quot;&quot;&quot;Before you use an indicator: what it measures, whose it is, how much data exists.&quot;&quot;&quot;</span>
-
-import undata as un
-
-print(un.about(&quot;undata/sdg/SH_STA_MORT.SEX--F&quot;))</code></pre></div>
-      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 13 October 2026</span></div><pre><samp>Maternal mortality ratio [Sex=Female]
-  id            undata/sdg/SH_STA_MORT.SEX--F
-  source        SDG Global Database
-  unit          Count per 100,000 live births
-  years         2000 to 2023
-  places        233 countries and regions have data
-  observations  5,592</samp></pre></div>
-    </article>
   </div>
 </section>
 
@@ -503,11 +765,11 @@ print(un.about(&quot;undata/sdg/SH_STA_MORT.SEX--F&quot;))</code></pre></div>
         <pre><code>!pip install undata</code></pre>
       </div>
       <div>
-        <h3>Run these examples</h3>
+        <h3>Run these use cases</h3>
         <p>With <a href="https://docs.astral.sh/uv/">uv</a>, which fetches the right Python itself.</p>
         <pre><code>git clone https://github.com/nerd-factory/undata
 cd undata
-uv run python examples/01_first_table.py</code></pre>
+uv run python examples/01_country_briefing.py</code></pre>
       </div>
     </div>
   </div>
@@ -519,37 +781,42 @@ uv run python examples/01_first_table.py</code></pre>
   <div class="wrap">
     <p>undata is a <a href="https://nerd-factory.github.io/nerd-lab/">Nerd Lab</a> experiment. Unofficial:
     not affiliated with or endorsed by the United Nations. The data belongs to the agencies that publish it, under the
-    <a href="https://data.un.org/undatacommons/terms-of-use">UN Data Commons terms of use</a>.</p>
+    <a href="https://data.un.org/undatacommons/terms-of-use">UN Data Commons terms of use</a>. The requests on this page are
+    illustrations of common tasks, not quotes from any office.</p>
     <p>Most of what the package knows about the platform was found while writing the
     <a href="https://mafiatun.github.io/un-data-commons-field-guide/">UN Data Commons Field Guide</a>.</p>
-    <p><a href="https://github.com/nerd-factory/undata">Source</a> ·
-    <a href="https://github.com/nerd-factory/undata/blob/main/PLAN.md">Plan</a> ·
+    <p><a href="https://pypi.org/project/undata/">PyPI</a> ·
+    <a href="https://github.com/nerd-factory/undata">Source</a> ·
+    <a href="https://github.com/nerd-factory/undata/blob/main/CHANGELOG.md">Changelog</a> ·
     <a href="https://github.com/nerd-factory/undata/issues">Report a problem</a> ·
     <a href="https://github.com/nerd-factory/nerd-lab/discussions">Ask a question</a> · Code: MIT</p>
   </div>
 </footer>
 
 <script>
-/* Copy buttons: added only when the clipboard is available, so the page needs no JS. */
+/* Copy buttons, on code and on the report sentence: added only when the clipboard is
+   available, so the page needs no JS. */
 if (navigator.clipboard) {
-  for (const block of document.querySelectorAll(".block:not(.out)")) {
-    const head = block.querySelector(".head");
-    const code = block.querySelector("pre code");
-    if (!head || !code) continue;
+  const targets = [
+    ...[...document.querySelectorAll(".block:not(.out)")].map((b) => [b.querySelector(".head"), b.querySelector("pre code")]),
+    ...[...document.querySelectorAll(".report")].map((r) => [r, r.querySelector("p")]),
+  ];
+  for (const [anchor, source] of targets) {
+    if (!anchor || !source) continue;
     const button = document.createElement("button");
     button.type = "button";
     button.className = "copy";
     button.textContent = "copy";
     button.addEventListener("click", async () => {
       try {
-        await navigator.clipboard.writeText(code.innerText);
+        await navigator.clipboard.writeText(source.innerText);
         button.textContent = "copied";
       } catch {
         button.textContent = "select and copy";
       }
       setTimeout(() => { button.textContent = "copy"; }, 1600);
     });
-    head.append(button);
+    anchor.append(button);
   }
 }
 </script>
