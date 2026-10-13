@@ -11,7 +11,7 @@ from .fake_api import MMR, FakeAPI
 def test_search_shows_un_collections_only_by_default(fake: FakeAPI) -> None:
     table = un.search("maternal mortality")
 
-    assert list(table.columns) == ["indicator", "name", "source"]
+    assert list(table.columns) == ["indicator", "name", "source", "places", "years", "breakdowns"]
     assert all(table["indicator"].str.startswith("undata/"))
 
 
@@ -97,6 +97,8 @@ def test_about_describes_the_main_source(fake: FakeAPI) -> None:
         last_year="2023",
         places=233,
         observations=5592,
+        sdg_indicator="3.1.1",
+        metadata="https://unstats.un.org/sdgs/metadata/files/Metadata-03-01-01.pdf",
     )
     text = repr(info)
     assert text.splitlines()[0] == "Maternal mortality ratio [Sex=Female]"

@@ -16,7 +16,10 @@ from __future__ import annotations
 from collections.abc import Sequence
 from typing import Any, Final
 
+import httpx
+
 from ._http import Transport
+from .errors import APIError
 
 #: Fields requested from the observation endpoint. Without ``select`` it returns
 #: an empty shell, and with ``select`` in a POST body the firewall answers 403,
@@ -79,7 +82,19 @@ def node(transport: Transport, nodes: str | Sequence[str], prop: str) -> JSON:
     while token:
         if pages >= MAX_NODE_PAGES:
             raise RuntimeError(f"Stopped after {MAX_NODE_PAGES} pages of {prop!r}.")
-        page: JSON = transport.get("/core/api/v2/node", {**params, "nextToken": token})
+        try:
+            page: JSON = transport.get("/core/api/v2/node", {**params, "nextToken": token})
+        except APIError as exc:
+            if exc.status < httpx.codes.INTERNAL_SERVER_ERROR:
+                raise
+            raise APIError(
+                f"The platform failed on page {pages + 1} of a very large answer to {prop!r}, "
+                f"after {pages * NODE_PAGE_SIZE:,} values. Narrow the request, for example "
+                "to one region instead of the world.",
+                status=exc.status,
+                url=exc.url,
+                body=exc.body,
+            ) from exc
         _merge_node_page(merged, page)
         token = page.get("nextToken")
         pages += 1

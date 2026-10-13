@@ -15,14 +15,17 @@ from collections.abc import Sequence
 
 __all__ = [
     "APIError",
+    "AmbiguousIndicatorError",
     "AmbiguousPlaceError",
     "BlockedRequestError",
     "ConnectionFailedError",
+    "CoverageWarning",
     "IndicatorNotFoundError",
     "MissingDataWarning",
     "MixedYearsWarning",
     "PlaceGuessedWarning",
     "PlaceNotFoundError",
+    "StaleDataWarning",
     "UNDataError",
     "UNDataWarning",
 ]
@@ -130,6 +133,25 @@ class IndicatorNotFoundError(UNDataError, LookupError):
         )
 
 
+class AmbiguousIndicatorError(IndicatorNotFoundError):
+    """An SDG indicator number is reported by several series, so undata will not pick one.
+
+    Attributes:
+        name: The SDG indicator number asked for.
+        suggestions: The ids of the series that report it.
+    """
+
+    def __init__(self, name: str, options: Sequence[tuple[str, str]]) -> None:
+        self.name = name
+        self.suggestions = [dcid for dcid, _ in options]
+        listing = "\n".join(f"  {dcid}  {label}" for dcid, label in options)
+        UNDataError.__init__(
+            self,
+            f"SDG indicator {name} is reported by {len(options)} series. Pass the id of the "
+            f"one you need:\n{listing}\nun.sdg.series({name!r}) lists them as a table.",
+        )
+
+
 class UNDataWarning(UserWarning):
     """Base class for every warning this package raises."""
 
@@ -147,3 +169,11 @@ class MixedYearsWarning(UNDataWarning):
 
 class PlaceGuessedWarning(UNDataWarning):
     """data.un.org's search chose a place your question did not name."""
+
+
+class StaleDataWarning(UNDataWarning):
+    """Values older than the ``since`` year you set were left out of the table."""
+
+
+class CoverageWarning(UNDataWarning):
+    """Not every country has data for every indicator you are comparing."""

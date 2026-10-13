@@ -40,8 +40,10 @@ def test_series_lists_fetchable_ids_totals_first_without_duplicates(fake: FakeAP
         "undata/sdg/VC_DTH_TOTN",
         "undata/sdg/VC_DTH_TOTR",
         "undata/sdg/VC_DTH_TOTN.SEX--F",
+        "undata/sdg/VC_DTH_TOTN.SEX--M",
+        "undata/sdg/VC_DTH_TOTN.SEX--_U",
     ]
-    assert list(table["total"]) == [True, True, False]
+    assert list(table["total"]) == [True, True, False, False, False]
 
 
 def test_an_indicator_with_no_series_gives_an_empty_table(fake: FakeAPI) -> None:

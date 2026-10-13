@@ -51,18 +51,41 @@ with their names. Copy the id from the first column.
 
 | Function | What it does |
 |---|---|
-| `un.search("words")` | Find indicators by what they measure. UN collections only, best match first. |
-| `un.about(indicator)` | What an indicator is, whose it is, its unit, and which years it covers. |
-| `un.get(indicator, countries, years)` | The numbers: one row per country and year, with unit and source. |
-| `un.latest(indicator, countries)` | Each country's most recent value, with a warning if those years differ. |
-| `un.countries(region)` · `un.regions()` | The names it knows, with UN names and ISO codes. |
+| `un.search("words")` | Find indicators by what they measure: UN collections, one row per indicator, with coverage. |
+| `un.about(indicator)` | What an indicator is, whose it is, its unit, years, and its SDG metadata link. |
+| `un.get(indicator, countries, years)` | The numbers: one row per country and year, with unit and source. `by="sex"` for a breakdown, `wide=True` for one column per indicator. |
+| `un.latest(indicator, countries)` | Each country's most recent value. `since=2020` leaves out older ones and names them. |
+| `un.totals(indicator, ["World", "LDCs"])` | The official figure for a region or group, as the agency published it. |
+| `un.change(indicator, countries, 2015, 2023)` | Before, after, the difference and the percentage change. |
+| `un.compare({"a": id1, "b": id2}, countries)` | Indicators side by side, with who has which spelled out. |
+| `un.breakdowns(indicator)` | Every breakdown: by sex, age, wealth and so on. |
+| `un.countries(region)` · `un.regions()` | The names it knows: countries with UN names, regions, and the LDC, LLDC and SIDS groups. |
 | `un.sdg.goals()` · `targets(16)` · `indicators("16.1")` · `series("16.1.2")` | Walk from an SDG goal down to indicators you can fetch. |
-| `un.ask("a question")` | See what data.un.org's search box decided, including whether it guessed the place. |
-| `un.save(table, "file.xlsx")` · `un.cite(table)` | Save to Excel or CSV with sources; write citations for a report. |
+| `un.describe(table)` | Plain-English sentences about a table, worked out from its numbers. |
+| `un.chart(table)` | A chart with its source underneath, for a slide. Needs `pip install "undata[charts]"`. |
+| `un.save(table, "file.xlsx")` · `un.cite(table)` | Excel or CSV with sources; citations for a report. |
+| `un.for_ai(table)` | The table with its sources and caveats, to paste into an AI assistant. |
+| `un.powerquery(indicator, countries)` | Power Query code that fetches the same data in Power BI or Excel. |
+| `un.ask("a question")` | What data.un.org's search box decided, including whether it guessed the place. |
+| `un.configure(cache=True)` | Keep responses on disk, for slow connections and notebooks that run again. |
 
 Wherever a function asks for countries you can write names the way you would in an email
-(`"Viet Nam"`, `"Vietnam"`, `"VNM"`), a list of them, or a region such as `"Southern Asia"`
-or `"Africa"`. Every function explains itself: `help(un.get)`.
+(`"Viet Nam"`, `"Vietnam"`, `"VNM"`), a list of them, a region such as `"Southern Asia"`
+or `"Africa"`, or a UN group: `"LDCs"`, `"LLDCs"`, `"SIDS"`. Wherever it asks for an
+indicator, an SDG number such as `"3.1.1"` works when one series reports it. Every
+function explains itself: `help(un.get)`.
+
+### From a terminal
+
+The same, without writing Python:
+
+```bash
+undata search "maternal mortality"
+undata totals 3.1.1 World LDCs SIDS --latest
+undata change 3.1.1 "Southern Asia" --start 2015 --end 2023 --describe
+undata get 3.1.1 LDCs --years 2015-2023 --to maternal-mortality.xlsx
+undata powerquery 3.1.1 "Southern Asia" > query.m
+```
 
 Every table has the same columns:
 

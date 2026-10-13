@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import warnings
 
+import httpx
 import pytest
 
 import undata as un
@@ -90,3 +91,60 @@ def test_latest_for_all_of_africa_survives_western_sahara() -> None:
         table = un.latest("undata/sdg/EG_ACS_ELEC", "Africa")
 
     assert len(table) >= 50
+
+
+# ── 0.2 features against the real platform ─────────────────────────────────
+
+
+@pytest.mark.parametrize("group", ["LDCs", "LLDCs", "SIDS"])
+def test_un_groupings_have_members_and_an_official_total(group: str) -> None:
+    assert len(un.places.expand(group)) > 25
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", un.UNDataWarning)
+        total = un.totals(MMR, group, latest=True)
+    assert len(total) == 1
+    assert total["source"].iloc[0] == "SDG Global Database"
+
+
+def test_world_total_is_the_published_figure() -> None:
+    world = un.totals(MMR, "World", years=2023)
+
+    assert 150 < world["value"].iloc[0] < 250
+
+
+def test_sdg_numbers_resolve_or_list_their_series() -> None:
+    assert set(un.get("3.1.1", "Bangladesh", years=2023)["indicator"]) == {MMR}
+    with pytest.raises(un.AmbiguousIndicatorError):
+        un.get("16.1.2", "Mali")
+
+
+def test_breakdowns_and_by() -> None:
+    assert {"sex", "age"} <= set(un.breakdowns("undata/sdg/VC_DTH_TOTN").columns)
+    table = un.get("undata/unicef/CME_MR.AGE--Y0T4", "Chad", years=2024, by="sex")
+    assert {"Female", "Male"} <= set(table["sex"])
+
+
+def test_about_links_the_sdg_metadata() -> None:
+    info = un.about(MMR)
+
+    assert info.sdg_indicator == "3.1.1"
+    assert info.metadata.endswith("Metadata-03-01-01.pdf")
+    assert httpx.head(info.metadata, follow_redirects=True, timeout=30).status_code == 200
+
+
+def test_search_shows_coverage() -> None:
+    table = un.search("access to electricity", limit=3)
+
+    assert table["places"].iloc[0] > 100
+    assert table["years"].iloc[0]
+
+
+def test_change_and_compare() -> None:
+    moved = un.change(MMR, "Southern Asia", 2015, 2023)
+    assert (moved["change"] < 0).all()
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", un.UNDataWarning)
+        both = un.compare(
+            {"conflict": "undata/sdg/VC_DTH_TOTR", "homicide": "undata/sdg/VC_IHR_PSRC"}, "World"
+        )
+    assert 0 < len(both.attrs["coverage"]["all"]) < 40

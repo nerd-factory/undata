@@ -254,41 +254,39 @@ import undata as un
 
 SAHEL = [&quot;Chad&quot;, &quot;Niger&quot;, &quot;Mali&quot;, &quot;Burkina Faso&quot;, &quot;Mauritania&quot;, &quot;Sudan&quot;]
 MEASURES = {
-    &quot;undata/sdg/EG_ACS_ELEC&quot;: &quot;electricity %&quot;,
-    &quot;undata/unicef/CME_MR.AGE--Y0T4&quot;: &quot;under-5 deaths per 1,000&quot;,
-    &quot;undata/sdg/SE_TOT_CPLR.EDUCATION_LEVEL--ISCED11_1&quot;: &quot;primary completion %&quot;,
+    &quot;electricity %&quot;: &quot;undata/sdg/EG_ACS_ELEC&quot;,
+    &quot;under-5 deaths per 1,000&quot;: &quot;undata/unicef/CME_MR.AGE--Y0T4&quot;,
+    &quot;primary completion %&quot;: &quot;undata/sdg/SE_TOT_CPLR.EDUCATION_LEVEL--ISCED11_1&quot;,
 }
 
-table = un.latest(list(MEASURES), SAHEL)
-table[&quot;measure&quot;] = table[&quot;indicator&quot;].map(MEASURES)
-brief = table.pivot(index=&quot;country&quot;, columns=&quot;measure&quot;, values=&quot;value&quot;)
-print(brief[list(MEASURES.values())].round(1).to_string(), &quot;\n&quot;)
+<span class="c"># One row per country, a value and a year per measure.</span>
+brief = un.compare(MEASURES, SAHEL).set_index(&quot;country&quot;)
+print(brief.drop(columns=&quot;iso3&quot;).round(1).to_string(), &quot;\n&quot;)
 
 <span class="c"># The sentence for the note, worked out from the numbers rather than typed in.</span>
 RANK = {1: &quot;&quot;, 2: &quot;second-&quot;, 3: &quot;third-&quot;, 4: &quot;fourth-&quot;, 5: &quot;fifth-&quot;, 6: &quot;sixth-&quot;}
-chad = table[table[&quot;country&quot;] == &quot;Chad&quot;].set_index(&quot;measure&quot;)
-power, deaths = chad.loc[&quot;electricity %&quot;], chad.loc[&quot;under-5 deaths per 1,000&quot;]
-<span class="c"># Rank 1 means the lowest electricity, and the highest child mortality.</span>
-power_rank = int(brief[&quot;electricity %&quot;].rank()[&quot;Chad&quot;])
-deaths_rank = int(brief[&quot;under-5 deaths per 1,000&quot;].rank(ascending=False)[&quot;Chad&quot;])
+chad = brief.loc[&quot;Chad&quot;]
+power_rank = int(brief[&quot;electricity %&quot;].rank()[&quot;Chad&quot;])  <span class="c"># 1 = the lowest</span>
+deaths_rank = int(brief[&quot;under-5 deaths per 1,000&quot;].rank(ascending=False)[&quot;Chad&quot;])  <span class="c"># 1 = highest</span>
 print(
-    f&quot;In {power.year}, {power.value:.0f}% of people in Chad had electricity, the &quot;
-    f&quot;{RANK[power_rank]}lowest of the six Sahel countries compared, and {deaths.value:.0f} of &quot;
-    f&quot;every 1,000 children died before their fifth birthday, the {RANK[deaths_rank]}highest.&quot;
+    f&quot;In {chad[&#x27;electricity % year&#x27;]}, {chad[&#x27;electricity %&#x27;]:.0f}% of people in Chad had &quot;
+    f&quot;electricity, the {RANK[power_rank]}lowest of the six Sahel countries compared, and &quot;
+    f&quot;{chad[&#x27;under-5 deaths per 1,000&#x27;]:.0f} of every 1,000 children died before their fifth &quot;
+    f&quot;birthday, the {RANK[deaths_rank]}highest.&quot;
 )</code></pre></div>
       <p class="step">The picture</p>
       <figure class="block"><div class="multiples"><div class="panel"><p class="panel-title">Access to electricity</p><svg class="chart" viewBox="0 0 320 224" role="img" aria-label="Access to electricity, Sahel" preserveAspectRatio="xMinYMin meet" style="--label:107.6px"><title>Access to electricity, Sahel</title><line class="grid" x1="107.6" x2="107.6" y1="30" y2="198"/><text class="tick" x="107.6" y="214" text-anchor="middle">0%</text><line class="grid" x1="185.8" x2="185.8" y1="30" y2="198"/><text class="tick" x="185.8" y="214" text-anchor="middle">50%</text><line class="grid" x1="264.0" x2="264.0" y1="30" y2="198"/><text class="tick" x="264.0" y="214" text-anchor="middle">100%</text><g class="row"><title>Sudan: 66% (2024)</title><rect class="hit" x="0" y="30" width="320" height="28"/><text class="label" x="97.6" y="48.0" text-anchor="end">Sudan</text><g class="bar"><path d="M107.6,36.0 h99.2 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-99.2 z"/></g><text class="value" x="216.8" y="48.0">66%</text></g><g class="row"><title>Mauritania: 52% (2024)</title><rect class="hit" x="0" y="58" width="320" height="28"/><text class="label" x="97.6" y="76.0" text-anchor="end">Mauritania</text><g class="bar"><path d="M107.6,64.0 h77.6 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-77.6 z"/></g><text class="value" x="195.2" y="76.0">52%</text></g><g class="row"><title>Mali: 50% (2024)</title><rect class="hit" x="0" y="86" width="320" height="28"/><text class="label" x="97.6" y="104.0" text-anchor="end">Mali</text><g class="bar"><path d="M107.6,92.0 h73.4 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-73.4 z"/></g><text class="value" x="191.0" y="104.0">50%</text></g><g class="row"><title>Burkina Faso: 34% (2024)</title><rect class="hit" x="0" y="114" width="320" height="28"/><text class="label" x="97.6" y="132.0" text-anchor="end">Burkina Faso</text><g class="bar"><path d="M107.6,120.0 h49.2 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-49.2 z"/></g><text class="value" x="166.8" y="132.0">34%</text></g><g class="row"><title>Niger: 21% (2024)</title><rect class="hit" x="0" y="142" width="320" height="28"/><text class="label" x="97.6" y="160.0" text-anchor="end">Niger</text><g class="bar"><path d="M107.6,148.0 h29.3 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-29.3 z"/></g><text class="value" x="146.9" y="160.0">21%</text></g><g class="row hi"><title>Chad: 13% (2024)</title><rect class="hit" x="0" y="170" width="320" height="28"/><text class="label" x="97.6" y="188.0" text-anchor="end">Chad</text><g class="bar"><path d="M107.6,176.0 h17.0 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-17.0 z"/></g><text class="value" x="134.6" y="188.0">13%</text></g><line class="baseline" x1="107.6" x2="107.6" y1="30" y2="198"/></svg></div><div class="panel"><p class="panel-title">Under-5 deaths per 1,000 live births</p><svg class="chart" viewBox="0 0 320 224" role="img" aria-label="Under-5 deaths per 1,000 live births, Sahel" preserveAspectRatio="xMinYMin meet" style="--label:107.6px"><title>Under-5 deaths per 1,000 live births, Sahel</title><line class="grid" x1="107.6" x2="107.6" y1="30" y2="198"/><text class="tick" x="107.6" y="214" text-anchor="middle">0</text><line class="grid" x1="185.8" x2="185.8" y1="30" y2="198"/><text class="tick" x="185.8" y="214" text-anchor="middle">100</text><line class="grid" x1="264.0" x2="264.0" y1="30" y2="198"/><text class="tick" x="264.0" y="214" text-anchor="middle">200</text><g class="row"><title>Niger: 111 (2024)</title><rect class="hit" x="0" y="30" width="320" height="28"/><text class="label" x="97.6" y="48.0" text-anchor="end">Niger</text><g class="bar"><path d="M107.6,36.0 h82.6 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-82.6 z"/></g><text class="value" x="200.2" y="48.0">111</text></g><g class="row hi"><title>Chad: 97 (2024)</title><rect class="hit" x="0" y="58" width="320" height="28"/><text class="label" x="97.6" y="76.0" text-anchor="end">Chad</text><g class="bar"><path d="M107.6,64.0 h72.1 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-72.1 z"/></g><text class="value" x="189.7" y="76.0">97</text></g><g class="row"><title>Burkina Faso: 75 (2024)</title><rect class="hit" x="0" y="86" width="320" height="28"/><text class="label" x="97.6" y="104.0" text-anchor="end">Burkina Faso</text><g class="bar"><path d="M107.6,92.0 h54.6 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-54.6 z"/></g><text class="value" x="172.2" y="104.0">75</text></g><g class="row"><title>Mali: 73 (2024)</title><rect class="hit" x="0" y="114" width="320" height="28"/><text class="label" x="97.6" y="132.0" text-anchor="end">Mali</text><g class="bar"><path d="M107.6,120.0 h53.1 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-53.1 z"/></g><text class="value" x="170.7" y="132.0">73</text></g><g class="row"><title>Sudan: 62 (2024)</title><rect class="hit" x="0" y="142" width="320" height="28"/><text class="label" x="97.6" y="160.0" text-anchor="end">Sudan</text><g class="bar"><path d="M107.6,148.0 h44.2 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-44.2 z"/></g><text class="value" x="161.8" y="160.0">62</text></g><g class="row"><title>Mauritania: 37 (2024)</title><rect class="hit" x="0" y="170" width="320" height="28"/><text class="label" x="97.6" y="188.0" text-anchor="end">Mauritania</text><g class="bar"><path d="M107.6,176.0 h24.9 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-24.9 z"/></g><text class="value" x="142.5" y="188.0">37</text></g><line class="baseline" x1="107.6" x2="107.6" y1="30" y2="198"/></svg></div><div class="panel"><p class="panel-title">Primary completion</p><svg class="chart" viewBox="0 0 320 224" role="img" aria-label="Primary completion, Sahel" preserveAspectRatio="xMinYMin meet" style="--label:107.6px"><title>Primary completion, Sahel</title><line class="grid" x1="107.6" x2="107.6" y1="30" y2="198"/><text class="tick" x="107.6" y="214" text-anchor="middle">0%</text><line class="grid" x1="185.8" x2="185.8" y1="30" y2="198"/><text class="tick" x="185.8" y="214" text-anchor="middle">50%</text><line class="grid" x1="264.0" x2="264.0" y1="30" y2="198"/><text class="tick" x="264.0" y="214" text-anchor="middle">100%</text><g class="row"><title>Sudan: 65% (2014)</title><rect class="hit" x="0" y="30" width="320" height="28"/><text class="label" x="97.6" y="48.0" text-anchor="end">Sudan</text><g class="bar"><path d="M107.6,36.0 h98.3 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-98.3 z"/></g><text class="value" x="215.9" y="48.0">65%</text></g><g class="row"><title>Burkina Faso: 60% (2021)</title><rect class="hit" x="0" y="58" width="320" height="28"/><text class="label" x="97.6" y="76.0" text-anchor="end">Burkina Faso</text><g class="bar"><path d="M107.6,64.0 h90.2 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-90.2 z"/></g><text class="value" x="207.8" y="76.0">60%</text></g><g class="row"><title>Mauritania: 58% (2015)</title><rect class="hit" x="0" y="86" width="320" height="28"/><text class="label" x="97.6" y="104.0" text-anchor="end">Mauritania</text><g class="bar"><path d="M107.6,92.0 h86.6 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-86.6 z"/></g><text class="value" x="204.2" y="104.0">58%</text></g><g class="row"><title>Mali: 48% (2024)</title><rect class="hit" x="0" y="114" width="320" height="28"/><text class="label" x="97.6" y="132.0" text-anchor="end">Mali</text><g class="bar"><path d="M107.6,120.0 h70.3 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-70.3 z"/></g><text class="value" x="187.9" y="132.0">48%</text></g><g class="row"><title>Niger: 36% (2022)</title><rect class="hit" x="0" y="142" width="320" height="28"/><text class="label" x="97.6" y="160.0" text-anchor="end">Niger</text><g class="bar"><path d="M107.6,148.0 h52.0 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-52.0 z"/></g><text class="value" x="169.6" y="160.0">36%</text></g><g class="row hi"><title>Chad: 27% (2019)</title><rect class="hit" x="0" y="170" width="320" height="28"/><text class="label" x="97.6" y="188.0" text-anchor="end">Chad</text><g class="bar"><path d="M107.6,176.0 h38.1 a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-38.1 z"/></g><text class="value" x="155.7" y="188.0">27%</text></g><line class="baseline" x1="107.6" x2="107.6" y1="30" y2="198"/></svg></div></div><figcaption>Chad in green. Latest year for each country; hover a bar for its year.</figcaption></figure>
       <p class="step">What came back</p>
-      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 13 October 2026</span></div><pre><samp>01_country_briefing.py:12: MixedYearsWarning: The latest values for School completion rate [Education level=Primary education (ISCED11 - 1)] come from different years, 2014 to 2024. Values from different years are not directly comparable; the year column shows which is which.
-  table = un.latest(list(MEASURES), SAHEL)
-measure       electricity %  under-5 deaths per 1,000  primary completion %
-country                                                                    
-Burkina Faso           34.0                      74.9                  60.3
-Chad                   13.4                      97.3                  26.9
-Mali                   49.5                      73.0                  47.5
-Mauritania             52.2                      36.9                  57.9
-Niger                  21.3                     110.7                  35.8
-Sudan                  66.0                      61.6                  65.4 
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 13 October 2026</span></div><pre><samp>01_country_briefing.py:13: MixedYearsWarning: The latest values for School completion rate [Education level=Primary education (ISCED11 - 1)] come from different years, 2014 to 2024. Values from different years are not directly comparable; the year column shows which is which. Pass since=YEAR to leave out older values.
+  brief = un.compare(MEASURES, SAHEL).set_index(&quot;country&quot;)
+              electricity %  electricity % year  under-5 deaths per 1,000  under-5 deaths per 1,000 year  primary completion %  primary completion % year
+country                                                                                                                                                  
+Burkina Faso           34.0                2024                      74.9                           2024                  60.3                       2021
+Chad                   13.4                2024                      97.3                           2024                  26.9                       2019
+Mali                   49.5                2024                      73.0                           2024                  47.5                       2024
+Mauritania             52.2                2024                      36.9                           2024                  57.9                       2015
+Niger                  21.3                2024                     110.7                           2024                  35.8                       2022
+Sudan                  66.0                2024                      61.6                           2024                  65.4                       2014 
 
 In 2024, 13% of people in Chad had electricity, the lowest of the six Sahel countries compared, and 97 of every 1,000 children died before their fifth birthday, the second-highest.</samp></pre></div>
       <div class="report"><span class="tag">For your note</span><p>In 2024, 13% of people in Chad had electricity, the lowest of the six Sahel countries compared, and 97 of every 1,000 children died before their fifth birthday, the second-highest.</p></div>
@@ -307,46 +305,45 @@ In 2024, 13% of people in Chad had electricity, the lowest of the six Sahel coun
 
 import undata as un
 
-<span class="c"># From the indicator your mandate names to the series that reports it.</span>
-print(un.sdg.series(&quot;3.1.1&quot;)[[&quot;indicator&quot;, &quot;name&quot;]].to_string(index=False), &quot;\n&quot;)
+<span class="c"># The SDG indicator number works directly: 3.1.1 is the maternal mortality ratio.</span>
+change = un.change(&quot;3.1.1&quot;, &quot;Southern Asia&quot;, 2015, 2023).sort_values(&quot;end_value&quot;)
+print(change[[&quot;country&quot;, &quot;start_value&quot;, &quot;end_value&quot;, &quot;change_pct&quot;]].round(0).to_string(index=False))
 
-MMR = &quot;undata/sdg/SH_STA_MORT.SEX--F&quot;
-table = un.get(MMR, &quot;Southern Asia&quot;, years=[2015, 2023])
-
-change = table.pivot(index=&quot;country&quot;, columns=&quot;year&quot;, values=&quot;value&quot;)
-change[&quot;change %&quot;] = (change[2023] / change[2015] - 1) * 100
-print(change.sort_values(2023).round(0).to_string(), &quot;\n&quot;)
-
-fell = int((change[&quot;change %&quot;] &lt; 0).sum())
-fell_in = f&quot;all {fell}&quot; if fell == len(change) else f&quot;{fell} of the {len(change)}&quot;
-below = change.index[change[2023] &lt; 70].tolist()
+<span class="c"># The regional and world figures, as published, to set the countries against.</span>
 print(
-    f&quot;Between 2015 and 2023, maternal mortality fell in {fell_in} countries &quot;
-    f&quot;of Southern Asia. {len(below)} were below 70 deaths per 100,000 live births in 2023 &quot;
-    f&quot;({&#x27;, &#x27;.join(below)}), the level Target 3.1 sets for the world as a whole.&quot;
+    un.totals(&quot;3.1.1&quot;, [&quot;Southern Asia&quot;, &quot;World&quot;], years=2023)[[&quot;country&quot;, &quot;value&quot;]].round(0), &quot;\n&quot;
+)
+
+fell = int((change[&quot;change&quot;] &lt; 0).sum())
+fell_in = f&quot;all {fell}&quot; if fell == len(change) else f&quot;{fell} of the {len(change)}&quot;
+below = change.loc[change[&quot;end_value&quot;] &lt; 70, &quot;country&quot;].tolist()
+print(
+    f&quot;Between 2015 and 2023, maternal mortality fell in {fell_in} countries of Southern Asia. &quot;
+    f&quot;{len(below)} were below 70 deaths per 100,000 live births in 2023 ({&#x27;, &#x27;.join(below)}), &quot;
+    &quot;the level Target 3.1 sets for the world as a whole.&quot;
 )</code></pre></div>
       <p class="step">The picture</p>
       <figure class="block"><div class="scroll"><svg class="chart" viewBox="0 0 640 326" role="img" aria-label="Maternal deaths per 100,000 live births, Southern Asia, 2015 and 2023" preserveAspectRatio="xMinYMin meet" style="--label:216.79999999999998px"><title>Maternal deaths per 100,000 live births, Southern Asia, 2015 and 2023</title><g class="legend" transform="translate(216.79999999999998,14)"><circle class="dot-before" cx="5" cy="0" r="5"/><text x="16" y="4">2015</text><circle class="dot-after" cx="76" cy="0" r="5"/><text x="87" y="4">2023</text></g><text class="col-head" x="632" y="36" text-anchor="end">2023</text><line class="grid" x1="216.8" x2="216.8" y1="48" y2="300"/><text class="tick" x="216.8" y="316" text-anchor="middle">0</text><line class="grid" x1="304.6" x2="304.6" y1="48" y2="300"/><text class="tick" x="304.6" y="316" text-anchor="middle">250</text><line class="grid" x1="392.4" x2="392.4" y1="48" y2="300"/><text class="tick" x="392.4" y="316" text-anchor="middle">500</text><line class="grid" x1="480.2" x2="480.2" y1="48" y2="300"/><text class="tick" x="480.2" y="316" text-anchor="middle">750</text><line class="grid" x1="568.0" x2="568.0" y1="48" y2="300"/><text class="tick" x="568.0" y="316" text-anchor="middle">1,000</text><line class="ref" x1="241.4" x2="241.4" y1="40" y2="300"/><text class="ref-label" x="241.4" y="36" text-anchor="middle">70</text><g class="row"><title>Afghanistan: 741 in 2015, 521 in 2023 (-30%)</title><rect class="hit" x="0" y="48.0" width="640" height="28"/><text class="label" x="206.79999999999998" y="66.0" text-anchor="end">Afghanistan</text><line class="link" x1="477.1" x2="399.6" y1="62.0" y2="62.0"/><circle class="dot-before" cx="477.1" cy="62.0" r="5"/><circle class="dot-after" cx="399.6" cy="62.0" r="5"/><text class="value" x="632" y="66.0" text-anchor="end">521</text></g><g class="row"><title>Pakistan: 202 in 2015, 155 in 2023 (-23%)</title><rect class="hit" x="0" y="76.0" width="640" height="28"/><text class="label" x="206.79999999999998" y="94.0" text-anchor="end">Pakistan</text><line class="link" x1="287.9" x2="271.2" y1="90.0" y2="90.0"/><circle class="dot-before" cx="287.9" cy="90.0" r="5"/><circle class="dot-after" cx="271.2" cy="90.0" r="5"/><text class="value" x="632" y="94.0" text-anchor="end">155</text></g><g class="row"><title>Nepal: 236 in 2015, 142 in 2023 (-40%)</title><rect class="hit" x="0" y="104.0" width="640" height="28"/><text class="label" x="206.79999999999998" y="122.0" text-anchor="end">Nepal</text><line class="link" x1="299.6" x2="266.7" y1="118.0" y2="118.0"/><circle class="dot-before" cx="299.6" cy="118.0" r="5"/><circle class="dot-after" cx="266.7" cy="118.0" r="5"/><text class="value" x="632" y="122.0" text-anchor="end">142</text></g><g class="row"><title>Bangladesh: 204 in 2015, 115 in 2023 (-43%)</title><rect class="hit" x="0" y="132.0" width="640" height="28"/><text class="label" x="206.79999999999998" y="150.0" text-anchor="end">Bangladesh</text><line class="link" x1="288.3" x2="257.2" y1="146.0" y2="146.0"/><circle class="dot-before" cx="288.3" cy="146.0" r="5"/><circle class="dot-after" cx="257.2" cy="146.0" r="5"/><text class="value" x="632" y="150.0" text-anchor="end">115</text></g><g class="row"><title>India: 129 in 2015, 80 in 2023 (-37%)</title><rect class="hit" x="0" y="160.0" width="640" height="28"/><text class="label" x="206.79999999999998" y="178.0" text-anchor="end">India</text><line class="link" x1="261.9" x2="245.1" y1="174.0" y2="174.0"/><circle class="dot-before" cx="261.9" cy="174.0" r="5"/><circle class="dot-after" cx="245.1" cy="174.0" r="5"/><text class="value" x="632" y="178.0" text-anchor="end">80</text></g><g class="row"><title>Bhutan: 68 in 2015, 47 in 2023 (-32%)</title><rect class="hit" x="0" y="188.0" width="640" height="28"/><text class="label" x="206.79999999999998" y="206.0" text-anchor="end">Bhutan</text><line class="link" x1="240.8" x2="233.2" y1="202.0" y2="202.0"/><circle class="dot-before" cx="240.8" cy="202.0" r="5"/><circle class="dot-after" cx="233.2" cy="202.0" r="5"/><text class="value" x="632" y="206.0" text-anchor="end">47</text></g><g class="row"><title>Maldives: 41 in 2015, 32 in 2023 (-22%)</title><rect class="hit" x="0" y="216.0" width="640" height="28"/><text class="label" x="206.79999999999998" y="234.0" text-anchor="end">Maldives</text><line class="link" x1="231.2" x2="228.0" y1="230.0" y2="230.0"/><circle class="dot-before" cx="231.2" cy="230.0" r="5"/><circle class="dot-after" cx="228.0" cy="230.0" r="5"/><text class="value" x="632" y="234.0" text-anchor="end">32</text></g><g class="row"><title>Sri Lanka: 22 in 2015, 18 in 2023 (-17%)</title><rect class="hit" x="0" y="244.0" width="640" height="28"/><text class="label" x="206.79999999999998" y="262.0" text-anchor="end">Sri Lanka</text><line class="link" x1="224.5" x2="223.2" y1="258.0" y2="258.0"/><circle class="dot-before" cx="224.5" cy="258.0" r="5"/><circle class="dot-after" cx="223.2" cy="258.0" r="5"/><text class="value" x="632" y="262.0" text-anchor="end">18</text></g><g class="row"><title>Iran (Islamic Republic of): 22 in 2015, 16 in 2023 (-29%)</title><rect class="hit" x="0" y="272.0" width="640" height="28"/><text class="label" x="206.79999999999998" y="290.0" text-anchor="end">Iran (Islamic Republic of)</text><line class="link" x1="224.6" x2="222.4" y1="286.0" y2="286.0"/><circle class="dot-before" cx="224.6" cy="286.0" r="5"/><circle class="dot-after" cx="222.4" cy="286.0" r="5"/><text class="value" x="632" y="290.0" text-anchor="end">16</text></g></svg></div><figcaption>Maternal deaths per 100,000 live births. The dashed line marks 70, the level Target 3.1 sets for the world.</figcaption></figure>
       <p class="step">What came back</p>
-      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 13 October 2026</span></div><pre><samp>                    indicator                                  name
-undata/sdg/SH_STA_MORT.SEX--F Maternal mortality ratio [Sex=Female] 
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 13 October 2026</span></div><pre><samp>                   country  start_value  end_value  change_pct
+Iran (Islamic Republic of)         22.0       16.0       -29.0
+                 Sri Lanka         22.0       18.0       -17.0
+                  Maldives         41.0       32.0       -22.0
+                    Bhutan         68.0       47.0       -32.0
+                     India        129.0       80.0       -37.0
+                Bangladesh        204.0      115.0       -43.0
+                     Nepal        236.0      142.0       -40.0
+                  Pakistan        202.0      155.0       -23.0
+               Afghanistan        741.0      521.0       -30.0
+         country  value
+0  Southern Asia  117.0
+1          World  197.0 
 
-year                         2015   2023  change %
-country                                           
-Iran (Islamic Republic of)   22.0   16.0     -29.0
-Sri Lanka                    22.0   18.0     -17.0
-Maldives                     41.0   32.0     -22.0
-Bhutan                       68.0   47.0     -32.0
-India                       129.0   80.0     -37.0
-Bangladesh                  204.0  115.0     -43.0
-Nepal                       236.0  142.0     -40.0
-Pakistan                    202.0  155.0     -23.0
-Afghanistan                 741.0  521.0     -30.0 
-
-Between 2015 and 2023, maternal mortality fell in all 9 countries of Southern Asia. 4 were below 70 deaths per 100,000 live births in 2023 (Bhutan, Iran (Islamic Republic of), Maldives, Sri Lanka), the level Target 3.1 sets for the world as a whole.</samp></pre></div>
-      <div class="report"><span class="tag">For your report</span><p>Between 2015 and 2023, maternal mortality fell in all 9 countries of Southern Asia. 4 were below 70 deaths per 100,000 live births in 2023 (Bhutan, Iran (Islamic Republic of), Maldives, Sri Lanka), the level Target 3.1 sets for the world as a whole.</p></div>
+Between 2015 and 2023, maternal mortality fell in all 9 countries of Southern Asia. 4 were below 70 deaths per 100,000 live births in 2023 (Iran (Islamic Republic of), Sri Lanka, Maldives, Bhutan), the level Target 3.1 sets for the world as a whole.</samp></pre></div>
+      <div class="report"><span class="tag">For your report</span><p>Between 2015 and 2023, maternal mortality fell in all 9 countries of Southern Asia. 4 were below 70 deaths per 100,000 live births in 2023 (Iran (Islamic Republic of), Sri Lanka, Maldives, Bhutan), the level Target 3.1 sets for the world as a whole.</p></div>
       <ul class="caught">
-        <li><strong>From the SDG number to the data.</strong> <code>un.sdg.series("3.1.1")</code> finds the series that reports the indicator, so nobody has to guess a code.</li>
+        <li><strong>The SDG number is enough.</strong> <code>"3.1.1"</code> finds the one series that reports the indicator; where several do, undata lists them instead of picking one.</li>
+        <li><strong>The official regional figure, not an average.</strong> <code>un.totals</code> returns the number the agency published for the region and the world.</li>
         <li><strong>Careful wording, built in.</strong> 70 per 100,000 is the level Target 3.1 sets for the world as a whole, not a national target, and the sentence says so.</li>
       </ul>
     </article>
@@ -379,7 +376,7 @@ print(
   Proportion of seats in national parliaments held by women [Sex=Female]: French Southern Territories
 The full list is in table.attrs[&#x27;missing&#x27;].
   table = un.latest(SEATS, &quot;Eastern Africa&quot;).sort_values(&quot;value&quot;, ascending=False)
-03_women_in_parliament.py:7: MixedYearsWarning: The latest values for Proportion of seats in national parliaments held by women [Sex=Female] come from different years, 2019 to 2026. Values from different years are not directly comparable; the year column shows which is which.
+03_women_in_parliament.py:7: MixedYearsWarning: The latest values for Proportion of seats in national parliaments held by women [Sex=Female] come from different years, 2019 to 2026. Values from different years are not directly comparable; the year column shows which is which. Pass since=YEAR to leave out older values.
   table = un.latest(SEATS, &quot;Eastern Africa&quot;).sort_values(&quot;value&quot;, ascending=False)
                     country  year  value
                      Rwanda  2026   63.8
@@ -477,60 +474,52 @@ Sudan has the most refugees abroad (2.8 million), but relative to population Sou
 
 import undata as un
 
-CONFLICT = &quot;undata/sdg/VC_DTH_TOTR&quot;  <span class="c"># conflict-related deaths per 100,000, SDG 16.1.2</span>
-HOMICIDE = &quot;undata/sdg/VC_IHR_PSRC&quot;  <span class="c"># intentional homicide per 100,000, SDG 16.1.1</span>
+INDICATORS = {
+    &quot;conflict&quot;: &quot;undata/sdg/VC_DTH_TOTR&quot;,  <span class="c"># conflict-related deaths per 100,000, SDG 16.1.2</span>
+    &quot;homicide&quot;: &quot;undata/sdg/VC_IHR_PSRC&quot;,  <span class="c"># intentional homicide per 100,000, SDG 16.1.1</span>
+}
 
-<span class="c"># Ask for the whole world. The warning lists who has no data: absent, not zero.</span>
-reporting = un.latest(CONFLICT, &quot;World&quot;)[&quot;country&quot;].tolist()
+<span class="c"># Ask for the whole world. The warning says how many countries have both: few.</span>
+table = un.compare(INDICATORS, &quot;World&quot;)
+reporting = table[table[&quot;conflict&quot;].notna()].sort_values(&quot;conflict&quot;, ascending=False)
+print(reporting[[&quot;country&quot;, &quot;conflict&quot;, &quot;homicide&quot;]].round(1).to_string(index=False), &quot;\n&quot;)
 
-both = un.latest([CONFLICT, HOMICIDE], reporting)
-wide = both.pivot(index=&quot;country&quot;, columns=&quot;indicator&quot;, values=&quot;value&quot;)
-wide = wide.rename(columns={CONFLICT: &quot;conflict&quot;, HOMICIDE: &quot;homicide&quot;})
-wide = wide[[&quot;conflict&quot;, &quot;homicide&quot;]].sort_values(&quot;conflict&quot;, ascending=False)
-print(wide.round(1).to_string(), &quot;\n&quot;)
-
-higher = wide.index[wide[&quot;conflict&quot;] &gt; wide[&quot;homicide&quot;]].tolist()
+higher = reporting.loc[reporting[&quot;conflict&quot;] &gt; reporting[&quot;homicide&quot;], &quot;country&quot;].tolist()
 print(
     f&quot;Only {len(reporting)} countries report conflict-related deaths. In {len(higher)} of &quot;
     f&quot;them, conflict killed more people per 100,000 than homicide: {&#x27;, &#x27;.join(higher)}.&quot;
 )</code></pre></div>
       <p class="step">What came back</p>
-      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 13 October 2026</span></div><pre><samp>05_conflict_and_homicide.py:9: MissingDataWarning: No data for 237 of 257 country/indicator combinations. They are left out of the table, not set to zero:
-  Number of total conflict-related deaths per 100,000 population: Aruba, Angola, Anguilla, Åland Islands, Albania, Andorra, Netherlands Antilles, United Arab Emirates and 229 more
-The full list is in table.attrs[&#x27;missing&#x27;].
-  reporting = un.latest(CONFLICT, &quot;World&quot;)[&quot;country&quot;].tolist()
-05_conflict_and_homicide.py:11: MissingDataWarning: No data for 7 of 40 country/indicator combinations. They are left out of the table, not set to zero:
-  Number of victims of intentional homicide per 100,000 population: Burkina Faso, Central African Republic, Democratic Republic of the Congo, Libya, Mali, Somalia, Sudan
-The full list is in table.attrs[&#x27;missing&#x27;].
-  both = un.latest([CONFLICT, HOMICIDE], reporting)
-05_conflict_and_homicide.py:11: MixedYearsWarning: The latest values for Number of victims of intentional homicide per 100,000 population come from different years, 2010 to 2024. Values from different years are not directly comparable; the year column shows which is which.
-  both = un.latest([CONFLICT, HOMICIDE], reporting)
-indicator                         conflict  homicide
-country                                             
-State of Palestine                   121.2       0.3
-Syrian Arab Republic                  27.7       2.1
-Sudan                                 21.9       NaN
-South Sudan                           18.8      14.0
-Burkina Faso                           6.6       NaN
-Ukraine                                6.4       3.8
-Lebanon                                5.8       2.6
-Central African Republic               4.9       NaN
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, 13 October 2026</span></div><pre><samp>05_conflict_and_homicide.py:11: MixedYearsWarning: The latest values for Number of victims of intentional homicide per 100,000 population come from different years, 2006 to 2024. Values from different years are not directly comparable; the year column shows which is which. Pass since=YEAR to leave out older values.
+  table = un.compare(INDICATORS, &quot;World&quot;)
+05_conflict_and_homicide.py:11: CoverageWarning: 13 of 257 countries have all 2 indicators. Only conflict: Burkina Faso, Central African Republic, Democratic Republic of the Congo, Libya, Mali, Somalia, Sudan. Only homicide: Albania, Algeria, American Samoa, Andorra, Angola, Anguilla, Antigua and Barbuda, Argentina and 177 more. No data at all for 52, left out.
+  table = un.compare(INDICATORS, &quot;World&quot;)
+                         country  conflict  homicide
+              State of Palestine     121.2       0.3
+            Syrian Arab Republic      27.7       2.1
+                           Sudan      21.9       NaN
+                     South Sudan      18.8      14.0
+                    Burkina Faso       6.6       NaN
+                         Ukraine       6.4       3.8
+                         Lebanon       5.8       2.6
+        Central African Republic       4.9       NaN
 Democratic Republic of the Congo       3.4       NaN
-Myanmar                                2.8       3.9
-Somalia                                1.8       NaN
-Mali                                   1.6       NaN
-Afghanistan                            0.5       4.2
-Ethiopia                               0.3       8.5
-Libya                                  0.3       NaN
-Cameroon                               0.2       6.8
-Yemen                                  0.1       5.8
-Colombia                               0.1      24.4
-Iraq                                   0.1       9.5
-Philippines                            0.0       4.3 
+                         Myanmar       2.8       3.9
+                         Somalia       1.8       NaN
+                            Mali       1.6       NaN
+                     Afghanistan       0.5       4.2
+                        Ethiopia       0.3       8.5
+                           Libya       0.3       NaN
+                        Cameroon       0.2       6.8
+                           Yemen       0.1       5.8
+                        Colombia       0.1      24.4
+                            Iraq       0.1       9.5
+                     Philippines       0.0       4.3 
 
 Only 20 countries report conflict-related deaths. In 5 of them, conflict killed more people per 100,000 than homicide: State of Palestine, Syrian Arab Republic, South Sudan, Ukraine, Lebanon.</samp></pre></div>
       <div class="report"><span class="tag">For your briefing</span><p>Only 20 countries report conflict-related deaths. In 5 of them, conflict killed more people per 100,000 than homicide: State of Palestine, Syrian Arab Republic, South Sudan, Ukraine, Lebanon.</p></div>
       <ul class="caught">
+        <li><strong>Who has what, spelled out.</strong> <code>un.compare</code> says how many countries have both indicators and names the rest.</li>
         <li><strong>Absent is not zero.</strong> Asking for the whole world shows how few countries report conflict deaths at all. Peaceful countries are missing, not zero, and a chart of "all countries" would be a chart of countries at war.</li>
         <li><strong>Gaps stay gaps.</strong> Where homicide data is missing, the table shows a blank, not a zero, and the warning names the countries.</li>
       </ul>
@@ -603,7 +592,7 @@ print(un.cite(table))</code></pre></div>
   School completion rate [Education level=Primary education (ISCED11 - 1)]: Brunei Darussalam, Malaysia, Singapore
 The full list is in table.attrs[&#x27;missing&#x27;].
   table = un.latest(INDICATORS, &quot;South-Eastern Asia&quot;)
-07_regional_data_pack.py:13: MixedYearsWarning: The latest values for School completion rate [Education level=Primary education (ISCED11 - 1)] come from different years, 2016 to 2023. Values from different years are not directly comparable; the year column shows which is which.
+07_regional_data_pack.py:13: MixedYearsWarning: The latest values for School completion rate [Education level=Primary education (ISCED11 - 1)] come from different years, 2016 to 2023. Values from different years are not directly comparable; the year column shows which is which. Pass since=YEAR to leave out older values.
   table = un.latest(INDICATORS, &quot;South-Eastern Asia&quot;)
 Saved 27 values for 11 countries to south-eastern-asia-data-pack.xlsx
 Sheets: data, sources, no data 
@@ -719,14 +708,20 @@ un.save(table, "maternal-mortality.xlsx")</code></pre></div>
     <table class="cheat">
       <thead><tr><th scope="col">function</th><th scope="col">what it does</th></tr></thead>
       <tbody>
-        <tr><td>un.search("words")</td><td>Find indicators by what they measure. UN collections only, best match first.</td></tr>
-        <tr><td>un.about(indicator)</td><td>What an indicator is, whose it is, its unit, and which years it covers.</td></tr>
-        <tr><td>un.get(indicator, countries, years)</td><td>The numbers: one row per country and year, with unit and source.</td></tr>
-        <tr><td>un.latest(indicator, countries)</td><td>Each country's most recent value, and a warning if those years differ.</td></tr>
-        <tr><td>un.countries(region)<br>un.regions()</td><td>The country and region names it knows, with UN names and ISO codes.</td></tr>
-        <tr><td>un.sdg.goals()<br>un.sdg.targets(16)<br>un.sdg.indicators("16.1")<br>un.sdg.series("16.1.2")</td><td>Walk from an SDG goal down to indicators you can fetch.</td></tr>
-        <tr><td>un.ask("a question")</td><td>See what data.un.org's search box decided, including whether it guessed the place.</td></tr>
-        <tr><td>un.save(table, "file.xlsx")<br>un.cite(table)</td><td>Save to Excel or CSV with sources; write citations for a report.</td></tr>
+        <tr><td>un.search("words")</td><td>Find indicators by what they measure: one row per indicator, with how many places and years have data.</td></tr>
+        <tr><td>un.about(indicator)</td><td>What an indicator is, whose it is, its unit, its years, and its SDG metadata.</td></tr>
+        <tr><td>un.get(indicator, countries, years)</td><td>The numbers: one row per country and year. <code>by="sex"</code> for a breakdown, <code>wide=True</code> for one column per indicator.</td></tr>
+        <tr><td>un.latest(indicator, countries)</td><td>Each country's most recent value. <code>since=2020</code> leaves out older ones and names them.</td></tr>
+        <tr><td>un.totals(indicator, ["World", "LDCs"])</td><td>The official figure for a region or group, as the agency published it.</td></tr>
+        <tr><td>un.change(indicator, countries, 2015, 2023)</td><td>Before, after, the difference and the percentage change.</td></tr>
+        <tr><td>un.compare({"a": id1, "b": id2}, countries)</td><td>Indicators side by side, with who has which spelled out.</td></tr>
+        <tr><td>un.countries(region)<br>un.regions()</td><td>Countries with UN names, regions, and the LDC, LLDC and SIDS groups.</td></tr>
+        <tr><td>un.sdg.goals()<br>un.sdg.targets(16)<br>un.sdg.indicators("16.1")<br>un.sdg.series("16.1.2")</td><td>Walk from an SDG goal down to indicators you can fetch. SDG numbers like <code>"3.1.1"</code> also work directly.</td></tr>
+        <tr><td>un.describe(table)<br>un.chart(table)</td><td>Sentences for a report, worked out from the numbers; a chart with its source, for a slide.</td></tr>
+        <tr><td>un.save(table, "file.xlsx")<br>un.cite(table)</td><td>Excel or CSV with sources; citations for a report.</td></tr>
+        <tr><td>un.for_ai(table)<br>un.powerquery(...)</td><td>The table with its caveats for an AI assistant; Power Query code for Power BI or Excel.</td></tr>
+        <tr><td>un.ask("a question")</td><td>What data.un.org's search box decided, including whether it guessed the place.</td></tr>
+        <tr><td>undata ...</td><td>All of it from a terminal: <code>undata totals 3.1.1 World LDCs --latest</code>.</td></tr>
       </tbody>
     </table>
   </div>

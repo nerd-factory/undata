@@ -3,7 +3,8 @@
 Anywhere undata asks for places you can write a country's name, its UN name, a
 common short name, or its three-letter ISO code — ``"Viet Nam"``, ``"Vietnam"``
 and ``"VNM"`` all work — or a region such as ``"Southern Asia"`` or ``"Africa"``,
-which stands for every country in it.
+which stands for every country in it. The UN development groupings work the same
+way: ``"LDCs"``, ``"LLDCs"`` and ``"SIDS"``.
 
 Tables use the UN's own short names (M49), so ``Türkiye`` and ``Viet Nam`` rather
 than the platform's ``Turkey`` and ``Vietnam``, and can go straight into a UN report.
@@ -67,6 +68,11 @@ REGIONS: Final[Mapping[str, str]] = {
     "WesternAfrica": "Western Africa",
     "WesternAsia": "Western Asia",
     "WesternEurope": "Western Europe",
+    # UN development groupings. The platform also holds OECD and developed/developing
+    # groupings, but their member lists are empty or wrong, so they are left out.
+    "undata-geo/G00404000": "Least developed countries (LDCs)",
+    "undata-geo/G00403000": "Landlocked developing countries (LLDCs)",
+    "undata-geo/G00405000": "Small Island Developing States (SIDS)",
 }
 
 #: UN M49 short names, where they differ from the platform's names. Keyed by ISO3.
@@ -140,6 +146,14 @@ ALIASES: Final[Mapping[str, str]] = {
     "brunei": "BRN",
     "netherlands": "NLD",
     "holland": "NLD",
+    "ldc": "undata-geo/G00404000",
+    "ldcs": "undata-geo/G00404000",
+    "least developed countries": "undata-geo/G00404000",
+    "lldc": "undata-geo/G00403000",
+    "lldcs": "undata-geo/G00403000",
+    "landlocked developing countries": "undata-geo/G00403000",
+    "sids": "undata-geo/G00405000",
+    "small island developing states": "undata-geo/G00405000",
     "world": "Earth",
     "global": "Earth",
     "all countries": "Earth",

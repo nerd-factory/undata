@@ -6,6 +6,40 @@ All notable changes are recorded here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- UN development groupings as places: `"LDCs"`, `"LLDCs"`, `"SIDS"` (and their full names).
+  The platform's OECD and developed/developing groupings are left out: their member
+  lists are wrong or empty.
+- `un.totals()`: the official figure for a region or group, as the agency published it.
+  undata never computes a regional figure of its own.
+- SDG indicator numbers such as `"3.1.1"` work wherever an indicator id does, when one
+  series reports the indicator; otherwise `AmbiguousIndicatorError` lists the series.
+- `wide=True` on `get`, `latest` and `totals`, and `un.wide()`: one column per indicator.
+  Citations and saving still find the sources.
+- `un.latest(..., since=YEAR)` leaves out older values and names them in a
+  `StaleDataWarning`.
+- `un.change()`: two years side by side, with the difference and the percentage change.
+- `un.compare()`: indicators side by side, with a `CoverageWarning` saying who has what.
+- `un.breakdowns()` and `un.get(..., by="sex")`: breakdowns by sex, age, wealth and more.
+- `un.describe()`: plain-English sentences about a table, from fixed rules, not a model.
+- `un.chart()`: ranked bars, lines or a dumbbell, chosen from the table, with the source
+  underneath. Optional: `pip install "undata[charts]"`.
+- `un.for_ai()`: a table with instructions, sources and gaps, for an AI assistant.
+- `un.powerquery()`: Power Query (M) code for Power BI and Excel.
+- `un.about()` gives the SDG indicator number and the UN Stats metadata document.
+- `un.search()` shows one row per indicator with a count of its breakdowns, and how many
+  places and years have data.
+- A disk cache: `un.configure(cache=True)` and `un.clear_cache()`.
+- An `undata` command for the terminal, with the same functions.
+
+### Fixed
+
+- A failure deep in paging through a very large answer now says what happened and how to
+  narrow the request, instead of a bare HTTP 500.
+- Requests for many places run several at a time.
+- The shared connection is closed when Python exits.
+
 ### Changed
 
 - The examples are now nine use cases written from real kinds of UN requests (a

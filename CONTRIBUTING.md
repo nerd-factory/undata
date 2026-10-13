@@ -55,12 +55,16 @@ CI runs the same four on Linux, macOS and Windows, on every supported Python.
 ## Layout
 
 ```
-src/undata/data.py         get() and latest(): the numbers
+src/undata/data.py         get(), latest(), totals(), change(), compare(), wide()
 src/undata/places.py       countries and regions by name, UN names
 src/undata/indicators.py   search() and about()
 src/undata/sdg.py          the SDG tree, goal to fetchable series
 src/undata/ask.py          what data.un.org's search box decided
-src/undata/export.py       save() and cite()
+src/undata/export.py       save(), cite(), for_ai(), powerquery()
+src/undata/breakdowns.py   breakdowns() and get(by=...)
+src/undata/summary.py      describe(): sentences from the numbers
+src/undata/chart.py        chart(): slide-ready charts (optional matplotlib)
+src/undata/cli.py          the undata command
 src/undata/_http.py        the only module that touches the network
 src/undata/_endpoints.py   one thin wrapper per API route, no interpretation
 src/undata/dcid.py         the identifier grammar

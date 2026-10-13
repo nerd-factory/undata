@@ -20,9 +20,13 @@ It exists to make the platform's request traps impossible to trip over:
 from __future__ import annotations
 
 import contextlib
+import hashlib
 import json
+import os
+import sys
 import time
 from collections.abc import Mapping, Sequence
+from pathlib import Path
 from typing import Any, Final
 from urllib.parse import quote, urlencode
 
@@ -81,8 +85,19 @@ def query_string(params: Mapping[str, QueryValue | None]) -> str:
     return urlencode(pairs, quote_via=quote, safe="")
 
 
+def default_cache_dir() -> Path:
+    """Where cached responses go: the platform's usual cache folder, under ``undata``."""
+    if sys.platform == "win32":
+        root = Path(os.environ.get("LOCALAPPDATA", Path.home() / "AppData" / "Local"))
+    elif sys.platform == "darwin":
+        root = Path.home() / "Library" / "Caches"
+    else:
+        root = Path(os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache"))
+    return root / "undata"
+
+
 class Transport:
-    """A synchronous HTTP transport with retries and explanatory errors.
+    """A synchronous HTTP transport with retries, explanatory errors and a disk cache.
 
     Args:
         base_url: Root of the Data Commons deployment.
@@ -91,6 +106,9 @@ class Transport:
             connection, before giving up.
         http_client: An ``httpx.Client`` to use instead of creating one. Useful for
             proxies, custom certificates, and tests.
+        cache_dir: Keep successful responses here and reuse them, so a notebook that
+            runs again does not ask again. ``None`` turns the cache off.
+        cache_hours: How long a cached response stays fresh.
     """
 
     def __init__(
@@ -100,9 +118,13 @@ class Transport:
         timeout: float = DEFAULT_TIMEOUT,
         retries: int = DEFAULT_RETRIES,
         http_client: httpx.Client | None = None,
+        cache_dir: str | Path | None = None,
+        cache_hours: float = 24,
     ) -> None:
         self.base_url = base_url.rstrip("/")
         self.retries = retries
+        self.cache_dir = Path(cache_dir).expanduser() if cache_dir is not None else None
+        self.cache_seconds = cache_hours * 3600
         self._owns_client = http_client is None
         self._client = http_client or httpx.Client(
             timeout=timeout,
@@ -146,7 +168,39 @@ class Transport:
         query = query_string(params or {})
         return f"{url}?{query}" if query else url
 
+    def _cache_file(self, request: httpx.Request) -> Path | None:
+        if self.cache_dir is None:
+            return None
+        key = hashlib.sha256(f"{request.method} {request.url}\n".encode() + request.content)
+        return self.cache_dir / f"{key.hexdigest()}.json"
+
     def _send(self, request: httpx.Request) -> Any:
+        cached = self._cache_file(request)
+        fresh = cached is not None and cached.exists()
+        if fresh and cached and time.time() - cached.stat().st_mtime < self.cache_seconds:
+            with contextlib.suppress(ValueError, OSError):
+                return json.loads(cached.read_text(encoding="utf-8"))
+        result = self._send_live(request)
+        if cached is not None:
+            with contextlib.suppress(OSError):  # a cache that cannot be written is no cache
+                cached.parent.mkdir(parents=True, exist_ok=True)
+                partial = cached.with_suffix(".tmp")
+                partial.write_text(json.dumps(result), encoding="utf-8")
+                partial.replace(cached)
+        return result
+
+    def clear_cache(self) -> int:
+        """Delete every cached response. Returns how many were deleted."""
+        if self.cache_dir is None or not self.cache_dir.exists():
+            return 0
+        removed = 0
+        for file in self.cache_dir.glob("*.json"):
+            with contextlib.suppress(OSError):
+                file.unlink()
+                removed += 1
+        return removed
+
+    def _send_live(self, request: httpx.Request) -> Any:
         url = str(request.url)
         for attempt in range(self.retries + 1):
             last_attempt = attempt == self.retries

@@ -28,7 +28,12 @@ COUNTRIES = {
     "country/KOR": "South Korea",
     "country/PNG": "Papua New Guinea",
 }
-REGION_MEMBERS = {"SouthernAsia": ["country/BGD", "country/NPL"]}
+REGION_MEMBERS = {
+    "SouthernAsia": ["country/BGD", "country/NPL"],
+    "undata-geo/G00404000": ["country/BGD", "country/NPL", "country/COD"],  # LDCs
+}
+TOTN = "undata/sdg/VC_DTH_TOTN"
+TOTN_F, TOTN_M, TOTN_U = (f"{TOTN}.SEX--{s}" for s in ("F", "M", "_U"))
 
 NAMES = {
     MMR: "Maternal mortality ratio [Sex=Female]",
@@ -37,12 +42,28 @@ NAMES = {
     "undata/p/SDG": "SDG Global Database",
     "dc/base/UN_SDG": "UN_SDG",
     UNIT_ID: "Count per 100,000 live births",
+    TOTN: "Number of total conflict-related deaths",
+    TOTN_F: "Number of total conflict-related deaths [Sex=Female]",
+    TOTN_M: "Number of total conflict-related deaths [Sex=Male]",
+    TOTN_U: "Number of total conflict-related deaths [Sex=Unknown]",
+    "undata/sdg/VC_DTH_TOTR": "Conflict deaths per 100,000",
+    "undata/who/U5": "Under-five mortality rate",
 }
 
 SDG_TREE: dict[str, list[tuple[str, str]]] = {
     "undata/g/sdgf/Root": [
         ("undata/g/sdgf/goal-16", "SDG Goal 16 — Promote peaceful and inclusive societies"),
         ("undata/g/sdgf/goal-3", "SDG Goal 3 — Ensure healthy lives"),
+    ],
+    "undata/g/sdgf/goal-3": [
+        ("undata/g/sdgf/target-3-1", "SDG Target 3.1 — Reduce maternal mortality")
+    ],
+    "undata/g/sdgf/target-3-1": [
+        ("undata/g/sdgf/ind-3-1-1", "SDG Indicator 3.1.1 — Maternal mortality ratio")
+    ],
+    "undata/g/sdgf/ind-3-1-1": [("undata/g/sdg/SH_STA_MORT", "Maternal mortality ratio")],
+    "undata/g/sdg/SH_STA_MORT": [
+        ("undata/g/sdg/SH_STA_MORT.001", "Maternal mortality ratio [Sex=Female]")
     ],
     "undata/g/sdgf/goal-16": [
         ("undata/g/sdgf/target-16-a", "SDG Target 16.a — Strengthen national institutions"),
@@ -70,9 +91,25 @@ SDG_MEMBERS = {
     "undata/g/sdg/VC_DTH_TOTR.000": [("undata/sdg/VC_DTH_TOTR", "Conflict deaths per 100,000")],
     "undata/g/sdg/VC_DTH_TOTN.000": [("undata/sdg/VC_DTH_TOTN", "Conflict deaths")],
     "undata/g/sdg/VC_DTH_TOTN.001": [
-        ("undata/sdg/VC_DTH_TOTN.SEX--F", "Conflict deaths [Female]"),
-        ("undata/sdg/VC_DTH_TOTN", "Conflict deaths"),  # listed twice in the graph
+        (TOTN_F, "Number of total conflict-related deaths [Sex=Female]"),
+        (TOTN_M, "Number of total conflict-related deaths [Sex=Male]"),
+        (TOTN_U, "Number of total conflict-related deaths [Sex=Unknown]"),
+        (TOTN, "Number of total conflict-related deaths"),  # listed twice in the graph
     ],
+    "undata/g/sdg/SH_STA_MORT.001": [(MMR, "Maternal mortality ratio [Sex=Female]")],
+}
+# Upward links: a variable to its sub-group, a group to its parents.
+MEMBER_OF = {
+    MMR: ["undata/g/sdg/SH_STA_MORT.001"],
+    TOTN: ["undata/g/sdg/VC_DTH_TOTN.000"],
+    TOTN_F: ["undata/g/sdg/VC_DTH_TOTN.001"],
+}
+PARENTS = {
+    "undata/g/sdg/SH_STA_MORT.001": ["undata/g/sdg/SH_STA_MORT"],
+    "undata/g/sdg/SH_STA_MORT": ["undata/g/sdg", "undata/g/sdgf/ind-3-1-1"],
+    "undata/g/sdg/VC_DTH_TOTN.000": ["undata/g/sdg/VC_DTH_TOTN"],
+    "undata/g/sdg/VC_DTH_TOTN.001": ["undata/g/sdg/VC_DTH_TOTN"],
+    "undata/g/sdg/VC_DTH_TOTN": ["undata/g/sdg", "undata/g/sdgf/ind-16-1-2"],
 }
 
 SERIES = {
@@ -84,8 +121,15 @@ SERIES = {
     (ELEC, "country/BGD"): [("2022", 99.0), ("2024", 99.5)],
     (ELEC, "country/NPL"): [("2018", 90.0)],
     (RAW, "country/BGD"): [("2023", 1.0)],
+    (MMR, "Earth"): [("2015", 227.0), ("2023", 197.3)],
+    (MMR, "undata-geo/G00404000"): [("2023", 313.1)],
+    (TOTN_F, "country/BGD"): [("2023", 4.0)],
+    (TOTN_M, "country/BGD"): [("2023", 9.0)],
+    (TOTN_U, "country/BGD"): [("2023", 2.0)],
+    (TOTN, "country/BGD"): [("2023", 15.0)],
 }
 SERIES_FACET = {MMR: "f-sdg", ELEC: "f-copy", RAW: "f-raw-unit"}
+SERIES_FACET.update(dict.fromkeys((TOTN, TOTN_F, TOTN_M, TOTN_U), "f-sdg"))
 FACETS = {
     "f-sdg": {
         "provenanceId": "undata/p/SDG",
@@ -106,6 +150,11 @@ SEARCH_HITS = [
     {"dcid": "undata/unicef/MNCH_DEATHS.SEX--F", "name": "Estimated number maternal deaths"},
     {"dcid": MMR, "name": "Maternal mortality ratio [Sex=Female]"},
     {"dcid": "Count_Person", "name": "Population"},
+]
+U5_HITS = [
+    {"dcid": "undata/who/U5.WEALTH--Q1", "name": "Under-five mortality rate [Wealth=Q1]"},
+    {"dcid": "undata/who/U5.WEALTH--Q2", "name": "Under-five mortality rate [Wealth=Q2]"},
+    {"dcid": "undata/who/INFANT.WEALTH--Q1", "name": "Infant mortality [Wealth=Q1]"},
 ]
 
 
@@ -128,6 +177,12 @@ class FakeAPI:
                 data[node] = {"arcs": {"name": {"nodes": [{"value": NAMES[node]}]}}}
             elif prop == "<-specializationOf" and node in SDG_TREE:
                 values = [{"dcid": d, "name": n} for d, n in SDG_TREE[node]]
+                data[node] = {"arcs": {"specializationOf": {"nodes": values}}}
+            elif prop == "->memberOf" and node in MEMBER_OF:
+                values = [{"dcid": d} for d in MEMBER_OF[node]]
+                data[node] = {"arcs": {"memberOf": {"nodes": values}}}
+            elif prop == "->specializationOf" and node in PARENTS:
+                values = [{"dcid": d} for d in PARENTS[node]]
                 data[node] = {"arcs": {"specializationOf": {"nodes": values}}}
             elif prop == "<-memberOf" and node in SDG_MEMBERS:
                 values = [{"dcid": d, "name": n} for d, n in SDG_MEMBERS[node]]
@@ -154,13 +209,14 @@ class FakeAPI:
 
     def stat_var_search(self, _t: object, query: str) -> dict[str, Any]:
         self.calls["search"] += 1
-        return {"statVars": SEARCH_HITS if "matern" in query.casefold() else []}
+        if "matern" in query.casefold():
+            return {"statVars": SEARCH_HITS}
+        return {"statVars": U5_HITS if "five" in query.casefold() else []}
 
     def variable_info(self, _t: object, dcids: str | Sequence[str]) -> dict[str, Any]:
         self.calls["variable_info"] += 1
-        if dcids != MMR:
-            return {}
-        return {
+        wanted = [dcids] if isinstance(dcids, str) else list(dcids)
+        info = {
             MMR: {
                 "provenanceSummary": {
                     "dc/base/UN_SDG": {"observationCount": 10, "seriesSummary": []},
@@ -176,8 +232,18 @@ class FakeAPI:
                         ],
                     },
                 }
-            }
+            },
+            "undata/who/U5": {
+                "provenanceSummary": {
+                    "undata/p/WHO": {
+                        "observationCount": 900,
+                        "timeSeriesCount": 90,
+                        "seriesSummary": [{"earliestDate": "1993", "latestDate": "2020"}],
+                    }
+                }
+            },
         }
+        return {d: info[d] for d in wanted if d in info}
 
     def detect_and_fulfill(self, _t: object, question: str) -> dict[str, Any]:
         self.calls["detect_and_fulfill"] += 1

@@ -2,21 +2,20 @@
 
 import undata as un
 
-# From the indicator your mandate names to the series that reports it.
-print(un.sdg.series("3.1.1")[["indicator", "name"]].to_string(index=False), "\n")
+# The SDG indicator number works directly: 3.1.1 is the maternal mortality ratio.
+change = un.change("3.1.1", "Southern Asia", 2015, 2023).sort_values("end_value")
+print(change[["country", "start_value", "end_value", "change_pct"]].round(0).to_string(index=False))
 
-MMR = "undata/sdg/SH_STA_MORT.SEX--F"
-table = un.get(MMR, "Southern Asia", years=[2015, 2023])
-
-change = table.pivot(index="country", columns="year", values="value")
-change["change %"] = (change[2023] / change[2015] - 1) * 100
-print(change.sort_values(2023).round(0).to_string(), "\n")
-
-fell = int((change["change %"] < 0).sum())
-fell_in = f"all {fell}" if fell == len(change) else f"{fell} of the {len(change)}"
-below = change.index[change[2023] < 70].tolist()
+# The regional and world figures, as published, to set the countries against.
 print(
-    f"Between 2015 and 2023, maternal mortality fell in {fell_in} countries "
-    f"of Southern Asia. {len(below)} were below 70 deaths per 100,000 live births in 2023 "
-    f"({', '.join(below)}), the level Target 3.1 sets for the world as a whole."
+    un.totals("3.1.1", ["Southern Asia", "World"], years=2023)[["country", "value"]].round(0), "\n"
+)
+
+fell = int((change["change"] < 0).sum())
+fell_in = f"all {fell}" if fell == len(change) else f"{fell} of the {len(change)}"
+below = change.loc[change["end_value"] < 70, "country"].tolist()
+print(
+    f"Between 2015 and 2023, maternal mortality fell in {fell_in} countries of Southern Asia. "
+    f"{len(below)} were below 70 deaths per 100,000 live births in 2023 ({', '.join(below)}), "
+    "the level Target 3.1 sets for the world as a whole."
 )

@@ -237,6 +237,15 @@ Estimates assume part-time work, about 15 hours a week.
 | 5. Docs and hardening | 8–10 | Docs site, notebook gallery, `llms.txt`, performance → **0.4.0 beta** |
 | 6. Stability | 10–14 | API changes from feedback; pyOpenSci review → **1.0.0** |
 
+## 10a. Shipped in 0.2 (2026-10-13)
+
+The review of what users needed beyond the platform's own API became 0.2: UN groupings
+(LDCs, LLDCs, SIDS), official regional totals, SDG numbers as input, wide tables, a
+freshness cut-off, change over time, honest comparisons, breakdowns, plain-English
+summaries, charts, AI-ready export, Power Query generation, SDG metadata links, better
+search, a disk cache and a command-line tool. Still open: async, polars output, and the
+naming decision for Taiwan and Kosovo, which the platform names in its own way.
+
 ## 11. Requirements for 1.0
 
 - [ ] Every public function is typed, documented and has a runnable example

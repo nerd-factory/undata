@@ -41,6 +41,14 @@ classifiers = [
   "Typing :: Typed",
 ]
 
+[project.optional-dependencies]
+charts = ["matplotlib>=3.9"]
+ai = ["tabulate>=0.9"]
+all = ["matplotlib>=3.9", "tabulate>=0.9"]
+
+[project.scripts]
+undata = "undata.cli:main"
+
 [project.urls]
 Homepage = "https://nerd-factory.github.io/undata/"
 Documentation = "https://nerd-factory.github.io/undata/"
@@ -59,6 +67,9 @@ dev = [
   "mypy>=1.13",
   "ruff>=0.8",
   "pandas-stubs>=2.2",
+  "matplotlib>=3.9",
+  "tabulate>=0.9",
+  "types-tabulate>=0.9",
 ]
 
 [tool.hatch.version]
@@ -127,6 +138,7 @@ convention = "google"
 "tests/**" = ["D", "S101", "PLR2004", "PLC0415"]
 "examples/**" = ["D103", "S101", "PLR2004"]
 "site/**" = ["E501", "PLR2004"]  # SVG string templates and chart geometry
+"src/undata/export.py" = ["E501"]  # the generated Power Query (M) lines are kept whole
 
 [tool.mypy]
 strict = true
