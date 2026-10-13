@@ -108,8 +108,8 @@ group; they can still be asked for by platform code, such as `country/XKS`.
 
 ```python
 table = un.latest("3.1.1", "LDCs", within=10)
-un.ai_pack(table, "maternal-mortality.zip")   # upload, then paste prompt.md
-print(un.for_ai(table, task="brief"))         # or paste this as one message
+un.ai_pack(table, "maternal-mortality.zip")  # upload, then paste prompt.md
+print(un.for_ai(table, task="brief"))  # or paste this as one message
 ```
 
 The pack holds `data.csv`, `metadata.md` (what each column means; each indicator's
