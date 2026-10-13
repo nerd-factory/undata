@@ -4,7 +4,11 @@ All notable changes are recorded here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow
 [Semantic Versioning](https://semver.org/). Below 1.0, minor versions may change the API.
 
-## Unreleased
+## [Unreleased]
+
+## [0.1.0] - 2026-10-13
+
+First release.
 
 ### Added
 
@@ -45,3 +49,6 @@ All notable changes are recorded here. The format follows
 
 - Spaces in query strings are sent as `%20`. httpx sends `+`, which this server reads
   literally, so `resolve("Viet Nam")` reached it as `Viet+Nam`.
+
+[Unreleased]: https://github.com/nerd-factory/undata/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/nerd-factory/undata/releases/tag/v0.1.0

@@ -15,16 +15,21 @@ requires-python = ">=3.11"
 dependencies = ["httpx>=0.27", "pandas>=2.2.2", "openpyxl>=3.1"]
 keywords = [
   "united-nations",
+  "un-data",
   "data-commons",
   "sdg",
+  "sustainable-development-goals",
+  "official-statistics",
   "statistics",
   "open-data",
+  "pandas",
   "api-client",
 ]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Developers",
   "Intended Audience :: Science/Research",
+  "Natural Language :: English",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3 :: Only",
@@ -37,10 +42,12 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/nerd-factory/undata"
+Homepage = "https://nerd-factory.github.io/undata/"
+Documentation = "https://nerd-factory.github.io/undata/"
 Source = "https://github.com/nerd-factory/undata"
 Issues = "https://github.com/nerd-factory/undata/issues"
 Changelog = "https://github.com/nerd-factory/undata/blob/main/CHANGELOG.md"
+"Release notes" = "https://github.com/nerd-factory/undata/releases"
 "Field guide" = "https://mafiatun.github.io/un-data-commons-field-guide/"
 
 [dependency-groups]
@@ -61,7 +68,17 @@ source = "vcs"
 version-file = "src/undata/_version.py"
 
 [tool.hatch.build.targets.sdist]
-exclude = ["/.github"]
+# Tests and examples ship in the sdist so downstream packagers (conda-forge, Linux
+# distributions) can run them. The website and CI configuration do not.
+include = [
+  "/src",
+  "/tests",
+  "/examples",
+  "/README.md",
+  "/CHANGELOG.md",
+  "/CITATION.cff",
+  "/LICENSE",
+]
 
 # ── Tests ──────────────────────────────────────────────────────────────
 [tool.pytest.ini_options]

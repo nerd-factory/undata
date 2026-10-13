@@ -13,3 +13,6 @@ htmlcov/
 .hypothesis/
 src/undata/_version.py
 .DS_Store
+
+# Local secrets. Never commit.
+.env

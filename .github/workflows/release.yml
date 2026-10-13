@@ -43,6 +43,9 @@ jobs:
       - uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: https://test.pypi.org/legacy/
+          # TestPyPI never accepts the same file twice, so a re-run after a failed
+          # PyPI step would otherwise fail here first.
+          skip-existing: true
 
   pypi:
     needs: testpypi

@@ -12,8 +12,8 @@
 
 [![CI](https://github.com/nerd-factory/undata/actions/workflows/ci.yml/badge.svg)](https://github.com/nerd-factory/undata/actions/workflows/ci.yml)
 [![Live API contract](https://github.com/nerd-factory/undata/actions/workflows/live.yml/badge.svg)](https://github.com/nerd-factory/undata/actions/workflows/live.yml)
-[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](pyproject.toml)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://github.com/nerd-factory/undata/blob/main/pyproject.toml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://github.com/nerd-factory/undata/blob/main/LICENSE)
 
 **[Ten examples, with real output →](https://nerd-factory.github.io/undata/)**
 
@@ -23,14 +23,14 @@ Type a country's name, get a table. undata is a Python package for the
 [UN System Data Commons](https://data.un.org), which holds statistics from 26 UN System
 entities. It is written for colleagues who need numbers for a report, not a course in APIs.
 
-> **Alpha.** It works today; install it from GitHub until it reaches PyPI.
+> **Alpha.** It works today; the API may still change before 1.0.
 > **Unofficial.** A [Nerd Lab](https://github.com/nerd-factory) experiment, not affiliated with
 > or endorsed by the United Nations. The data belongs to the agencies that publish it.
 
 ## Three lines to a spreadsheet
 
 ```bash
-pip install "git+https://github.com/nerd-factory/undata"
+pip install undata
 ```
 
 ```python
@@ -39,6 +39,9 @@ import undata as un
 table = un.get("undata/sdg/SH_STA_MORT.SEX--F", ["Bangladesh", "Viet Nam"])
 un.save(table, "maternal-mortality.xlsx")  # data on one sheet, citations on the next
 ```
+
+In Google Colab, run `!pip install undata` in the first cell. For the latest unreleased
+changes: `pip install "git+https://github.com/nerd-factory/undata"`.
 
 Don't know the indicator's id? `un.search("maternal mortality")` lists matching indicators
 with their names. Copy the id from the first column.
@@ -82,13 +85,13 @@ country  iso3  year  value  unit  indicator_name  indicator  source  source_url
   `datacommons-client` (any POST body containing `"select"`) and any GET request that
   mentions Western Sahara (`ESH`, mistaken for a shell command). undata routes around both.
 
-Each behaviour is pinned by a test in [tests/live/](tests/live/) that runs against the real
+Each behaviour is pinned by a test in [tests/live/](https://github.com/nerd-factory/undata/tree/main/tests/live) that runs against the real
 platform every night and opens an issue if the platform changes. Most of them were found
 while writing the [UN Data Commons Field Guide](https://mafiatun.github.io/un-data-commons-field-guide/).
 
 ## Examples
 
-Ten runnable scripts in [examples/](examples/): a first table, comparing a region, a whole
+Ten runnable scripts in [examples/](https://github.com/nerd-factory/undata/tree/main/examples): a first table, comparing a region, a whole
 continent, an SDG target to its numbers, gaps, names, the search box, sources, Excel and
 citations, and checking an indicator. They run against the live platform every night, and
 [the examples page](https://nerd-factory.github.io/undata/) shows each with its real output.
@@ -97,7 +100,7 @@ citations, and checking an indicator. They run against the live platform every n
 
 The friendly functions sit on three layers you can use directly: `undata.Transport` (the
 only code that touches the network), `undata._endpoints` (one thin wrapper per API route),
-and `undata.dcid` (the identifier grammar). [PLAN.md](PLAN.md) covers the design and the
+and `undata.dcid` (the identifier grammar). [PLAN.md](https://github.com/nerd-factory/undata/blob/main/PLAN.md) covers the design and the
 road to 1.0.
 
 ```bash
@@ -108,12 +111,12 @@ uv run pytest -m live       # pins the live platform's behaviour (network)
 uv run ruff check . && uv run ruff format --check . && uv run mypy
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). Questions that feel too basic are welcome in
+See [CONTRIBUTING.md](https://github.com/nerd-factory/undata/blob/main/CONTRIBUTING.md). Questions that feel too basic are welcome in
 [Nerd Lab Discussions](https://github.com/nerd-factory/nerd-lab/discussions); they are not
 too basic.
 
 ## Licence
 
-Code: [MIT](LICENSE). Data fetched with it is governed by the
+Code: [MIT](https://github.com/nerd-factory/undata/blob/main/LICENSE). Data fetched with it is governed by the
 [UN Data Commons terms of use](https://data.un.org/undatacommons/terms-of-use) and by each
 contributing agency's own terms.

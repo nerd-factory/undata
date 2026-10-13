@@ -7,6 +7,9 @@ authors:
     given-names: Mafizul
   - name: "Nerd Lab contributors"
 repository-code: "https://github.com/nerd-factory/undata"
+url: "https://nerd-factory.github.io/undata/"
+version: 0.1.0
+date-released: 2026-10-13
 license: MIT
 keywords:
   - United Nations
