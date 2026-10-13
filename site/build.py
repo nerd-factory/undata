@@ -7,6 +7,8 @@ root with network access:
     uv run python site/build.py
 
 It writes site/public/index.html, which is committed; deploying needs no build step.
+Charts an example saves (PNG, and interactive HTML) are copied to site/public/img/
+and shown under the example, so the page shows exactly what the code made.
 """
 
 from __future__ import annotations
@@ -15,6 +17,7 @@ import datetime as dt
 import html
 import io
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -27,8 +30,9 @@ ROOT = Path(__file__).resolve().parent.parent
 EXAMPLES = ROOT / "examples"
 TEMPLATE = ROOT / "site" / "template.html"
 OUTPUT = ROOT / "site" / "public" / "index.html"
+IMAGES = OUTPUT.parent / "img"
 
-PLACEHOLDER = re.compile(r"<!--(example|output|name|chart|report):(\d\d)-->")
+PLACEHOLDER = re.compile(r"<!--(example|output|name|chart|figure|report):(\d\d)-->")
 
 
 def highlight(source: str) -> str:
@@ -88,11 +92,44 @@ def run(script: Path, workdir: Path) -> str:
     return result.stdout.replace(f"{EXAMPLES}/", "").rstrip("\n")
 
 
+def keep_figures(number: str, workdir: Path) -> list[str]:
+    """Copy the charts example ``number`` saved into the site; return their names."""
+    kept = []
+    for made in sorted(workdir.glob("*")):
+        if made.suffix in (".png", ".html"):
+            name = f"{number}-{made.name}"
+            shutil.copyfile(made, IMAGES / name)
+            kept.append(name)
+    return kept
+
+
+def figure(names: list[str], alt: str) -> str:
+    """An image of the saved chart, with a link to its interactive version if there is one."""
+    png = next((n for n in names if n.endswith(".png")), None)
+    if png is None:
+        raise SystemExit(f"no chart was saved for {names}")
+    out = f'<img src="img/{png}" alt="{html.escape(alt, quote=True)}" loading="lazy">'
+    for page in (n for n in names if n.endswith(".html")):
+        out += f'<figcaption><a href="img/{page}">Open the interactive version</a>: hover for every number.</figcaption>'
+    return out
+
+
 def main() -> None:
     """Fill the template and write the page."""
     scripts = {path.name[:2]: path for path in sorted(EXAMPLES.glob("[0-9][0-9]_*.py"))}
+    shutil.rmtree(IMAGES, ignore_errors=True)
+    IMAGES.mkdir(parents=True)
+    outputs: dict[str, str] = {}
+    figures: dict[str, list[str]] = {}
     with tempfile.TemporaryDirectory() as scratch:
-        outputs = {number: run(path, Path(scratch)) for number, path in scripts.items()}
+        for number, path in scripts.items():
+            workdir = Path(scratch) / number
+            workdir.mkdir()
+            outputs[number] = run(path, workdir)
+            figures[number] = keep_figures(number, workdir)
+
+    def report(number: str) -> str:
+        return outputs[number].split("\n\n")[-1].strip()
 
     def fill(match: re.Match[str]) -> str:
         kind, number = match.groups()
@@ -102,9 +139,11 @@ def main() -> None:
         if kind == "output":
             return html.escape(outputs[number])
         if kind == "report":
-            return html.escape(outputs[number].split("\n\n")[-1].strip())
+            return html.escape(report(number))
         if kind == "chart":
             return render_chart(number)
+        if kind == "figure":
+            return figure(figures[number], report(number))
         return f"examples/{script.name}"
 
     page = PLACEHOLDER.sub(fill, TEMPLATE.read_text(encoding="utf-8"))

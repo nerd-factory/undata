@@ -178,7 +178,9 @@ def test_chart_draws_ranked_bars_with_a_source_line(
     fig = un.chart(table, tmp_path / "bars.png", highlight="Nepal")
 
     assert (tmp_path / "bars.png").stat().st_size > 1000
-    texts = " ".join(t.get_text() for t in fig.texts)
+    from matplotlib.text import Text
+
+    texts = " ".join(t.get_text() for t in fig.findobj(Text))
     assert "Source: UN_SDG (Data Commons copy)" in texts
 
 
@@ -195,28 +197,15 @@ def test_chart_picks_lines_for_several_years_and_dumbbells_for_change(
     assert (tmp_path / "dumbbell.png").exists()
 
 
-def test_chart_refuses_two_indicators_and_too_many_lines(fake: FakeAPI, no_display: None) -> None:
+def test_chart_refuses_two_indicators(fake: FakeAPI, no_display: None) -> None:
     with pytest.warns(un.MixedYearsWarning):
         two = un.latest([ELEC, MMR], ["Bangladesh", "Nepal"])
     with pytest.raises(ValueError, match="one indicator at a time"):
         un.chart(two)
-
-    many = pd.DataFrame(
-        {
-            "country": [f"C{i}" for i in range(7) for _ in range(2)],
-            "year": [2020, 2021] * 7,
-            "value": 1.0,
-            "indicator_name": "x",
-            "unit": "%",
-            "source": "s",
-        }
-    )
-    with pytest.raises(ValueError, match="too many lines"):
-        un.chart(many)
     with pytest.raises(ValueError, match=r"needs a table from un\.change"):
-        un.chart(many, kind="dumbbell")
+        un.chart(two, kind="dumbbell")
     with pytest.raises(ValueError, match="empty"):
-        un.chart(many.iloc[0:0])
+        un.chart(two.iloc[0:0])
 
 
 # ── 9. Breakdowns ────────────────────────────────────────────────────────

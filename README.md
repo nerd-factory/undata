@@ -16,7 +16,7 @@
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://github.com/nerd-factory/undata/blob/main/pyproject.toml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://github.com/nerd-factory/undata/blob/main/LICENSE)
 
-**[Nine use cases, with real output →](https://nerd-factory.github.io/undata/)**
+**[Twelve use cases, with real output →](https://nerd-factory.github.io/undata/)**
 
 </div>
 
@@ -62,8 +62,13 @@ with their names. Copy the id from the first column.
 | `un.breakdowns(indicator)` | Every breakdown: by sex, age, wealth and so on. |
 | `un.countries(region)` · `un.regions()` | The UN M49 list: countries and areas with their UN names, M49 regions, and the LDC, LLDC and SIDS groups. |
 | `un.sdg.goals()` · `targets(16)` · `indicators("16.1")` · `series("16.1.2")` | Walk from an SDG goal down to indicators you can fetch. |
+| `un.progress(indicator, countries, better="lower", target=70)` | On track for 2030? The UN Statistics Division's progress method, country by country. |
+| `un.profile(country, indicators)` | One country beside its M49 region and the world, with its rank in the region. |
+| `un.gap(indicator, countries, by="sex")` | The gap between two groups (women and men, rural and urban, poorest and richest) in the same year. |
+| `un.trend(...)` · `un.benchmark(indicator)` · `un.availability(...)` | Change since 2015; UN groups side by side; which countries report what, and how recently. |
 | `un.describe(table)` | Plain-English sentences about a table, worked out from its numbers. |
-| `un.chart(table)` | A chart with its source underneath, for a slide. Needs `pip install "undata[charts]"`. |
+| `un.chart(table)` | A publication-ready chart picked to fit the table, with its source underneath. `interactive=True` for hover and zoom. Needs `pip install "undata[charts]"`. |
+| `un.style()` · `un.palette()` | Give your own matplotlib and seaborn charts the same look. |
 | `un.save(table, "file.xlsx")` · `un.cite(table)` | Excel or CSV with sources; citations for a report. |
 | `un.for_ai(table, task="brief")` | The table with its sources, caveats and a task, to paste into an AI assistant. |
 | `un.ai_pack(table, "pack.zip")` | The data, a data dictionary and a prompt, to upload to an AI assistant. |
@@ -104,6 +109,38 @@ groups are the current UN lists (44, 32 and 53 countries), not the platform's ol
 copies. Places the platform holds outside M49 are left out of every list, region and
 group; they can still be asked for by platform code, such as `country/XKS`.
 
+## The analyses UN reports run most
+
+```python
+table = un.progress("3.1.1", "LDCs", better="lower", target=70)
+un.chart(table, "ldc-progress.png")
+print(un.describe(table))
+```
+
+![Progress on maternal mortality in the least developed countries, by the UN's method](https://nerd-factory.github.io/undata/img/10-ldc-progress.png)
+
+`un.progress` follows the UN Statistics Division's *Technical Note for Progress
+Assessment* step by step. It takes each country's growth rate since 2015 and projects it
+to 2030. With a target, it compares the projected change with the change the target
+needs; without one, it scores the growth rate. Each country then lands in the five
+categories the SDG Report uses, from "on track" to "regression", with the method
+cited in the table. `un.profile`, `un.gap`, `un.trend`, `un.benchmark` and
+`un.availability` cover the other questions that come up in every country analysis and
+progress report, and each has a chart made for it.
+
+## Charts ready for a publication
+
+`un.chart(table)` looks at the table and picks the chart: ranked bars, lines, small
+multiples when there are too many lines, before-and-after dot plots, a scatter for two
+indicators, a heatmap of who reports what, a tile map with one equal square per
+country, or the progress, profile and gap charts above. Every chart carries its title,
+unit and source line, labels its marks directly, and uses palettes checked for colour
+blindness. PNG at 300 dpi, or SVG and PDF with text left editable. `context="slides"`
+sizes it for a presentation, `interactive=True` returns a Plotly chart with hover
+(`pip install "undata[interactive]"`), and `un.style()` gives your own matplotlib and
+seaborn charts the same look. Tile maps avoid drawing borders, so they take no position
+on disputed boundaries.
+
 ## Taking it to an AI assistant
 
 ```python
@@ -140,7 +177,7 @@ while writing the [UN Data Commons Field Guide](https://mafiatun.github.io/un-da
 
 ## Use cases
 
-Nine requests as they arrive in UN work, each a runnable script in
+Twelve requests as they arrive in UN work, each a runnable script in
 [examples/](https://github.com/nerd-factory/undata/tree/main/examples) that ends with a
 sentence ready for the report:
 
@@ -155,6 +192,9 @@ sentence ready for the report:
 | 07 | Publications team | A regional data pack in Excel, with citations and gaps on their own sheets |
 | 08 | Monitoring and evaluation | A dashboard file that refreshes itself on a schedule |
 | 09 | Communications | Checking what data.un.org's search box decided before sharing its chart |
+| 10 | SDG reporting | Which least developed countries are on track for 2030, by the UN's own method |
+| 11 | Country team | Chad against Middle Africa and the world, on one chart |
+| 12 | Leave no one behind | The rural-urban gap in finishing primary school |
 
 They run against the live platform every night. [The use-cases page](https://nerd-factory.github.io/undata/)
 shows each with its code, a chart, the real output and the sentence.

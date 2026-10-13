@@ -42,8 +42,9 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
-charts = ["matplotlib>=3.9"]
-all = ["matplotlib>=3.9"]
+charts = ["matplotlib>=3.9", "seaborn>=0.13"]
+interactive = ["plotly>=5.20"]
+all = ["matplotlib>=3.9", "seaborn>=0.13", "plotly>=5.20"]
 
 [project.scripts]
 undata = "undata.cli:main"
@@ -67,6 +68,8 @@ dev = [
   "ruff>=0.8",
   "pandas-stubs>=2.2",
   "matplotlib>=3.9",
+  "seaborn>=0.13",
+  "plotly>=5.20",
 ]
 
 [tool.hatch.version]
@@ -98,7 +101,12 @@ addopts = [
 markers = [
   "live: calls the real data.un.org API (run nightly, or with `-m live`)",
 ]
-filterwarnings = ["error"]
+filterwarnings = [
+  "error",
+  # matplotlib 3.9.0, the lowest we support, uses pyparsing names that newer pyparsing
+  # deprecates; harmless, and fixed in later matplotlib
+  "ignore:.* deprecated - use:DeprecationWarning",
+]
 xfail_strict = true
 
 [tool.coverage.run]
@@ -136,6 +144,8 @@ convention = "google"
 "examples/**" = ["D103", "S101", "PLR2004"]
 "site/**" = ["E501", "PLR2004"]  # SVG string templates and chart geometry
 "src/undata/export.py" = ["E501"]  # the generated Power Query (M) lines are kept whole
+"src/undata/chart.py" = ["E501", "PLR0911", "PLR0913"]  # drawing calls read better on one line
+"src/undata/_interactive.py" = ["E501", "C901", "PLR0911", "PLR0912", "PLR0915"]  # one branch per chart kind
 
 [tool.mypy]
 strict = true
@@ -144,5 +154,5 @@ files = ["src", "tests"]
 exclude = ["src/undata/_version.py"]
 
 [[tool.mypy.overrides]]
-module = ["undata._version"]
+module = ["undata._version", "seaborn", "plotly", "plotly.*"]
 ignore_missing_imports = true

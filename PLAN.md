@@ -248,6 +248,17 @@ a look-back window for latest values, coverage reports and AI data packs. Taiwan
 Kosovo are settled by the M49 rule: outside M49, outside every list. Still open: async
 and polars output.
 
+## 10b. Shipped in 0.3 (2026-10-13)
+
+The analyses UN reports run most often became functions: `progress` (the UN Statistics
+Division's published progress method), `profile`, `gap`, `trend`, `benchmark` and
+`availability`, each with a chart and a `describe` sentence. `chart` became a catalogue
+of production charts (static and interactive) with one shared style and checked
+palettes, and `style()` extends that look to users' own matplotlib and seaborn charts.
+Maps are tile maps only: equal squares, no borders, so no position on disputed
+boundaries. Next: a YouTube series built on the use cases, and a decision on an MCP
+connector or `un.analyse()` for AI assistants.
+
 ## 11. Requirements for 1.0
 
 - [ ] Every public function is typed, documented and has a runnable example

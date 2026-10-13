@@ -19,6 +19,7 @@ from typing import Final
 import pandas as pd
 
 from ._http import DEFAULT_BASE_URL
+from ._long import long_of
 from .data import Years, _year_filter
 from .indicators import check
 from .places import expand
@@ -31,8 +32,7 @@ _PLATFORM = "UN System Data Commons, https://data.un.org"
 
 def _long(table: pd.DataFrame) -> pd.DataFrame:
     """The row-per-value table behind a wide, change or compare table."""
-    long = table.attrs.get("long")
-    return long if isinstance(long, pd.DataFrame) else table
+    return long_of(table)
 
 
 def _sources(table: pd.DataFrame) -> pd.DataFrame:

@@ -10,6 +10,8 @@ from __future__ import annotations
 
 import pandas as pd
 
+from ._long import long_of
+
 __all__ = ["coverage", "describe", "fmt_number"]
 
 _MAX_COUNTRIES = 8
@@ -117,7 +119,9 @@ def describe(table: pd.DataFrame) -> str:
 
     Args:
         table: A table from :func:`undata.get`, :func:`undata.latest`,
-            :func:`undata.totals`, :func:`undata.change` or :func:`undata.wide`.
+            :func:`undata.totals`, :func:`undata.change` or :func:`undata.wide`, or
+            from :func:`undata.progress`, :func:`undata.gap` or :func:`undata.profile`,
+            which get their own summary: statuses, the widest gap, or ranks.
 
     Returns:
         A paragraph per indicator, ready to paste and edit.
@@ -127,10 +131,15 @@ def describe(table: pd.DataFrame) -> str:
         >>> table = un.latest("undata/sdg/EG_ACS_ELEC", "Southern Asia")
         >>> print(un.describe(table))  # doctest: +SKIP
     """
+    from .analysis import describe_analysis  # noqa: PLC0415 — analysis builds on summary's helpers
+
+    sentence = describe_analysis(table)
+    if sentence is not None:
+        return sentence
     if "change_pct" in table.columns:
         source, kind = table, "change"
     else:
-        source = table.attrs.get("long", table)
+        source = long_of(table)
         if not {"country", "year", "value", "indicator_name"} <= set(source.columns):
             raise ValueError(
                 "describe() works on tables from un.get(), un.latest(), un.totals(), "
@@ -213,7 +222,7 @@ def coverage(table: pd.DataFrame) -> pd.DataFrame:
         >>> table = un.latest("3.1.1", "LDCs", within=5)  # doctest: +SKIP
         >>> un.coverage(table)  # doctest: +SKIP
     """
-    source = table.attrs.get("long", table)
+    source = long_of(table)
     asked_names = table.attrs.get("asked")
     missing = table.attrs.get("missing") or []
     stale = table.attrs.get("stale") or []

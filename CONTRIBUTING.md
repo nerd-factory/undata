@@ -64,7 +64,11 @@ src/undata/ask.py          what data.un.org's search box decided
 src/undata/export.py       save(), cite(), for_ai(), powerquery()
 src/undata/breakdowns.py   breakdowns() and get(by=...)
 src/undata/summary.py      describe(): sentences from the numbers
-src/undata/chart.py        chart(): slide-ready charts (optional matplotlib)
+src/undata/analysis.py     progress(), profile(), gap(), trend(), benchmark(), availability()
+src/undata/chart.py        chart(): the chart catalogue (optional matplotlib)
+src/undata/_interactive.py chart(interactive=True), with Plotly
+src/undata/style.py        style() and the checked palettes
+src/undata/tiles.csv       the tile-map grid; rebuild with scripts/build_tile_grid.py
 src/undata/cli.py          the undata command
 src/undata/_http.py        the only module that touches the network
 src/undata/_endpoints.py   one thin wrapper per API route, no interpretation

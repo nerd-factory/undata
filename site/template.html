@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>undata · UN data in Python</title>
-<meta name="description" content="undata is a Python package for UN colleagues who need numbers for a report. Nine real use cases, from a country briefing to an SDG progress check, each with the code, a chart, the real output and a sentence ready for your report.">
+<meta name="description" content="undata is a Python package for UN colleagues who need numbers for a report. Twelve real use cases, from a country briefing to an SDG progress assessment, each with the code, a chart, the real output and a sentence ready for your report.">
 <meta name="theme-color" content="#141419">
 <meta property="og:title" content="undata — UN data in Python, without the guessing">
-<meta property="og:description" content="Nine real use cases: a country briefing, SDG progress, women in parliament, refugees, conflict and homicide, and more. Real data, real output, a sentence for your report.">
+<meta property="og:description" content="Twelve real use cases: a country briefing, SDG progress, a country profile, rural-urban gaps, women in parliament, refugees, and more. Real data, real output, a sentence for your report.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://nerd-factory.github.io/undata/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23141419'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='15' font-weight='700' text-anchor='middle' fill='%23C8F531'%3Eun%3C/text%3E%3C/svg%3E">
@@ -148,6 +148,7 @@ pre .c { color: var(--muted); }
 .step + .block { margin-top: 0.6rem; }
 figure.block { margin: 0.6rem 0 0; padding: 1rem 1rem 0.75rem; background: transparent; }
 figcaption { font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem; }
+figure.block img { display: block; width: 100%; height: auto; background: #fff; border-radius: 4px; }
 .multiples { display: grid; gap: 1.25rem 2rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
 .panel-title { font-size: 0.9rem; margin: 0 0 0.25rem; }
 .scroll { overflow-x: auto; }
@@ -227,7 +228,7 @@ figcaption { font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem; }
 <section class="sec" id="use-cases">
   <div class="wrap">
     <p class="anno">// 01 — use cases</p>
-    <h2>Nine requests, as they actually arrive</h2>
+    <h2>Twelve requests, as they actually arrive</h2>
     <p>Each one starts from a real kind of request in UN work and ends with something you can
     send: a table, a chart, an Excel file, or a sentence for the report. Each takes a few lines of
     Python and a few minutes.</p>
@@ -241,6 +242,9 @@ figcaption { font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem; }
       <li><a href="#data-pack"><p class="role"><b>07</b>Publications team</p><h3>A regional data pack in Excel</h3><p>Three indicators, one file, citations and gaps on their own sheets.</p></a></li>
       <li><a href="#dashboard"><p class="role"><b>08</b>Monitoring and evaluation</p><h3>A dashboard that refreshes itself</h3><p>A file Power BI or Excel reads, updated on a schedule.</p></a></li>
       <li><a href="#search-box"><p class="role"><b>09</b>Communications</p><h3>Check a chart before you share it</h3><p>See what data.un.org's search box decided, including whether it guessed.</p></a></li>
+      <li><a href="#on-track"><p class="role"><b>10</b>SDG progress report</p><h3>Who is on track for 2030?</h3><p>The UN's own progress method, applied to every least developed country.</p></a></li>
+      <li><a href="#profile"><p class="role"><b>11</b>Country team</p><h3>A country profile on one chart</h3><p>Chad against Middle Africa and the world, five indicators, one picture.</p></a></li>
+      <li><a href="#gap"><p class="role"><b>12</b>Leave no one behind</p><h3>Who is left behind</h3><p>The rural-urban gap in finishing primary school, compared in the same year.</p></a></li>
     </ul>
 
     <article class="case" id="briefing">
@@ -400,6 +404,60 @@ jobs:
         <li><strong>The guess, caught.</strong> The search box answered a question about "Bengal" with figures for the United States, under a title that does not mention either. undata reads the platform's own record of where the place came from, and warns.</li>
       </ul>
     </article>
+
+    <article class="case" id="on-track">
+      <p class="case-meta"><span class="n">10</span><span>SDG reporting</span><span>progress report</span></p>
+      <h3>Who is on track for 2030?</h3>
+      <blockquote class="ask"><p>"For the LDC chapter of the SDG progress report: which least developed countries are on track to bring maternal mortality below 70 by 2030, using the same method as the UN's own report?"</p><cite>The ask</cite></blockquote>
+      <p class="step">The code</p>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:10--></span></div><pre><code><!--example:10--></code></pre></div>
+      <p class="step">The chart it saved</p>
+      <figure class="block"><!--figure:10--></figure>
+      <p class="step">What came back</p>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:10--></samp></pre></div>
+      <div class="report"><span class="tag">For your chapter</span><p><!--report:10--></p></div>
+      <ul class="caught">
+        <li><strong>The UN's method, not a home-made one.</strong> <code>un.progress</code> follows the UN Statistics Division's technical note step by step: the growth rate since 2015, projected to 2030, set against the change the target needs, then sorted into the same five categories the SDG Report uses.</li>
+        <li><strong>The method is cited for you.</strong> The sentence ends with the source of the method, and <code>table.attrs["method"]</code> carries its link.</li>
+        <li><strong>Status is never colour alone.</strong> Every row is labelled in words, so the chart survives printing in black and white and reads for colour-blind readers.</li>
+      </ul>
+    </article>
+
+    <article class="case" id="profile">
+      <p class="case-meta"><span class="n">11</span><span>Country team</span><span>country profile</span></p>
+      <h3>A country profile on one chart</h3>
+      <blockquote class="ask"><p>"The Resident Coordinator wants one picture for the Common Country Analysis: where does Chad stand on the basics, against its region and the world?"</p><cite>The ask</cite></blockquote>
+      <p class="step">The code</p>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:11--></span></div><pre><code><!--example:11--></code></pre></div>
+      <p class="step">The chart it saved</p>
+      <figure class="block"><!--figure:11--></figure>
+      <p class="step">What came back</p>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:11--></samp></pre></div>
+      <div class="report"><span class="tag">For your analysis</span><p><!--report:11--></p></div>
+      <ul class="caught">
+        <li><strong>The region is the UN's region.</strong> Chad's M49 region is Middle Africa, so that is the comparison, using the regional figures the agencies published, not an average undata made up.</li>
+        <li><strong>Each row on its own scale.</strong> Deaths per 100,000 and a percentage never share an axis. Each indicator gets its own line, with every value written on it.</li>
+        <li><strong>Ranks that read either way.</strong> "Highest of 9" is bad news for mortality and good news for women in parliament; the wording does not pretend otherwise.</li>
+      </ul>
+    </article>
+
+    <article class="case" id="gap">
+      <p class="case-meta"><span class="n">12</span><span>Leave no one behind</span><span>equity analysis</span></p>
+      <h3>Who is left behind</h3>
+      <blockquote class="ask"><p>"For the leave-no-one-behind section: how much less likely are rural children to finish primary school than urban children, and where is the gap widest?"</p><cite>The ask</cite></blockquote>
+      <p class="step">The code</p>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:12--></span></div><pre><code><!--example:12--></code></pre></div>
+      <p class="step">The chart it saved</p>
+      <figure class="block"><!--figure:12--></figure>
+      <p class="step">What came back</p>
+      <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:12--></samp></pre></div>
+      <div class="report"><span class="tag">For your section</span><p><!--report:12--></p></div>
+      <ul class="caught">
+        <li><strong>Same year, both groups.</strong> <code>un.gap</code> compares rural and urban in the latest year that has both, so a 2019 figure is never set against a 2024 one.</li>
+        <li><strong>Any breakdown the data has.</strong> <code>by="sex"</code>, <code>by="urbanization"</code> or <code>by="wealth quantile"</code>; ask for one the indicator lacks and the error lists the ones it has.</li>
+        <li><strong>Parity, defined.</strong> A ratio between 0.97 and 1.03 counts as parity, the band the UN uses for gender parity indices.</li>
+      </ul>
+    </article>
   </div>
 </section>
 
@@ -440,7 +498,11 @@ un.save(table, "maternal-mortality.xlsx")</code></pre></div>
         <tr><td>un.compare({"a": id1, "b": id2}, countries)</td><td>Indicators side by side, with who has which spelled out.</td></tr>
         <tr><td>un.countries(region)<br>un.regions()</td><td>The UN M49 list: official names, M49 regions, and the current LDC, LLDC and SIDS groups.</td></tr>
         <tr><td>un.sdg.goals()<br>un.sdg.targets(16)<br>un.sdg.indicators("16.1")<br>un.sdg.series("16.1.2")</td><td>Walk from an SDG goal down to indicators you can fetch. SDG numbers like <code>"3.1.1"</code> also work directly.</td></tr>
-        <tr><td>un.describe(table)<br>un.chart(table)</td><td>Sentences for a report, worked out from the numbers; a chart with its source, for a slide.</td></tr>
+        <tr><td>un.progress(indicator, countries, better="lower", target=70)</td><td>On track for 2030? The UN Statistics Division's progress method, country by country, with the five SDG Report categories.</td></tr>
+        <tr><td>un.profile(country, indicators)<br>un.gap(indicator, countries, by="sex")</td><td>One country beside its region and the world; the gap between two groups in the same year.</td></tr>
+        <tr><td>un.trend(...)<br>un.benchmark(indicator)<br>un.availability(...)</td><td>Change since 2015; UN groups side by side; which countries report what, and how recently.</td></tr>
+        <tr><td>un.describe(table)<br>un.chart(table)</td><td>Sentences for a report, worked out from the numbers. A publication-ready chart picked to fit the table (bars, lines, small multiples, a tile map, a progress chart and more) with its source. <code>interactive=True</code> for hover and zoom.</td></tr>
+        <tr><td>un.style()<br>un.palette()</td><td>Give your own matplotlib and seaborn charts the same clean, colour-blind-safe look.</td></tr>
         <tr><td>un.save(table, "file.xlsx")<br>un.cite(table)</td><td>Excel or CSV with sources; citations for a report.</td></tr>
         <tr><td>un.ai_pack(table, "pack.zip")<br>un.for_ai(table, task="brief")<br>un.powerquery(...)</td><td>Data, metadata and a prompt to upload to an AI assistant, or to paste; Power Query code for Power BI or Excel.</td></tr>
         <tr><td>un.ask("a question")</td><td>What data.un.org's search box decided, including whether it guessed the place.</td></tr>

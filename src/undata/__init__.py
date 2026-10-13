@@ -28,6 +28,7 @@ from . import places, sdg
 from ._http import DEFAULT_BASE_URL, Transport
 from ._session import clear_cache, configure
 from ._version import __version__
+from .analysis import STATUSES, availability, benchmark, gap, profile, progress, trend
 from .ask import Answer, ask
 from .breakdowns import breakdowns
 from .chart import chart
@@ -52,6 +53,7 @@ from .errors import (
 from .export import ai_pack, cite, for_ai, powerquery, save
 from .indicators import IndicatorInfo, about, search
 from .places import Place, countries, regions
+from .style import palette, style
 from .summary import coverage, describe
 
 # Each warning is about the table just returned, so show it every time rather than
@@ -60,6 +62,7 @@ warnings.filterwarnings("always", category=UNDataWarning)
 
 __all__ = [
     "DEFAULT_BASE_URL",
+    "STATUSES",
     "APIError",
     "AmbiguousIndicatorError",
     "AmbiguousPlaceError",
@@ -82,6 +85,8 @@ __all__ = [
     "about",
     "ai_pack",
     "ask",
+    "availability",
+    "benchmark",
     "breakdowns",
     "build_dcid",
     "change",
@@ -96,15 +101,21 @@ __all__ = [
     "describe",
     "describe_dcid",
     "for_ai",
+    "gap",
     "get",
     "latest",
+    "palette",
     "parse_dcid",
     "places",
     "powerquery",
+    "profile",
+    "progress",
     "regions",
     "save",
     "sdg",
     "search",
+    "style",
     "totals",
+    "trend",
     "wide",
 ]

@@ -30,7 +30,7 @@ jobs:
       - name: Check the page was built
         run: |
           test -f site/public/index.html
-          if grep -q '<!--\(example\|output\|name\|generated\)' site/public/index.html; then
+          if grep -q '<!--\(example\|output\|name\|figure\|generated\)' site/public/index.html; then
             echo "site/public/index.html still has template placeholders; run site/build.py" >&2
             exit 1
           fi

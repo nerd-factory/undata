@@ -6,6 +6,55 @@ All notable changes are recorded here. The format follows
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-13
+
+The analyses UN reports run most often, one function each, and charts ready for a
+publication.
+
+### Added
+
+- `un.progress()`: is each country on track for 2030? The UN Statistics Division's
+  progress method (*Technical Note for Progress Assessment*), step by step: growth rate
+  since 2015 or the first year after, the 2030 projection, the ratio to the change a
+  target needs, and the five SDG Report categories with their 0-5 scores. Without a
+  target, the growth-rate thresholds, mirrored when lower is better. The method is
+  cited on the table.
+- `un.profile()`: one country beside its M49 region and the world, with its rank in the
+  region. `un.gap()`: two groups (women and men, rural and urban, poorest and richest)
+  compared in the latest year that has both, with the ratio and parity.
+  `un.trend()`, `un.benchmark()` (UN groups side by side, from published totals) and
+  `un.availability()` (which countries report what, and how recently).
+- `un.describe()` writes the finding for progress, gap and profile tables: the countries
+  per status, the widest gap and who is at parity, each indicator's rank.
+- A chart for each, and a production chart catalogue behind `un.chart()`: ranked bars,
+  lines with direct labels, small multiples, before-and-after dot plots, a scatter,
+  an availability heatmap, a tile map (one equal square per country, no borders drawn),
+  and progress, profile and gap charts. Titles, units and the source line are part of
+  every chart; text wraps to fit; PNG at 300 dpi, SVG and PDF with editable text.
+  `context="slides"`, `highlight=`, `title=`, `note=`, `benchmarks=`, `top=`.
+- `un.chart(..., interactive=True)`: Plotly versions with hover and zoom, saved as
+  HTML (`pip install "undata[interactive]"`).
+- `un.style()` gives your own matplotlib and seaborn charts undata's look;
+  `un.palette()` returns its colour-blind-checked palettes; `un.STATUSES` lists the
+  progress categories in order.
+- Use cases 10-12 on the page: SDG progress for the LDCs, a country profile, and the
+  rural-urban gap, each with the chart the code saved.
+
+### Changed
+
+- `un.chart()` on a table with more than six countries draws small multiples instead
+  of refusing; `kind="line"` still refuses, with the reason.
+- The `charts` extra now installs seaborn too; matplotlib remains the only requirement.
+- `un.breakdowns()` walks every group under an indicator, so breakdowns nested under
+  context groups (such as urbanization) are found.
+
+### Fixed
+
+- `pd.concat()` on two undata tables failed ("truth value of a DataFrame is
+  ambiguous"), because the long table kept in `.attrs` was compared by pandas. It is
+  now held so that pandas can compare and copy it, and is no longer copied on every
+  operation.
+
 ## [0.2.0] - 2026-10-13
 
 Everything a UN colleague was doing by hand in the 0.1 use cases, built in, on the UN's
@@ -115,6 +164,7 @@ First release.
 - Spaces in query strings are sent as `%20`. httpx sends `+`, which this server reads
   literally, so `resolve("Viet Nam")` reached it as `Viet+Nam`.
 
-[Unreleased]: https://github.com/nerd-factory/undata/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/nerd-factory/undata/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/nerd-factory/undata/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/nerd-factory/undata/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/nerd-factory/undata/releases/tag/v0.1.0

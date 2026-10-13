@@ -53,38 +53,55 @@ def _column(dimension: str) -> str:
     return dimension.lower().replace("_", " ")
 
 
+#: Graph lookups per request, to keep GET query strings short.
+_BATCH = 40
+#: How many levels to walk down from an indicator's group. The platform nests context
+#: groups (by sex, by urbanization...) under the group, and sub-groups under those.
+_DEPTH = 4
+
+
+def _children(nodes: list[str], prop: str) -> dict[str, list[dict[str, Any]]]:
+    """``prop`` arcs of many nodes, fetched in batches."""
+    transport = _session.transport()
+    found: dict[str, list[dict[str, Any]]] = {}
+    for start in range(0, len(nodes), _BATCH):
+        batch = nodes[start : start + _BATCH]
+        body = api.node(transport, batch, prop)
+        arc = prop.lstrip("<-")
+        for node in batch:
+            found[node] = _arc(body, node, arc)
+    return found
+
+
 def _members(indicator: str) -> list[tuple[str, str]]:
-    """Every slice in the indicator's group, as (id, name). Cached per session."""
+    """Every slice of the indicator, as (id, name). Cached per session.
+
+    The indicator's group is named after it (``undata/sdg/X`` belongs to
+    ``undata/g/sdg/X``). Every group below it is walked, and their members collected.
+    """
 
     def load() -> list[tuple[str, str]]:
-        transport = _session.transport()
         parsed = parse_dcid(indicator)
-        prefix = f"{parsed.namespace}/g/{parsed.agency}/" if parsed else ""
-        subgroups = [
-            n["dcid"]
-            for n in _arc(api.node(transport, indicator, "->memberOf"), indicator, "memberOf")
-        ]
-        if not subgroups:
+        if parsed is None:
             return []
-        parents = api.node(transport, subgroups, "->specializationOf")
-        groups = sorted(
-            {
-                n["dcid"]
-                for sub in subgroups
-                for n in _arc(parents, sub, "specializationOf")
-                if n["dcid"].startswith(prefix)
-            }
-        )
-        if not groups:
-            return []
-        children = api.node(transport, groups, "<-specializationOf")
-        all_subgroups = [n["dcid"] for g in groups for n in _arc(children, g, "specializationOf")]
-        if not all_subgroups:
-            return []
-        members = api.node(transport, all_subgroups, "<-memberOf")
+        top = f"{parsed.namespace}/g/{parsed.agency}/{parsed.code}"
+        groups: list[str] = [top]
+        frontier, seen = [top], {top}
+        for _ in range(_DEPTH):
+            below = _children(frontier, "<-specializationOf")
+            fresh: list[str] = []
+            for node in frontier:
+                for child in below.get(node, []):
+                    if child["dcid"] not in seen:
+                        seen.add(child["dcid"])
+                        fresh.append(child["dcid"])
+            frontier = fresh
+            if not frontier:
+                break
+            groups += frontier
         found: dict[str, str] = {}
-        for sub in all_subgroups:
-            for n in _arc(members, sub, "memberOf"):
+        for nodes in _children(groups, "<-memberOf").values():
+            for n in nodes:
                 found.setdefault(n["dcid"], n.get("name", n["dcid"]))
         return sorted(found.items())
 

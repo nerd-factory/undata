@@ -28,6 +28,7 @@ import pandas as pd
 
 from . import _endpoints as api
 from . import _session
+from ._long import keep
 from .breakdowns import slices_by
 from .errors import CoverageWarning, MissingDataWarning, MixedYearsWarning, StaleDataWarning
 from .indicators import check, names, source_label
@@ -220,7 +221,7 @@ def wide(table: pd.DataFrame) -> pd.DataFrame:
     Returns:
         The values, with countries down the side and indicator names across the top.
         A table that has several years per country keeps a ``year`` level in the
-        index. The original table stays in ``.attrs["long"]``, so :func:`undata.cite`
+        index. The original table stays attached, so :func:`undata.cite`
         and :func:`undata.save` still know the sources.
 
     Example:
@@ -236,8 +237,8 @@ def wide(table: pd.DataFrame) -> pd.DataFrame:
             index=index, columns="indicator_name", values="value", aggfunc="first"
         )
         result.columns.name = None
-    result.attrs = {**table.attrs, "long": table}
-    return result
+    result.attrs = dict(table.attrs)
+    return keep(result, table)
 
 
 # The functions below take a ``wide=True`` argument, which hides the function above.
@@ -481,8 +482,7 @@ def change(
     )
     frame.attrs["missing"] = [{"country": c, "indicator_name": n} for c, n in missing]
     frame.attrs["retrieved"] = _date.today().isoformat()
-    frame.attrs["long"] = _frame(rows, [])
-    return frame
+    return keep(frame, _frame(rows, []))
 
 
 def compare(
@@ -551,9 +551,9 @@ def compare(
     none = sorted(set(asked) - set().union(*have.values()))
     result.attrs = {
         **long.attrs,
-        "long": long.drop(columns="label"),
         "coverage": {"all": sorted(every), "only": only, "none": none},
     }
+    keep(result, long.drop(columns="label"))
     parts = [f"{len(every)} of {len(asked)} countries have all {len(order)} indicators."]
     parts += [f"Only {label}: {_shorten(c)}." for label, c in only.items() if c]
     if none:
