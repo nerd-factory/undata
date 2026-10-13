@@ -54,17 +54,19 @@ with their names. Copy the id from the first column.
 | `un.search("words")` | Find indicators by what they measure: UN collections, one row per indicator, with coverage. |
 | `un.about(indicator)` | What an indicator is, whose it is, its unit, years, and its SDG metadata link. |
 | `un.get(indicator, countries, years)` | The numbers: one row per country and year, with unit and source. `by="sex"` for a breakdown, `wide=True` for one column per indicator. |
-| `un.latest(indicator, countries)` | Each country's most recent value. `since=2020` leaves out older ones and names them. |
+| `un.latest(indicator, countries)` | Each country's most recent value. `within=10` keeps only values from the past ten years and names the countries whose latest is older. |
+| `un.coverage(table)` | How complete a table is: who has a value, who was too old, who has none, and which years. |
 | `un.totals(indicator, ["World", "LDCs"])` | The official figure for a region or group, as the agency published it. |
 | `un.change(indicator, countries, 2015, 2023)` | Before, after, the difference and the percentage change. |
 | `un.compare({"a": id1, "b": id2}, countries)` | Indicators side by side, with who has which spelled out. |
 | `un.breakdowns(indicator)` | Every breakdown: by sex, age, wealth and so on. |
-| `un.countries(region)` · `un.regions()` | The names it knows: countries with UN names, regions, and the LDC, LLDC and SIDS groups. |
+| `un.countries(region)` · `un.regions()` | The UN M49 list: countries and areas with their UN names, M49 regions, and the LDC, LLDC and SIDS groups. |
 | `un.sdg.goals()` · `targets(16)` · `indicators("16.1")` · `series("16.1.2")` | Walk from an SDG goal down to indicators you can fetch. |
 | `un.describe(table)` | Plain-English sentences about a table, worked out from its numbers. |
 | `un.chart(table)` | A chart with its source underneath, for a slide. Needs `pip install "undata[charts]"`. |
 | `un.save(table, "file.xlsx")` · `un.cite(table)` | Excel or CSV with sources; citations for a report. |
-| `un.for_ai(table)` | The table with its sources and caveats, to paste into an AI assistant. |
+| `un.for_ai(table, task="brief")` | The table with its sources, caveats and a task, to paste into an AI assistant. |
+| `un.ai_pack(table, "pack.zip")` | The data, a data dictionary and a prompt, to upload to an AI assistant. |
 | `un.powerquery(indicator, countries)` | Power Query code that fetches the same data in Power BI or Excel. |
 | `un.ask("a question")` | What data.un.org's search box decided, including whether it guessed the place. |
 | `un.configure(cache=True)` | Keep responses on disk, for slow connections and notebooks that run again. |
@@ -93,6 +95,28 @@ Every table has the same columns:
 country  iso3  year  value  unit  indicator_name  indicator  source  source_url
 ```
 
+## The country list is the UN's own
+
+Countries, regions and groups come from **UN M49**, the UN Statistics Division's
+standard, shipped with the package and checked against the UN's current table every
+night. Tables use official UN names, regions follow M49, and the LDC, LLDC and SIDS
+groups are the current UN lists (44, 32 and 53 countries), not the platform's older
+copies. Places the platform holds outside M49 are left out of every list, region and
+group; they can still be asked for by platform code, such as `country/XKS`.
+
+## Taking it to an AI assistant
+
+```python
+table = un.latest("3.1.1", "LDCs", within=10)
+un.ai_pack(table, "maternal-mortality.zip")   # upload, then paste prompt.md
+print(un.for_ai(table, task="brief"))         # or paste this as one message
+```
+
+The pack holds `data.csv`, `metadata.md` (what each column means; each indicator's
+unit, source and citation; how complete the data is; the caveats) and `prompt.md`
+(rules that keep the assistant to these numbers, and a task). Tasks: `explain`,
+`brief`, `trends`, `gaps`, `chart`.
+
 ## The careful parts are built in
 
 - **It never guesses a place.** data.un.org's search box answers a question about "Bengal"
@@ -107,7 +131,8 @@ country  iso3  year  value  unit  indicator_name  indicator  source  source_url
   `MixedYearsWarning` says when those differ.
 - **It works where other clients fail.** The platform's firewall blocks Google's official
   `datacommons-client` (any POST body containing `"select"`) and any GET request that
-  mentions Western Sahara (`ESH`, mistaken for a shell command). undata routes around both.
+  mentions Western Sahara, Greece or Slovenia (`ESH`, `GRC`, `SVN`, mistaken for
+  command names). undata routes around all of them.
 
 Each behaviour is pinned by a test in [tests/live/](https://github.com/nerd-factory/undata/tree/main/tests/live) that runs against the real
 platform every night and opens an issue if the platform changes. Most of them were found

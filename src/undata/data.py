@@ -149,8 +149,8 @@ def _warn_mixed_years(frame: pd.DataFrame, stacklevel: int = 3) -> None:
             warnings.warn(
                 f"The latest values for {indicator_name} come from different years, "
                 f"{first} to {last}. Values from different years are not directly "
-                "comparable; the year column shows which is which. Pass since=YEAR to "
-                "leave out older values.",
+                "comparable; the year column shows which is which. Pass within=N to keep "
+                "only values from the past N years.",
                 MixedYearsWarning,
                 stacklevel=stacklevel,
             )
@@ -299,35 +299,53 @@ def latest(
     indicators: str | Sequence[str],
     countries: str | Iterable[str],
     *,
+    within: int | None = None,
     since: int | None = None,
     wide: bool = False,
 ) -> pd.DataFrame:
     """Get each country's most recent value for an indicator.
 
-    "Most recent" is per country, so one country's latest value may be from 2023 and
-    another's from 2015. The ``year`` column says which, and a
-    :class:`~undata.MixedYearsWarning` is shown when the years differ by more than two.
+    Many series are not published every year for every country, so "most recent"
+    is per country: one country's latest value may be from 2023 and another's from
+    2015. The ``year`` column says which. To keep only recent enough values, say how
+    far back to look: ``within=10`` takes each country's latest value from the past
+    ten years, and names the countries whose latest is older.
 
     Args:
         indicators: One indicator id or SDG indicator number, or a list of them.
         countries: Country names, ISO codes, regions or groups, alone or in a list.
-        since: Leave out values older than this year. The ones left out are named in
-            a :class:`~undata.StaleDataWarning` and kept in ``.attrs["stale"]``.
+        within: Look back this many years from this year, so ``within=5`` in 2026
+            keeps values from 2021 on. Older values are left out and named in a
+            :class:`~undata.StaleDataWarning`.
+        since: The same, as a year: ``since=2020`` keeps values from 2020 on.
         wide: Return one column per indicator instead of one row per value.
 
     Returns:
         A table with one row per country and indicator, in the same columns as
-        :func:`get`.
+        :func:`get`. ``.attrs["window"]`` records the years looked at, and
+        :func:`undata.coverage` summarises who has a value, who was too old and who
+        has none.
 
     Example:
         >>> import undata as un
-        >>> un.latest("undata/sdg/EG_ACS_ELEC", "Western Africa", since=2020)  # doctest: +SKIP
+        >>> table = un.latest("3.1.1", "Western Africa", within=5)  # doctest: +SKIP
+        >>> un.coverage(table)  # doctest: +SKIP
     """
+    if within is not None and since is not None:
+        raise ValueError("Pass within= or since=, not both.")
+    this_year = _date.today().year
+    if within is not None:
+        if within < 0:
+            raise ValueError("within= counts years back from this one, so it cannot be negative.")
+        since = this_year - within
     indicator_names = check(indicators)
     places = expand(countries)
     rows, missing = _collect(indicator_names, places, keep=None, last_only=True)
     _warn_missing(missing, len(places) * len(indicator_names))
     frame = _frame(rows, missing)
+    frame.attrs["asked"] = [p.name for p in places]
+    frame.attrs["window"] = {"within_years": within, "since": since, "until": this_year}
+    frame.attrs["stale"] = []
     if since is not None:
         old = frame["year"] < since
         stale = frame[old]
@@ -335,9 +353,10 @@ def latest(
         frame.attrs["stale"] = stale[["country", "indicator_name", "year"]].to_dict("records")
         if not stale.empty:
             listed = [f"{r.country} ({r.year})" for r in stale.itertuples()]
+            span = f" (outside the last {within} years)" if within is not None else ""
             warnings.warn(
-                f"Left out {len(stale)} values older than {since}: {_shorten(listed)}. "
-                "They are in table.attrs['stale'].",
+                f"Left out {len(stale)} values older than {since}{span}: {_shorten(listed)}. "
+                "They are in table.attrs['stale']; un.coverage(table) summarises them.",
                 StaleDataWarning,
                 stacklevel=2,
             )
@@ -470,6 +489,7 @@ def compare(
     indicators: Sequence[str] | Mapping[str, str],
     countries: str | Iterable[str],
     *,
+    within: int | None = None,
     since: int | None = None,
 ) -> pd.DataFrame:
     """Put several indicators side by side, each country's latest value of each.
@@ -483,6 +503,8 @@ def compare(
             ``{"conflict": "undata/sdg/VC_DTH_TOTR", "homicide": "undata/sdg/VC_IHR_PSRC"}``.
             Labels become the column names; without them, indicator names are used.
         countries: Country names, ISO codes, regions or groups.
+        within: As for :func:`latest`: each country's latest value from the past
+            this many years.
         since: As for :func:`latest`.
 
     Returns:
@@ -499,7 +521,7 @@ def compare(
     # that they point at the caller's line, not at this one.
     with warnings.catch_warnings(record=True) as caught:
         warnings.simplefilter("always")
-        long = latest(ids, countries, since=since)
+        long = latest(ids, countries, within=within, since=since)
     for warning in caught:
         if not issubclass(warning.category, MissingDataWarning):
             warnings.warn(warning.message, stacklevel=2)

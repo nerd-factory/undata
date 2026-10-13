@@ -62,7 +62,7 @@ def test_a_year_filter_that_leaves_nothing_counts_as_missing(fake: FakeAPI) -> N
 
 
 def test_long_missing_lists_are_shortened(fake: FakeAPI) -> None:
-    with pytest.warns(un.MissingDataWarning, match="and 1 more"):
+    with pytest.warns(un.MissingDataWarning, match=r"and \d+ more"):
         un.get(ELEC, "World")
 
 
@@ -71,10 +71,11 @@ def test_get_accepts_regions_and_sends_them_in_chunks(
 ) -> None:
     monkeypatch.setattr("undata.data._CHUNK", 1)
 
-    table = un.get(MMR, "Southern Asia")
+    with pytest.warns(un.MissingDataWarning):
+        table = un.get(MMR, "Southern Asia")
 
     assert set(table["country"]) == {"Bangladesh", "Nepal"}
-    assert fake.calls["series"] == 2
+    assert fake.calls["series"] == 9  # one request per country of Southern Asia
 
 
 def test_get_rejects_a_phrase_before_fetching_anything(fake: FakeAPI) -> None:
@@ -113,7 +114,7 @@ def test_latest_translates_a_unit_id_and_warns_about_gaps(fake: FakeAPI) -> None
 
 
 def test_latest_uses_post_so_western_sahara_cannot_trip_the_firewall(fake: FakeAPI) -> None:
-    with pytest.warns(un.MixedYearsWarning):
+    with pytest.warns(un.MixedYearsWarning), pytest.warns(un.MissingDataWarning):
         un.latest(ELEC, "Southern Asia")
 
     assert fake.calls["series"] == 1

@@ -49,10 +49,10 @@ from .errors import (
     UNDataError,
     UNDataWarning,
 )
-from .export import cite, for_ai, powerquery, save
+from .export import ai_pack, cite, for_ai, powerquery, save
 from .indicators import IndicatorInfo, about, search
 from .places import Place, countries, regions
-from .summary import describe
+from .summary import coverage, describe
 
 # Each warning is about the table just returned, so show it every time rather than
 # only the first time Python sees it.
@@ -80,6 +80,7 @@ __all__ = [
     "UNDataWarning",
     "__version__",
     "about",
+    "ai_pack",
     "ask",
     "breakdowns",
     "build_dcid",
@@ -91,6 +92,7 @@ __all__ = [
     "compare",
     "configure",
     "countries",
+    "coverage",
     "describe",
     "describe_dcid",
     "for_ai",

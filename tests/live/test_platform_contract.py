@@ -113,14 +113,15 @@ def test_search_ranks_the_base_import_above_the_un_series(live: Transport) -> No
     assert hits.index("undata/sdg/SH_STA_MORT.SEX--F") > 0
 
 
-def test_a_get_mentioning_western_sahara_is_blocked_but_post_is_not() -> None:
-    """Why latest() fetches by POST. ESH is matched as the "esh" shell by the firewall."""
+@pytest.mark.parametrize("code", ["ESH", "GRC", "SVN"])
+def test_a_get_mentioning_some_countries_is_blocked_but_post_is_not(code: str) -> None:
+    """Why data is fetched by POST: ESH, GRC and SVN read as command names to the firewall."""
     get = httpx.get(
-        f"{DEFAULT_BASE_URL}/core/api/v2/node?nodes=country%2FESH&property=-%3Ename", timeout=30
+        f"{DEFAULT_BASE_URL}/core/api/v2/node?nodes=country%2F{code}&property=-%3Ename", timeout=30
     )
     post = httpx.post(
         f"{DEFAULT_BASE_URL}/api/observations/series",
-        json={"variables": ["Count_Person"], "entities": ["country/ESH"]},
+        json={"variables": ["Count_Person"], "entities": [f"country/{code}"]},
         timeout=30,
     )
 

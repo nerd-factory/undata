@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import warnings
+import zipfile
+from datetime import date
 from pathlib import Path
 
 import httpx
@@ -29,8 +31,10 @@ def test_groupings_resolve(fake: FakeAPI, name: str) -> None:
 
 
 def test_a_grouping_expands_to_its_members(fake: FakeAPI) -> None:
-    assert [p.iso3 for p in un.places.expand("LDCs")] == ["BGD", "NPL", "COD"]
-    assert {"Small Island Developing States (SIDS)"} <= set(un.regions()["region"])
+    members = [p.iso3 for p in un.places.expand("LDCs")]
+    assert len(members) == 44
+    assert {"BGD", "NPL", "COD"} <= set(members)
+    assert "Small island developing States (SIDS)" in set(un.regions()["region"])
 
 
 # ── 2. Official totals ───────────────────────────────────────────────────
@@ -421,6 +425,7 @@ def test_cli_prints_tables_and_sentences(fake: FakeAPI, capsys: pytest.CaptureFi
         (["search", "maternal mortality"], "SH_STA_MORT"),
         (["about", "3.1.1"], "Metadata-03-01-01.pdf"),
         (["latest", ELEC, "Bangladesh", "--since", "2020"], "99.5"),
+        (["latest", ELEC, "Bangladesh", "--within", "10", "--coverage"], "last 10 years"),
         (["latest", ELEC, "Bangladesh", "--wide"], "Proportion of population"),
         (["totals", MMR, "World", "--latest"], "197.3"),
         (["get", TOTN, "Bangladesh", "--by", "sex"], "Female"),
@@ -487,20 +492,122 @@ def test_for_ai_carries_instructions_sources_and_gaps(fake: FakeAPI) -> None:
 
     text = un.for_ai(table)
 
-    assert "Use only the numbers in this table" in text
+    assert "Use only the numbers in this data" in text
     assert "| Bangladesh" in text  # a Markdown table
     assert "No data for: Norway." in text
     assert "- SDG Global Database. Maternal mortality ratio" in text
 
 
-def test_for_ai_without_tabulate_or_sources(fake: FakeAPI, monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr("undata.export._has_tabulate", lambda: False)
+def test_for_ai_cuts_long_tables_and_copes_without_sources(fake: FakeAPI) -> None:
     table = un.get(MMR, "Bangladesh")
 
     text = un.for_ai(table, max_rows=2)
-    assert "country,iso3,year" in text
+    assert "| country | iso3 | year |" in text
     assert "(Showing 2 of 5 rows.)" in text
-    assert "Sources:" not in un.for_ai(pd.DataFrame({"country": ["x"]}))
+    assert "Sources:" not in un.for_ai(pd.DataFrame({"country": ["x|y\nz"]}))
+    assert "x\\|y z" in un.for_ai(pd.DataFrame({"country": ["x|y\nz"]}))
+
+
+def test_for_ai_adds_a_task_or_a_question(fake: FakeAPI) -> None:
+    table = un.get(MMR, "Bangladesh")
+
+    assert un.for_ai(table, task="brief").splitlines()[-1].startswith("Task: Draft a briefing")
+    assert un.for_ai(table, question="Why 2021?").endswith("Question: Why 2021?")
+    with pytest.raises(ValueError, match="Unknown task 'poem'"):
+        un.for_ai(table, task="poem")
+
+
+# ── Latest within N years, and coverage ───────────────────────────────────
+
+
+def test_latest_within_keeps_recent_values_and_records_the_window(fake: FakeAPI) -> None:
+    this_year = date.today().year
+    with (
+        pytest.warns(un.StaleDataWarning, match=r"outside the last 5 years\): Nepal \(2018\)"),
+        pytest.warns(un.MissingDataWarning, match="Norway"),
+    ):
+        table = un.latest(ELEC, ["Bangladesh", "Nepal", "Norway"], within=5)
+
+    assert list(table["country"]) == ["Bangladesh"]
+    assert table.attrs["window"] == {"within_years": 5, "since": this_year - 5, "until": this_year}
+    report = un.coverage(table).iloc[0]
+    assert (report["asked"], report["with_value"], report["too_old"], report["no_data"]) == (
+        3,
+        1,
+        1,
+        1,
+    )
+    assert report["window"] == f"{this_year - 5}-{this_year} (last 5 years)"
+    assert "1 places had nothing that recent (Nepal)" in un.describe(table)
+
+
+def test_latest_within_rules(fake: FakeAPI) -> None:
+    with pytest.raises(ValueError, match="not both"):
+        un.latest(ELEC, "Bangladesh", within=5, since=2020)
+    with pytest.raises(ValueError, match="cannot be negative"):
+        un.latest(ELEC, "Bangladesh", within=-1)
+
+
+def test_coverage_without_a_window(fake: FakeAPI) -> None:
+    report = un.coverage(un.get(MMR, "Bangladesh")).iloc[0]
+
+    assert (report["with_value"], report["oldest_year"], report["newest_year"]) == (1, 2019, 2023)
+    assert report["window"] == "any year"
+
+
+def test_compare_within(fake: FakeAPI) -> None:
+    with pytest.warns(un.StaleDataWarning), pytest.warns(un.CoverageWarning):
+        table = un.compare({"power": ELEC, "mothers": MMR}, ["Bangladesh", "Nepal"], within=5)
+
+    assert pd.isna(table.set_index("country").loc["Nepal", "power"])
+
+
+def test_save_adds_a_coverage_sheet(fake: FakeAPI, tmp_path: Path) -> None:
+    with pytest.warns(un.StaleDataWarning):
+        table = un.latest(ELEC, ["Bangladesh", "Nepal"], since=2020)
+    sheets = pd.read_excel(un.save(table, tmp_path / "x.xlsx"), sheet_name=None)
+
+    assert sheets["coverage"]["too_old"].tolist() == [1]
+
+
+# ── AI data packs ────────────────────────────────────────────────────────
+
+
+def test_ai_pack_writes_data_metadata_and_a_prompt(fake: FakeAPI, tmp_path: Path) -> None:
+    with pytest.warns(un.MissingDataWarning):
+        table = un.latest(MMR, ["Bangladesh", "Norway"], within=10)
+
+    path = un.ai_pack(table, tmp_path / "pack.zip")
+
+    with zipfile.ZipFile(path) as archive:
+        assert sorted(archive.namelist()) == ["data.csv", "metadata.md", "prompt.md"]
+        data = archive.read("data.csv").decode()
+        metadata = archive.read("metadata.md").decode()
+        prompt = archive.read("prompt.md").decode()
+    assert data.startswith("country,iso3,year,value,unit")
+    assert "- Unit: Count per 100,000 live births" in metadata
+    assert "| Maternal mortality ratio [Sex=Female] | 2 | 1 | 0 | 1 |" in metadata
+    assert "No data for: Norway." in metadata
+    assert "## How to cite" in metadata
+    assert "Choose a task" in prompt
+    assert "It is not zero." in prompt
+
+
+def test_ai_pack_to_a_folder_with_a_task(fake: FakeAPI, tmp_path: Path) -> None:
+    folder = un.ai_pack(un.get(MMR, "Bangladesh"), tmp_path / "pack", task="trends")
+
+    assert (folder / "prompt.md").read_text().strip().endswith("Do not extrapolate.")
+    assert "## Caveats" not in (folder / "metadata.md").read_text()
+    with pytest.raises(ValueError, match="Unknown task"):
+        un.ai_pack(un.get(MMR, "Bangladesh"), tmp_path / "x", task="poem")
+
+
+def test_ai_pack_on_a_table_without_sources(tmp_path: Path) -> None:
+    folder = un.ai_pack(pd.DataFrame({"country": ["x"], "value": [1]}), tmp_path / "bare")
+
+    text = (folder / "metadata.md").read_text()
+    assert "- `value`: The value, in the unit given." in text
+    assert "## Indicators" not in text
 
 
 # ── Fixes: paging, parallel fetching ─────────────────────────────────────
@@ -539,5 +646,5 @@ def test_many_places_are_fetched_in_parallel_chunks(
     with pytest.warns(un.MissingDataWarning):
         table = un.get(MMR, "LDCs")
 
-    assert fake.calls["series"] == 3
+    assert fake.calls["series"] == 44  # one per least developed country
     assert set(table["country"]) == {"Bangladesh", "Nepal"}

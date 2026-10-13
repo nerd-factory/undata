@@ -43,8 +43,7 @@ classifiers = [
 
 [project.optional-dependencies]
 charts = ["matplotlib>=3.9"]
-ai = ["tabulate>=0.9"]
-all = ["matplotlib>=3.9", "tabulate>=0.9"]
+all = ["matplotlib>=3.9"]
 
 [project.scripts]
 undata = "undata.cli:main"
@@ -68,8 +67,6 @@ dev = [
   "ruff>=0.8",
   "pandas-stubs>=2.2",
   "matplotlib>=3.9",
-  "tabulate>=0.9",
-  "types-tabulate>=0.9",
 ]
 
 [tool.hatch.version]

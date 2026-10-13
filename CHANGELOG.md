@@ -8,9 +8,23 @@ All notable changes are recorded here. The format follows
 
 ### Added
 
+- undata's own country list: the UN M49 standard, shipped as `m49.csv` and refreshed by
+  `scripts/update_m49.py`. Countries carry their official UN names; regions and
+  sub-regions follow M49; LDCs, LLDCs and SIDS are the UN's current lists (44, 32, 53),
+  where the platform's copies were out of date (46 and 47). Developed and developing
+  countries are groups too. Places needs no request to the platform any more.
+- Places outside M49 (such as Taiwan and Kosovo, which the platform holds) are in no
+  list, region or group, and are reachable only by platform code, under the platform's
+  name. M49 codes (`"704"`) work as input.
+- `un.latest(..., within=10)`: each country's latest value from the past ten years, with
+  the window recorded on the table and older values named.
+- `un.coverage(table)`: who has a value, who was too old, who has none, and which years.
+  It also goes into the Excel file as a `coverage` sheet.
+- `un.ai_pack()`: data, metadata and a prompt, to upload to an AI assistant.
+- `un.for_ai(task=..., question=...)`: tasks for the assistant (explain, brief, trends,
+  gaps, chart). Markdown tables no longer need the tabulate package.
+
 - UN development groupings as places: `"LDCs"`, `"LLDCs"`, `"SIDS"` (and their full names).
-  The platform's OECD and developed/developing groupings are left out: their member
-  lists are wrong or empty.
 - `un.totals()`: the official figure for a region or group, as the agency published it.
   undata never computes a regional figure of its own.
 - SDG indicator numbers such as `"3.1.1"` work wherever an indicator id does, when one
@@ -35,6 +49,9 @@ All notable changes are recorded here. The format follows
 
 ### Fixed
 
+- On Windows, a cache with a zero lifetime could serve a response it had just written.
+- The 403 message and the live tests now name all three country codes the firewall
+  refuses on GET: ESH, GRC and SVN.
 - A failure deep in paging through a very large answer now says what happened and how to
   narrow the request, instead of a bare HTTP 500.
 - Requests for many places run several at a time.

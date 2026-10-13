@@ -31,7 +31,7 @@ from .errors import UNDataError
 from .export import powerquery, save
 from .indicators import about, search
 from .places import countries, regions
-from .summary import describe
+from .summary import coverage, describe
 
 
 def _years(text: str | None) -> int | tuple[int, int] | None:
@@ -93,7 +93,9 @@ def _parser() -> argparse.ArgumentParser:
     cmd.add_argument("--wide", action="store_true", help="one column per indicator")
 
     cmd = data_command("latest", "each place's most recent value")
+    cmd.add_argument("--within", type=int, help="latest value from the past N years only")
     cmd.add_argument("--since", type=int, help="leave out values older than this year")
+    cmd.add_argument("--coverage", action="store_true", help="add who has data, and how old")
     cmd.add_argument("--wide", action="store_true", help="one column per indicator")
 
     cmd = data_command("totals", "the official figure for a region or group")
@@ -154,9 +156,17 @@ def _run(args: argparse.Namespace) -> None:
             args,
         )
     elif command == "latest":
-        _show(
-            latest(_indicators(args.indicator), args.places, since=args.since, wide=args.wide), args
+        table = latest(
+            _indicators(args.indicator),
+            args.places,
+            within=args.within,
+            since=args.since,
+            wide=args.wide,
         )
+        _show(table, args)
+        if args.coverage:
+            print()
+            print(coverage(table).to_string(index=False))
     elif command == "totals":
         _show(
             totals(

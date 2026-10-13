@@ -9,9 +9,10 @@ It exists to make the platform's request traps impossible to trip over:
 * Relation expressions (``->``, ``<-``, ``+``, ``{typeOf:Country}``) must be
   percent-encoded or the API answers 400. Query strings are built here with every
   reserved character percent-encoded, ``+`` included.
-* Any GET whose query string contains the word ``ESH`` (Western Sahara's country
-  code) is answered with 403: the firewall mistakes it for the ``esh`` shell. The
-  friendly functions therefore fetch data by POST (see ``data._collect``).
+* Any GET whose query string contains the country code ``ESH`` (Western Sahara),
+  ``GRC`` (Greece) or ``SVN`` (Slovenia) is answered with 403: the firewall mistakes
+  them for the ``esh``, ``grc`` and ``svn`` commands. The friendly functions therefore
+  fetch data by POST (see ``data._collect``).
 * The server does not decode ``+`` as a space in a query string: ``nodes=Viet+Nam``
   reaches it as ``Viet+Nam``. Spaces are therefore sent as ``%20``, never ``+``,
   which is what httpx would do by default.
@@ -51,8 +52,9 @@ _BLOCKED_MESSAGE: Final = (
     "The data.un.org firewall refused this request. No API key exists or is needed, "
     "so this is not an authentication problem. The firewall is known to refuse a POST "
     'body containing a line break or a "select" key, and any GET request whose query '
-    "contains the word ESH (Western Sahara's country code), which it mistakes for a "
-    "shell command. undata's own functions avoid all three; if one of them raised this, "
+    "contains the country code ESH (Western Sahara), GRC (Greece) or SVN (Slovenia), "
+    "which it mistakes for command names. undata's own functions avoid all of these; if "
+    "one of them raised this, "
     "the rules have changed. Please report it at "
     "https://github.com/nerd-factory/undata/issues with the URL above."
 )
@@ -176,8 +178,10 @@ class Transport:
 
     def _send(self, request: httpx.Request) -> Any:
         cached = self._cache_file(request)
-        fresh = cached is not None and cached.exists()
-        if fresh and cached and time.time() - cached.stat().st_mtime < self.cache_seconds:
+        # A zero lifetime turns reading off outright: on Windows a file's mtime can sit
+        # slightly ahead of time.time(), which would make a just-written entry look fresh.
+        usable = cached is not None and self.cache_seconds > 0 and cached.exists()
+        if usable and cached and time.time() - cached.stat().st_mtime < self.cache_seconds:
             with contextlib.suppress(ValueError, OSError):
                 return json.loads(cached.read_text(encoding="utf-8"))
         result = self._send_live(request)

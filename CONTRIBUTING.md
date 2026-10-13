@@ -56,7 +56,8 @@ CI runs the same four on Linux, macOS and Windows, on every supported Python.
 
 ```
 src/undata/data.py         get(), latest(), totals(), change(), compare(), wide()
-src/undata/places.py       countries and regions by name, UN names
+src/undata/places.py       countries, regions and groups, from the UN M49 list
+src/undata/m49.csv         the UN M49 list itself; refresh with scripts/update_m49.py
 src/undata/indicators.py   search() and about()
 src/undata/sdg.py          the SDG tree, goal to fetchable series
 src/undata/ask.py          what data.un.org's search box decided

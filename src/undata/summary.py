@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import pandas as pd
 
-__all__ = ["describe", "fmt_number"]
+__all__ = ["coverage", "describe", "fmt_number"]
 
 _MAX_COUNTRIES = 8
 
@@ -149,10 +149,104 @@ def describe(table: pd.DataFrame) -> str:
             paragraphs.append(_series(group, heading))
         else:
             paragraphs.append(_latest_like(group, heading))
+    window = table.attrs.get("window") or {}
+    stale = table.attrs.get("stale") or []
+    if window.get("since") is not None:
+        span = (
+            f"the last {window['within_years']} years"
+            if window.get("within_years") is not None
+            else f"{window['since']} or later"
+        )
+        text = f"Only each place's latest value from {span} is used"
+        if stale:
+            old = sorted({s["country"] for s in stale})
+            text += f"; {len(old)} places had nothing that recent ({_listing(old)})"
+        paragraphs.append(text + ".")
     missing = table.attrs.get("missing") or []
     if missing:
         names = sorted({m["country"] for m in missing})
-        shown = ", ".join(names[:_MAX_COUNTRIES])
-        more = f" and {len(names) - _MAX_COUNTRIES} more" if len(names) > _MAX_COUNTRIES else ""
-        paragraphs.append(f"No data for {shown}{more}; they are not counted as zero.")
+        paragraphs.append(f"No data for {_listing(names)}; they are not counted as zero.")
     return "\n\n".join(paragraphs)
+
+
+def _listing(names: list[str]) -> str:
+    shown = ", ".join(names[:_MAX_COUNTRIES])
+    more = len(names) - _MAX_COUNTRIES
+    return f"{shown} and {more} more" if more > 0 else shown
+
+
+COVERAGE_COLUMNS = [
+    "indicator_name",
+    "asked",
+    "with_value",
+    "too_old",
+    "no_data",
+    "oldest_year",
+    "newest_year",
+    "median_year",
+    "window",
+]
+
+
+def _window_text(window: dict[str, object] | None) -> str:
+    if not window or window.get("since") is None:
+        return "any year"
+    within = window.get("within_years")
+    since, until = window["since"], window.get("until")
+    return f"{since}-{until} (last {within} years)" if within is not None else f"{since} on"
+
+
+def coverage(table: pd.DataFrame) -> pd.DataFrame:
+    """Say how complete a table is: who has a value, who was too old, who has none.
+
+    Args:
+        table: A table from :func:`undata.latest` (with or without ``within=``),
+            :func:`undata.get`, :func:`undata.totals` or :func:`undata.wide`.
+
+    Returns:
+        One row per indicator: how many places were asked for, how many have a value,
+        how many had only values older than the window, how many have none at all,
+        the oldest, newest and median year of the values kept, and the window.
+
+    Example:
+        >>> import undata as un
+        >>> table = un.latest("3.1.1", "LDCs", within=5)  # doctest: +SKIP
+        >>> un.coverage(table)  # doctest: +SKIP
+    """
+    source = table.attrs.get("long", table)
+    asked_names = table.attrs.get("asked")
+    missing = table.attrs.get("missing") or []
+    stale = table.attrs.get("stale") or []
+    window = _window_text(table.attrs.get("window"))
+    names = list(
+        dict.fromkeys(
+            list(source["indicator_name"])
+            + [m["indicator_name"] for m in missing]
+            + [s["indicator_name"] for s in stale]
+        )
+    )
+    rows = []
+    for name in names:
+        kept = source[source["indicator_name"] == name]
+        have = set(kept["country"])
+        too_old = {s["country"] for s in stale if s["indicator_name"] == name}
+        none = {m["country"] for m in missing if m["indicator_name"] == name}
+        asked = len(asked_names) if asked_names else len(have | too_old | none)
+        years = kept["year"].dropna()
+        rows.append(
+            {
+                "indicator_name": name,
+                "asked": asked,
+                "with_value": len(have),
+                "too_old": len(too_old),
+                "no_data": len(none),
+                "oldest_year": int(years.min()) if len(years) else None,
+                "newest_year": int(years.max()) if len(years) else None,
+                "median_year": int(years.median()) if len(years) else None,
+                "window": window,
+            }
+        )
+    frame = pd.DataFrame(rows, columns=COVERAGE_COLUMNS)
+    for column in ("oldest_year", "newest_year", "median_year"):
+        frame[column] = frame[column].astype("Int64")
+    return frame

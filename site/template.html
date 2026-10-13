@@ -434,15 +434,15 @@ un.save(table, "maternal-mortality.xlsx")</code></pre></div>
         <tr><td>un.search("words")</td><td>Find indicators by what they measure: one row per indicator, with how many places and years have data.</td></tr>
         <tr><td>un.about(indicator)</td><td>What an indicator is, whose it is, its unit, its years, and its SDG metadata.</td></tr>
         <tr><td>un.get(indicator, countries, years)</td><td>The numbers: one row per country and year. <code>by="sex"</code> for a breakdown, <code>wide=True</code> for one column per indicator.</td></tr>
-        <tr><td>un.latest(indicator, countries)</td><td>Each country's most recent value. <code>since=2020</code> leaves out older ones and names them.</td></tr>
+        <tr><td>un.latest(indicator, countries)<br>un.coverage(table)</td><td>Each country's most recent value. <code>within=10</code> keeps only the past ten years and names who is older; <code>coverage</code> says who has what.</td></tr>
         <tr><td>un.totals(indicator, ["World", "LDCs"])</td><td>The official figure for a region or group, as the agency published it.</td></tr>
         <tr><td>un.change(indicator, countries, 2015, 2023)</td><td>Before, after, the difference and the percentage change.</td></tr>
         <tr><td>un.compare({"a": id1, "b": id2}, countries)</td><td>Indicators side by side, with who has which spelled out.</td></tr>
-        <tr><td>un.countries(region)<br>un.regions()</td><td>Countries with UN names, regions, and the LDC, LLDC and SIDS groups.</td></tr>
+        <tr><td>un.countries(region)<br>un.regions()</td><td>The UN M49 list: official names, M49 regions, and the current LDC, LLDC and SIDS groups.</td></tr>
         <tr><td>un.sdg.goals()<br>un.sdg.targets(16)<br>un.sdg.indicators("16.1")<br>un.sdg.series("16.1.2")</td><td>Walk from an SDG goal down to indicators you can fetch. SDG numbers like <code>"3.1.1"</code> also work directly.</td></tr>
         <tr><td>un.describe(table)<br>un.chart(table)</td><td>Sentences for a report, worked out from the numbers; a chart with its source, for a slide.</td></tr>
         <tr><td>un.save(table, "file.xlsx")<br>un.cite(table)</td><td>Excel or CSV with sources; citations for a report.</td></tr>
-        <tr><td>un.for_ai(table)<br>un.powerquery(...)</td><td>The table with its caveats for an AI assistant; Power Query code for Power BI or Excel.</td></tr>
+        <tr><td>un.ai_pack(table, "pack.zip")<br>un.for_ai(table, task="brief")<br>un.powerquery(...)</td><td>Data, metadata and a prompt to upload to an AI assistant, or to paste; Power Query code for Power BI or Excel.</td></tr>
         <tr><td>un.ask("a question")</td><td>What data.un.org's search box decided, including whether it guessed the place.</td></tr>
         <tr><td>undata ...</td><td>All of it from a terminal: <code>undata totals 3.1.1 World LDCs --latest</code>.</td></tr>
       </tbody>

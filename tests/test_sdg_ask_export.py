@@ -124,7 +124,7 @@ def test_save_to_excel_adds_sources_and_gaps(fake: FakeAPI, tmp_path: Path) -> N
     path = un.save(_table(fake), tmp_path / "out.xlsx")
 
     sheets = pd.read_excel(path, sheet_name=None)
-    assert set(sheets) == {"data", "sources", "no data"}
+    assert set(sheets) == {"data", "sources", "no data", "coverage"}
     assert len(sheets["data"]) == 5
     assert sheets["sources"]["citation"].iloc[0].startswith("SDG Global Database.")
     assert list(sheets["no data"]["country"]) == ["Norway"]
@@ -133,7 +133,7 @@ def test_save_to_excel_adds_sources_and_gaps(fake: FakeAPI, tmp_path: Path) -> N
 def test_save_to_excel_without_gaps_has_two_sheets(fake: FakeAPI, tmp_path: Path) -> None:
     path = un.save(un.get(MMR, "Bangladesh"), tmp_path / "out.xlsx")
 
-    assert set(pd.read_excel(path, sheet_name=None)) == {"data", "sources"}
+    assert set(pd.read_excel(path, sheet_name=None)) == {"data", "sources", "coverage"}
 
 
 def test_save_to_csv(fake: FakeAPI, tmp_path: Path) -> None:

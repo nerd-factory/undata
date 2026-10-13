@@ -48,6 +48,7 @@ NAMES = {
     TOTN_U: "Number of total conflict-related deaths [Sex=Unknown]",
     "undata/sdg/VC_DTH_TOTR": "Conflict deaths per 100,000",
     "undata/who/U5": "Under-five mortality rate",
+    "country/XKS": "Kosovo",  # on the platform, not in UN M49
 }
 
 SDG_TREE: dict[str, list[tuple[str, str]]] = {

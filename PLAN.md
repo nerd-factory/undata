@@ -243,8 +243,10 @@ The review of what users needed beyond the platform's own API became 0.2: UN gro
 (LDCs, LLDCs, SIDS), official regional totals, SDG numbers as input, wide tables, a
 freshness cut-off, change over time, honest comparisons, breakdowns, plain-English
 summaries, charts, AI-ready export, Power Query generation, SDG metadata links, better
-search, a disk cache and a command-line tool. Still open: async, polars output, and the
-naming decision for Taiwan and Kosovo, which the platform names in its own way.
+search, a disk cache and a command-line tool, then undata's own country list (UN M49),
+a look-back window for latest values, coverage reports and AI data packs. Taiwan and
+Kosovo are settled by the M49 rule: outside M49, outside every list. Still open: async
+and polars output.
 
 ## 11. Requirements for 1.0
 
@@ -267,5 +269,6 @@ naming decision for Taiwan and Kosovo, which the platform names in its own way.
 | Status | Unofficial | Said in the README and on PyPI. Revisit if UNSD wants to endorse it. |
 | Licence | MIT | Matches the rest of Nerd Lab |
 | Models | dataclasses | Keeps the install light; no pydantic |
+| Country list | UN M49, shipped with the package | Decided 2026-10-13. Official names and current UN groups; the platform's list and groupings are out of date. Places outside M49 are reachable only by code. |
 | Audience | UN colleagues with little data experience first | Decided 2026-10-13. Flat namespace (`un.get`), names not ids for places, tables not JSON, plain-English warnings. |
 | pandas, openpyxl | Required, not extras | Every result is a table and Excel is the common destination; an extra install step is a barrier for the main audience. |
