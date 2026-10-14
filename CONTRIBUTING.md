@@ -78,6 +78,7 @@ src/undata/errors.py       every exception, each with a message that helps
 tests/                     offline tests; tests/live/ calls the real API
 examples/                  runnable use cases, run nightly against the live API
 site/                      the use-cases page: template, build.py, charts.py
+docs/                      the API reference (Sphinx), built from the docstrings
 ```
 
 ## The use-cases page
@@ -91,6 +92,20 @@ uv run python site/build.py
 ```
 
 Pushing the result to `main` deploys it to https://nerd-factory.github.io/undata/.
+
+## The API reference
+
+`docs/` holds the reference pages; the content is the docstrings, so documenting a
+function means writing its docstring (Google style: `Args:`, `Returns:`, `Example:`).
+Build it locally with:
+
+```bash
+uv run --group docs sphinx-build -W docs _build/reference   # open _build/reference/index.html
+```
+
+CI builds it with warnings as errors, and the Pages workflow publishes it at
+https://nerd-factory.github.io/undata/reference/ on every push to `main`. The connector's
+tool list and the command-line help are generated from the code during the build.
 
 ## Releasing (maintainers)
 

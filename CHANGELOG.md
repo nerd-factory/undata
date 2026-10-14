@@ -6,6 +6,14 @@ All notable changes are recorded here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- An API reference at https://nerd-factory.github.io/undata/reference/, built from the
+  docstrings with Sphinx: every function's parameters, return values and examples, the
+  progress method explained, the chart catalogue, the connector's tools (generated from
+  the server) and the command-line help (generated from the command). CI fails on any
+  documentation warning, and PyPI's "Documentation" link now points at it.
+
 ## [0.4.1] - 2026-10-13
 
 Documentation only; no change to behaviour.

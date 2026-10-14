@@ -26,6 +26,8 @@ jobs:
       - run: uv run ruff format --check .
       - run: uv run ruff check --output-format=github .
       - run: uv run mypy
+      - name: Build the API reference, failing on any warning
+        run: uv run --group docs sphinx-build -W --keep-going -q docs _build/reference
 
   test:
     name: Test (${{ matrix.os }}, Python ${{ matrix.python }})

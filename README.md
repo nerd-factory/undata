@@ -16,7 +16,8 @@
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://github.com/nerd-factory/undata/blob/main/pyproject.toml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://github.com/nerd-factory/undata/blob/main/LICENSE)
 
-**[Twelve use cases, with real output →](https://nerd-factory.github.io/undata/)**
+**[Twelve use cases, with real output →](https://nerd-factory.github.io/undata/)** ·
+**[API reference →](https://nerd-factory.github.io/undata/reference/)**
 
 </div>
 
@@ -80,7 +81,9 @@ Wherever a function asks for countries you can write names the way you would in 
 (`"Viet Nam"`, `"Vietnam"`, `"VNM"`), a list of them, a region such as `"Southern Asia"`
 or `"Africa"`, or a UN group: `"LDCs"`, `"LLDCs"`, `"SIDS"`. Wherever it asks for an
 indicator, an SDG number such as `"3.1.1"` works when one series reports it. Every
-function explains itself: `help(un.get)`.
+function explains itself: `help(un.get)`, and the
+[API reference](https://nerd-factory.github.io/undata/reference/) documents every
+parameter.
 
 ### From a terminal
 

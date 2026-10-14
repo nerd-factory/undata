@@ -57,7 +57,7 @@ undata-mcp = "undata.mcp_server:main"
 
 [project.urls]
 Homepage = "https://nerd-factory.github.io/undata/"
-Documentation = "https://nerd-factory.github.io/undata/"
+Documentation = "https://nerd-factory.github.io/undata/reference/"
 Source = "https://github.com/nerd-factory/undata"
 Issues = "https://github.com/nerd-factory/undata/issues"
 Changelog = "https://github.com/nerd-factory/undata/blob/main/CHANGELOG.md"
@@ -78,6 +78,12 @@ dev = [
   "plotly>=5.20",
   "mcp>=2.3",
 ]
+docs = [
+  "sphinx>=8.2",
+  "furo>=2025.12.19",
+  "sphinx-copybutton>=0.5.2",
+  "mcp>=2.3",
+]
 
 [tool.hatch.version]
 source = "vcs"
@@ -92,6 +98,7 @@ include = [
   "/src",
   "/tests",
   "/examples",
+  "/docs",
   "/README.md",
   "/CHANGELOG.md",
   "/CITATION.cff",

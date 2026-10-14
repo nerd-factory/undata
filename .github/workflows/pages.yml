@@ -1,13 +1,14 @@
 name: Pages
 
-# Publishes site/public/ as https://nerd-factory.github.io/undata/. The page is
-# built locally with `uv run python site/build.py`, which reruns the
-# examples against the live API, and the result is committed; this only deploys it.
+# Publishes site/public/ as https://nerd-factory.github.io/undata/. The use-cases page is
+# built locally with `uv run python site/build.py`, which reruns the examples against
+# the live API, and the result is committed. The API reference is built here, from the
+# docstrings, into site/public/reference/, so it always matches main.
 
 on:
   push:
     branches: [main]
-    paths: ["site/public/**", ".github/workflows/pages.yml"]
+    paths: ["site/public/**", "docs/**", "src/**", ".github/workflows/pages.yml"]
   workflow_dispatch:
 
 permissions:
@@ -27,6 +28,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0  # the version comes from git tags
       - name: Check the page was built
         run: |
           test -f site/public/index.html
@@ -34,6 +37,11 @@ jobs:
             echo "site/public/index.html still has template placeholders; run site/build.py" >&2
             exit 1
           fi
+      - uses: astral-sh/setup-uv@v10.3.0
+        with:
+          python-version: "3.13"
+      - name: Build the API reference
+        run: uv run --group docs sphinx-build -W --keep-going -q docs site/public/reference
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
         with:
