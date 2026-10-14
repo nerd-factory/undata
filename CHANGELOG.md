@@ -6,6 +6,12 @@ All notable changes are recorded here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- The terms-of-use link points at the UN System Data Commons Terms of Use again. 0.4.1
+  replaced it with UNdata's general terms after an automated check reported a 404; the
+  platform answers every page of its web app with that status, and the page itself works.
+
 ## [0.4.2] - 2026-10-14
 
 ### Changed
