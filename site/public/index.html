@@ -52,7 +52,7 @@ code, pre { font-family: var(--mono); }
 .bar nav { display: flex; gap: clamp(0.75rem, 3vw, 1.5rem); font-family: var(--mono); font-size: 0.8rem; }
 .bar nav a { color: var(--muted); text-decoration: none; }
 .bar nav a:hover { color: var(--volt); }
-@media (max-width: 34rem) { .bar nav .opt { display: none; } }
+@media (max-width: 34rem) { .bar nav .opt, .brand span { display: none; } }
 
 /* sections */
 .sec { padding-block: clamp(2.75rem, 8vh, 5rem); border-bottom: 1px solid var(--line); }
@@ -195,6 +195,7 @@ figure.block img { display: block; width: 100%; height: auto; background: #fff; 
     <a class="brand" href="https://nerd-factory.github.io/nerd-lab/"><span>nerd lab /</span> undata</a>
     <nav aria-label="Page">
       <a href="#use-cases">use cases</a>
+      <a href="videos/">videos</a>
       <a href="#start" class="opt">start</a>
       <a href="#functions" class="opt">functions</a>
       <a href="#claude" class="opt">claude</a>
@@ -219,6 +220,10 @@ figure.block img { display: block; width: 100%; height: auto; background: #fff; 
     <div class="install">
       <pre><code>pip install undata</code></pre>
     </div>
+
+    <p class="watch"><a href="videos/">Watch it work: six two-minute videos</a> — a sourced spreadsheet,
+    SDG progress by the UN method, a country in context, who is left behind, the safeguards, and an AI
+    assistant that cites its numbers.</p>
 
     <p class="status"><strong>Everything on this page is real.</strong> Each use case below is a
     script in <a href="https://github.com/nerd-factory/undata/tree/main/examples">examples/</a>. The
