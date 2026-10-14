@@ -5,11 +5,10 @@ type: software
 authors:
   - family-names: Islam
     given-names: Mafizul
-  - name: "Nerd Lab contributors"
 repository-code: "https://github.com/nerd-factory/undata"
 url: "https://nerd-factory.github.io/undata/"
-version: 0.4.1
-date-released: 2026-10-13
+version: 0.4.2
+date-released: 2026-10-14
 license: MIT
 keywords:
   - United Nations

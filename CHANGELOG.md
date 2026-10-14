@@ -6,6 +6,14 @@ All notable changes are recorded here. The format follows
 
 ## [Unreleased]
 
+## [0.4.2] - 2026-10-14
+
+### Changed
+
+- The package page names Mafizul Islam as its creator and maintainer, in the README and in
+  the package metadata, and no longer shows the Nerd Lab logo.
+- PyPI's "Documentation" link points at the new API reference.
+
 ### Added
 
 - An API reference at https://nerd-factory.github.io/undata/reference/, built from the
@@ -205,7 +213,8 @@ First release.
 - Spaces in query strings are sent as `%20`. httpx sends `+`, which this server reads
   literally, so `resolve("Viet Nam")` reached it as `Viet+Nam`.
 
-[Unreleased]: https://github.com/nerd-factory/undata/compare/v0.4.1...HEAD
+[Unreleased]: https://github.com/nerd-factory/undata/compare/v0.4.2...HEAD
+[0.4.2]: https://github.com/nerd-factory/undata/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/nerd-factory/undata/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/nerd-factory/undata/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/nerd-factory/undata/compare/v0.2.0...v0.3.0

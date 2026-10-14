@@ -19,8 +19,8 @@ sys.path.insert(0, str(HERE.parent / "src"))
 import undata  # noqa: E402
 
 project = "undata"
-author = "Mafizul Islam (Nerd Lab)"
-copyright = "2026, Nerd Lab"
+author = "Mafizul Islam"
+copyright = "2026, Mafizul Islam"
 release = undata.__version__
 version = ".".join(release.split(".")[:2])
 

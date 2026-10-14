@@ -10,7 +10,7 @@ readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
 authors = [{ name = "Mafizul Islam", email = "islam50@un.org" }]
-maintainers = [{ name = "Nerd Lab contributors" }]
+maintainers = [{ name = "Mafizul Islam", email = "islam50@un.org" }]
 requires-python = ">=3.11"
 dependencies = ["httpx>=0.27", "pandas>=2.2.2", "openpyxl>=3.1"]
 keywords = [

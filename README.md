@@ -1,14 +1,10 @@
 <div align="center">
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/nerd-factory/nerd-lab/main/assets/logo/nerd-lab-offwhite.svg">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/nerd-factory/nerd-lab/main/assets/logo/nerd-lab-ink.svg">
-  <img alt="NERD LAB" src="https://raw.githubusercontent.com/nerd-factory/nerd-lab/main/assets/logo/nerd-lab-ink.svg" width="300">
-</picture>
-
 # undata
 
 **UN data in Python, without the guessing.**
+
+Created and maintained by **Mafizul Islam**.
 
 [![CI](https://github.com/nerd-factory/undata/actions/workflows/ci.yml/badge.svg)](https://github.com/nerd-factory/undata/actions/workflows/ci.yml)
 [![Live API contract](https://github.com/nerd-factory/undata/actions/workflows/live.yml/badge.svg)](https://github.com/nerd-factory/undata/actions/workflows/live.yml)
@@ -259,6 +255,11 @@ uv run ruff check . && uv run ruff format --check . && uv run mypy
 See [CONTRIBUTING.md](https://github.com/nerd-factory/undata/blob/main/CONTRIBUTING.md). Questions that feel too basic are welcome in
 [Nerd Lab Discussions](https://github.com/nerd-factory/nerd-lab/discussions); they are not
 too basic.
+
+## Author
+
+undata was created and is maintained by Mafizul Islam, as a
+[Nerd Lab](https://github.com/nerd-factory) project.
 
 ## Licence
 
