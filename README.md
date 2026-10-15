@@ -12,7 +12,9 @@ Created and maintained by **Mafizul Islam**.
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://github.com/nerd-factory/undata/blob/main/pyproject.toml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://github.com/nerd-factory/undata/blob/main/LICENSE)
 
+**[Try it in your browser, no install →](https://colab.research.google.com/github/nerd-factory/undata/blob/main/examples/first_table.ipynb)** ·
 **[Twelve use cases, with real output →](https://nerd-factory.github.io/undata/)** ·
+**[Six two-minute videos →](https://nerd-factory.github.io/undata/videos/)** ·
 **[API reference →](https://nerd-factory.github.io/undata/reference/)**
 
 </div>
@@ -38,7 +40,9 @@ table = un.get("undata/sdg/SH_STA_MORT.SEX--F", ["Bangladesh", "Viet Nam"])
 un.save(table, "maternal-mortality.xlsx")  # data on one sheet, citations on the next
 ```
 
-In Google Colab, run `!pip install undata` in the first cell. For the latest unreleased
+New to Python? [Open the first-table notebook in Google Colab](https://colab.research.google.com/github/nerd-factory/undata/blob/main/examples/first_table.ipynb): it runs in your
+browser, with nothing to install, and walks from a question to a chart and an Excel file in
+five minutes. In your own Colab notebook, run `!pip install undata` in the first cell. For the latest unreleased
 changes: `pip install "git+https://github.com/nerd-factory/undata"`.
 
 Don't know the indicator's id? `un.search("maternal mortality")` lists matching indicators
@@ -255,6 +259,16 @@ uv run ruff check . && uv run ruff format --check . && uv run mypy
 See [CONTRIBUTING.md](https://github.com/nerd-factory/undata/blob/main/CONTRIBUTING.md). Questions that feel too basic are welcome in
 [Nerd Lab Discussions](https://github.com/nerd-factory/nerd-lab/discussions); they are not
 too basic.
+
+## How to cite
+
+If you use undata in published work, cite it and the agency that published the data. GitHub
+shows a ready citation under **Cite this repository**, from
+[CITATION.cff](https://github.com/nerd-factory/undata/blob/main/CITATION.cff), and
+`un.cite(table)` writes the citation for the data itself:
+
+> Islam, M. undata: a Python client for the UN System Data Commons.
+> https://github.com/nerd-factory/undata
 
 ## Author
 
