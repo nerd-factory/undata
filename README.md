@@ -11,6 +11,7 @@ Created and maintained by **Mafizul Islam**.
 [![PyPI](https://img.shields.io/pypi/v/undata)](https://pypi.org/project/undata/)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://github.com/nerd-factory/undata/blob/main/pyproject.toml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://github.com/nerd-factory/undata/blob/main/LICENSE)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23426675.svg)](https://doi.org/10.5281/zenodo.23426675)
 
 **[Try it in your browser, no install →](https://colab.research.google.com/github/nerd-factory/undata/blob/main/examples/first_table.ipynb)** ·
 **[Twelve use cases, with real output →](https://nerd-factory.github.io/undata/)** ·
@@ -267,8 +268,13 @@ shows a ready citation under **Cite this repository**, from
 [CITATION.cff](https://github.com/nerd-factory/undata/blob/main/CITATION.cff), and
 `un.cite(table)` writes the citation for the data itself:
 
-> Islam, M. undata: a Python client for the UN System Data Commons.
-> https://github.com/nerd-factory/undata
+> Islam, M. undata: a Python client for the UN System Data Commons. Zenodo.
+> https://doi.org/10.5281/zenodo.23426675
+
+That DOI always points at the latest release. Each release also has its own DOI on
+[Zenodo](https://doi.org/10.5281/zenodo.23426675) (0.4.3 is
+[10.5281/zenodo.23426676](https://doi.org/10.5281/zenodo.23426676)); cite that one when
+someone needs to rerun your work with the exact version you used.
 
 ## Author
 

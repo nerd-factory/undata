@@ -5,6 +5,14 @@ type: software
 authors:
   - family-names: Islam
     given-names: Mafizul
+doi: 10.5281/zenodo.23426675
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.23426675
+    description: All versions; resolves to the latest release.
+  - type: doi
+    value: 10.5281/zenodo.23426676
+    description: Version 0.4.3.
 repository-code: "https://github.com/nerd-factory/undata"
 url: "https://nerd-factory.github.io/undata/"
 version: 0.4.3
