@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>undata videos · UN data in Python</title>
-<meta name="description" content="Six two-minute videos on undata, the Python package for UN System Data Commons data: a sourced spreadsheet in three lines, SDG progress by the UN method, a country in context, who is left behind, the safeguards, and an AI assistant that cites its numbers.">
+<meta name="description" content="Short videos on undata, the Python package for UN System Data Commons data. Season 1: a sourced spreadsheet in three lines, SDG progress by the UN method, a country in context, who is left behind, the safeguards, and an AI assistant that cites its numbers. Season 2: UN data products in Excel, Flourish, PowerPoint, Copilot, Python and R.">
 <meta name="theme-color" content="#141419">
-<meta property="og:title" content="undata in six two-minute videos">
+<meta property="og:title" content="undata in short videos: Python, Excel, Flourish, PowerPoint, Copilot and R">
 <meta property="og:description" content="Real UN data, real output: from a question to a sourced spreadsheet, SDG progress, country profiles, gaps, safeguards and an AI connector.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://nerd-factory.github.io/undata/videos/">
@@ -70,6 +70,9 @@ details { border-top: 1px solid var(--line); padding-top: 0.8rem; }
 summary { cursor: pointer; font-family: var(--mono); font-size: 0.85rem; color: var(--muted); }
 details p { color: #d8d5cd; max-width: 46rem; }
 .note { font-size: 0.9rem; color: var(--muted); max-width: 46rem; }
+.season { margin: 2.5rem 0 0.25rem; font-family: var(--mono); font-size: 0.85rem; letter-spacing: 0.06em; color: var(--volt); text-transform: uppercase; }
+.season + p { margin: 0 0 0.5rem; max-width: 46rem; color: #d8d5cd; }
+.divider h2 { margin-bottom: 0.75rem; }
 footer { padding-block: 2.5rem; font-size: 0.85rem; color: var(--muted); }
 @media (forced-colors: active) { .index a, .player, .chapters button { border: 1px solid CanvasText; } }
 </style>
@@ -91,17 +94,23 @@ footer { padding-block: 2.5rem; font-size: 0.85rem; color: var(--muted); }
 <main id="main">
 <section class="sec">
   <div class="wrap">
-    <p class="anno">// videos · six use cases, two minutes each</p>
+    <p class="anno">// videos · 11 short videos, two seasons</p>
     <h1>Watch undata do the work.</h1>
-    <p class="lede">Six short videos, each one real request from start to finish: the code, what comes back,
-    the chart and the sentence for your report. Every number on screen was returned by undata from the
-    UN System Data Commons on 2026-10-14.</p>
-    <p class="meta">All six as a <a href="https://www.youtube.com/playlist?list=PLCLeVAwBLQNs">YouTube playlist</a> ·
-    captions are burned in, and every video has a transcript below it.</p>
-    <ul class="index"><li><a href="#spreadsheet"><img src="posters/01-three-lines.jpg" alt="" width="1280" height="720" loading="lazy"><p><b>01</b>Three lines to a spreadsheet</p></a></li><li><a href="#on-track"><img src="posters/02-on-track-2030.jpg" alt="" width="1280" height="720" loading="lazy"><p><b>02</b>On track for 2030?</p></a></li><li><a href="#in-context"><img src="posters/03-country-in-context.jpg" alt="" width="1280" height="720" loading="lazy"><p><b>03</b>One country, in context</p></a></li><li><a href="#left-behind"><img src="posters/04-left-behind.jpg" alt="" width="1280" height="720" loading="lazy"><p><b>04</b>Who gets left behind?</p></a></li><li><a href="#defend"><img src="posters/05-numbers-you-can-defend.jpg" alt="" width="1280" height="720" loading="lazy"><p><b>05</b>Numbers you can defend</p></a></li><li><a href="#ai"><img src="posters/06-ask-an-ai.jpg" alt="" width="1280" height="720" loading="lazy"><p><b>06</b>Ask an AI assistant, with sources</p></a></li></ul>
+    <p class="lede">Each video is one real request from start to finish: the code, what comes back, and the
+    chart, slide, file or sentence you would send. Captions are burned in, and every video has a transcript below it.</p>
+    <p class="season"><a href="#python">Season 1 · undata in Python</a></p><p>Six requests, start to finish in Python: a sourced spreadsheet, SDG progress by the UN method, a country in context, who is left behind, the safeguards, and an AI assistant that cites its numbers.</p><ul class="index"><li><a href="#spreadsheet"><img src="posters/01-three-lines.jpg" alt="" width="1280" height="720" loading="lazy"><p><b>01</b>Three lines to a spreadsheet</p></a></li><li><a href="#on-track"><img src="posters/02-on-track-2030.jpg" alt="" width="1280" height="720" loading="lazy"><p><b>02</b>On track for 2030?</p></a></li><li><a href="#in-context"><img src="posters/03-country-in-context.jpg" alt="" width="1280" height="720" loading="lazy"><p><b>03</b>One country, in context</p></a></li><li><a href="#left-behind"><img src="posters/04-left-behind.jpg" alt="" width="1280" height="720" loading="lazy"><p><b>04</b>Who gets left behind?</p></a></li><li><a href="#defend"><img src="posters/05-numbers-you-can-defend.jpg" alt="" width="1280" height="720" loading="lazy"><p><b>05</b>Numbers you can defend</p></a></li><li><a href="#ai"><img src="posters/06-ask-an-ai.jpg" alt="" width="1280" height="720" loading="lazy"><p><b>06</b>Ask an AI assistant, with sources</p></a></li></ul><p class="season"><a href="#at-work">Season 2 · undata at work</a></p><p>Five data products, one per everyday tool: a report chart in Excel, an animated chart in Flourish, a one-slide briefing in PowerPoint, a first draft with Copilot, and a publication figure in Python and R.</p><ul class="index"><li><a href="#excel"><img src="posters/07-excel-chart.jpg" alt="" width="1280" height="720" loading="lazy"><p><b>07</b>A report chart, in Excel</p></a></li><li><a href="#flourish"><img src="posters/08-flourish-race.jpg" alt="" width="1280" height="720" loading="lazy"><p><b>08</b>An animated chart, in Flourish</p></a></li><li><a href="#powerpoint"><img src="posters/09-powerpoint-briefing.jpg" alt="" width="1280" height="720" loading="lazy"><p><b>09</b>A one-slide briefing, in PowerPoint</p></a></li><li><a href="#copilot"><img src="posters/10-copilot-draft.jpg" alt="" width="1280" height="720" loading="lazy"><p><b>10</b>A first draft, with Copilot</p></a></li><li><a href="#python-r"><img src="posters/11-python-r-figure.jpg" alt="" width="1280" height="720" loading="lazy"><p><b>11</b>A publication figure, in Python and R</p></a></li></ul>
   </div>
 </section>
 
+<section class="sec divider" id="python">
+  <div class="wrap">
+    <p class="anno">// season 1 · undata in python</p>
+    <h2>undata in Python</h2>
+    <p class="lede">Six requests, start to finish in Python: a sourced spreadsheet, SDG progress by the UN method, a country in context, who is left behind, the safeguards, and an AI assistant that cites its numbers.</p>
+    <p class="meta">Every number on screen was returned by undata from the UN System Data Commons on 2026-10-14
+    · <a href="https://www.youtube.com/playlist?list=PLCLeVAwBLQNs">the season as a YouTube playlist</a></p>
+  </div>
+</section>
 <section class="sec" id="spreadsheet">
   <div class="wrap">
     <p class="anno">// 01 — 2:00</p>
@@ -192,11 +201,98 @@ footer { padding-block: 2.5rem; font-size: 0.85rem; color: var(--muted); }
     <details><summary>Transcript</summary><p><a href="https://youtu.be/Ft1H8b2XhFI?t=0">0:00</a> A I assistants are quick with numbers. But where do those numbers come from? Connect undata, and the assistant fetches UN statistics itself, with the source in every answer.</p><p><a href="https://youtu.be/Ft1H8b2XhFI?t=11">0:11</a> Setup is one entry in the assistant’s settings. In Claude Desktop, add undata as an MCP server. The uv tool fetches Python and the package the first time it runs. In Claude Code, it is a single command.</p><p><a href="https://youtu.be/Ft1H8b2XhFI?t=25">0:25</a> The assistant gets fourteen tools. Search indicators, browse the SDG framework, fetch data, and run the same analyses you saw in this series. Every one only reads. None needs an account, or a key.</p><p><a href="https://youtu.be/Ft1H8b2XhFI?t=38">0:38</a> Ask which least developed countries are on track to bring maternal mortality below seventy by 2030. The assistant calls undata’s progress tool, with the indicator, the group, and the target. What comes back is the whole table, a summary worked out from the numbers, and the sources, so the answer can cite them.</p><p><a href="https://youtu.be/Ft1H8b2XhFI?t=56">0:56</a> And the safeguards travel with it. Ask about Bengal, and the tool refuses to guess, so the assistant has to come back and ask you, instead of answering about somewhere else.</p><p><a href="https://youtu.be/Ft1H8b2XhFI?t=65">1:05</a> No connector where you work? un.for_ai turns a table into one message to paste, with its sources and caveats. un.ai_pack makes a zip to upload: the data, a data dictionary, and a prompt.</p><p><a href="https://youtu.be/Ft1H8b2XhFI?t=78">1:18</a> That is the series. UN data, with its sources, wherever you work: in a notebook, a spreadsheet, a terminal, or an assistant.</p></details>
   </div>
 </section>
+<section class="sec divider" id="at-work">
+  <div class="wrap">
+    <p class="anno">// season 2 · undata at work</p>
+    <h2>undata at work</h2>
+    <p class="lede">Five data products, one per everyday tool: a report chart in Excel, an animated chart in Flourish, a one-slide briefing in PowerPoint, a first draft with Copilot, and a publication figure in Python and R.</p>
+    <p class="meta">Every number on screen was returned by undata from the UN System Data Commons on 2026-10-16
+    · <a href="https://www.youtube.com/playlist?list=PLR62uX4yNZpA">the season as a YouTube playlist</a></p>
+  </div>
+</section>
+<section class="sec" id="excel">
+  <div class="wrap">
+    <p class="anno">// 07 — 2:35</p>
+    <h2>A report chart, in Excel</h2>
+    <p class="lede">Turn official UN statistics into a chart fit for a report, in Excel, in about five minutes: fetch the data with two lines of Python, then five formatting moves, then a Power Query table that refreshes itself.</p>
+    <div class="player" data-id="KJaUd0l3hkA" data-title="A report chart, in Excel">
+      <button type="button" class="play" aria-label="Play: A report chart, in Excel (2:35)">
+        <img src="posters/07-excel-chart.jpg" alt="" width="1280" height="720" loading="lazy"><span class="badge"></span><span class="len">2:35</span>
+      </button>
+    </div>
+    <p class="meta">Shows <code>latest</code> · <code>save</code> · <code>powerquery</code> · Excel · <a href="https://youtu.be/KJaUd0l3hkA">watch on YouTube</a></p>
+    <ul class="chapters" aria-label="Chapters"><li><button type="button" data-t="0"><span>0:00</span>Introduction</button></li><li><button type="button" data-t="11"><span>0:11</span>The product</button></li><li><button type="button" data-t="27"><span>0:27</span>un.latest + un.save</button></li><li><button type="button" data-t="43"><span>0:43</span>The file un.save wrote</button></li><li><button type="button" data-t="58"><span>0:58</span>Five moves in Excel</button></li><li><button type="button" data-t="91"><span>1:31</span>Before and after</button></li><li><button type="button" data-t="102"><span>1:42</span>un.powerquery · a table that refreshes</button></li><li><button type="button" data-t="120"><span>2:00</span>In Excel: paste it once</button></li><li><button type="button" data-t="139"><span>2:19</span>Make it yours</button></li></ul>
+    <details><summary>Transcript</summary><p><a href="https://youtu.be/KJaUd0l3hkA?t=0">0:00</a> A chart in a report has two jobs: make one point, and let the reader check it. Here is how to build one in Excel, from official UN data, in about five minutes.</p><p><a href="https://youtu.be/KJaUd0l3hkA?t=10">0:10</a> This is where we are going: a ranked bar chart in the style of the World Bank’s Atlas of the SDGs. The title states the finding. One colour marks the country the report is about, Nigeria. And the source sits right underneath, with the one territory that has no data.</p><p><a href="https://youtu.be/KJaUd0l3hkA?t=26">0:26</a> Two lines of Python fetch the data. un.latest takes each country’s most recent value for electricity access, SDG seven point one point one, across Western Africa. un.save writes it to an Excel file, and tells you, in plain words, which place had no value.</p><p><a href="https://youtu.be/KJaUd0l3hkA?t=43">0:43</a> Open it, and the data is ready to chart: country, year, value and unit, with the source on every row. The sources sheet holds the full citation, ready to paste. And the no data sheet names Saint Helena, instead of showing a zero.</p><p><a href="https://youtu.be/KJaUd0l3hkA?t=57">0:57</a> Select the country and value columns, and insert a bar chart. This is Excel’s default. It is correct, and it says nothing. Move one: sort smallest to largest, so the longest bar sits on top. Two: delete the gridlines and the axis, and label the bars instead. Three: make every bar grey, then colour only the country you are writing about. Four: write the finding as the title, with the unit, the year and the benchmarks underneath. Five: paste the source line from the sources sheet.</p><p><a href="https://youtu.be/KJaUd0l3hkA?t=91">1:31</a> Same data, same software. The difference is five decisions, and every one of them is for the reader: what to look at first, what it means, and where it came from.</p><p><a href="https://youtu.be/KJaUd0l3hkA?t=102">1:42</a> Next quarter the numbers will change. Rather than start again, ask undata for Power Query code. It writes a query that fetches the same indicator for the same countries, and drops a place with no data instead of filling it with zero. We sent the query’s request to the live service, and it returned 391 values.</p><p><a href="https://youtu.be/KJaUd0l3hkA?t=120">2:00</a> In Excel, go to Data, Get Data, From Other Sources, Blank Query. Open the Advanced Editor and paste the code. Close and Load puts the values in a table. From then on, Refresh All brings in whatever the agencies have published since, with no Python involved.</p><p><a href="https://youtu.be/KJaUd0l3hkA?t=138">2:18</a> Swap Western Africa for your region. Swap electricity for the indicator in your mandate. The five moves stay the same.</p><p><a href="https://youtu.be/KJaUd0l3hkA?t=145">2:25</a> A chart that makes one point, and shows where it came from. Next: a chart that moves, in Flourish.</p></details>
+  </div>
+</section>
+<section class="sec" id="flourish">
+  <div class="wrap">
+    <p class="anno">// 08 — 2:13</p>
+    <h2>An animated chart, in Flourish</h2>
+    <p class="lede">Make an animated chart in Flourish from official UN data: one Python call for every country and year, one pivot into the shape Flourish wants, then upload.</p>
+    <div class="player" data-id="RVUozHIpvms" data-title="An animated chart, in Flourish">
+      <button type="button" class="play" aria-label="Play: An animated chart, in Flourish (2:13)">
+        <img src="posters/08-flourish-race.jpg" alt="" width="1280" height="720" loading="lazy"><span class="badge"></span><span class="len">2:13</span>
+      </button>
+    </div>
+    <p class="meta">Shows <code>get</code> · a pandas pivot · Flourish · <a href="https://youtu.be/RVUozHIpvms">watch on YouTube</a></p>
+    <ul class="chapters" aria-label="Chapters"><li><button type="button" data-t="0"><span>0:00</span>Introduction</button></li><li><button type="button" data-t="13"><span>0:13</span>The product</button></li><li><button type="button" data-t="23"><span>0:23</span>un.get + one pivot</button></li><li><button type="button" data-t="44"><span>0:44</span>The shape Flourish wants</button></li><li><button type="button" data-t="60"><span>1:00</span>In Flourish</button></li><li><button type="button" data-t="81"><span>1:21</span>Reading the race</button></li><li><button type="button" data-t="112"><span>1:52</span>Before you publish</button></li></ul>
+    <details><summary>Transcript</summary><p><a href="https://youtu.be/RVUozHIpvms?t=0">0:00</a> Some stories are about change over time, and they land best in motion. Here is how to turn official UN data into an animated chart in Flourish, without writing any code for the chart itself.</p><p><a href="https://youtu.be/RVUozHIpvms?t=13">0:13</a> This is the product: the share of seats held by women in national parliaments, country by country, from 2000 to 2026. One table made it.</p><p><a href="https://youtu.be/RVUozHIpvms?t=23">0:23</a> First, the data. un.get with World fetches every country, from 2000 to 2026. Flourish wants one row per country and one column per year, and pandas’ pivot does exactly that. Add each country’s region, to colour the bars, and save a CSV. The last line prints the citation, for the chart’s footer.</p><p><a href="https://youtu.be/RVUozHIpvms?t=44">0:44</a> Here is the file: 193 countries. A label column, a category column, and one value column per year, 27 of them. Get the shape right, and the template does the rest. Where a country did not report, the cell is empty, not zero.</p><p><a href="https://youtu.be/RVUozHIpvms?t=60">1:00</a> In Flourish, start a new visualisation and choose the bar chart race template. On the Data tab, upload the CSV. Set the label to column A, the categories to column B, and the values to columns C to AC. In the footer settings, paste the citation as the source. Then preview it, and publish or download it.</p><p><a href="https://youtu.be/RVUozHIpvms?t=81">1:21</a> In 2000, Sweden led, with 43 percent of seats held by women, and only one country had reached forty. Now watch Rwanda, in orange, as the years run forward. In 2009, it became the first country where women held more than half the seats. Others followed, year after year, from Latin America, Africa and Europe. By 2026, 30 countries are at forty percent or more, and the world average has doubled, from 13 percent to 27.</p><p><a href="https://youtu.be/RVUozHIpvms?t=112">1:52</a> One caution. Publishing from Flourish puts the chart on the public web, so follow your office’s rules for public content. Keep the source in the footer, and for print, download it as an image.</p><p><a href="https://youtu.be/RVUozHIpvms?t=123">2:03</a> One table, the right shape, and the chart moves on its own. Next: a one-slide briefing, in PowerPoint.</p></details>
+  </div>
+</section>
+<section class="sec" id="powerpoint">
+  <div class="wrap">
+    <p class="anno">// 09 — 1:35</p>
+    <h2>A one-slide briefing, in PowerPoint</h2>
+    <p class="lede">Build a one-slide briefing from official UN data: the finding as the headline, an Atlas-style dumbbell chart, and speaker notes written from the numbers.</p>
+    <div class="player" data-id="tgCRllGjaHk" data-title="A one-slide briefing, in PowerPoint">
+      <button type="button" class="play" aria-label="Play: A one-slide briefing, in PowerPoint (1:35)">
+        <img src="posters/09-powerpoint-briefing.jpg" alt="" width="1280" height="720" loading="lazy"><span class="badge"></span><span class="len">1:35</span>
+      </button>
+    </div>
+    <p class="meta">Shows <code>benchmark</code> · <code>chart</code> · <code>describe</code> · PowerPoint · <a href="https://youtu.be/tgCRllGjaHk">watch on YouTube</a></p>
+    <ul class="chapters" aria-label="Chapters"><li><button type="button" data-t="0"><span>0:00</span>Introduction</button></li><li><button type="button" data-t="9"><span>0:09</span>The product</button></li><li><button type="button" data-t="20"><span>0:20</span>un.benchmark · un.chart · un.describe</button></li><li><button type="button" data-t="34"><span>0:34</span>The chart · an Atlas-style dumbbell</button></li><li><button type="button" data-t="55"><span>0:55</span>In PowerPoint</button></li><li><button type="button" data-t="74"><span>1:14</span>Headline rules</button></li></ul>
+    <details><summary>Transcript</summary><p><a href="https://youtu.be/tgCRllGjaHk?t=0">0:00</a> Ten minutes before a meeting, someone asks for one slide on hunger. Here is how to make it from official data, with every number traceable to its source.</p><p><a href="https://youtu.be/tgCRllGjaHk?t=9">0:09</a> This is the slide. The headline is the finding, not the topic. The chart sets every region’s figure for 2015 beside the latest, and the speaker notes already hold the numbers, in sentences.</p><p><a href="https://youtu.be/tgCRllGjaHk?t=20">0:20</a> un.benchmark takes the figures each agency publishes for regions: the official regional totals, not an average that undata makes up. un.chart draws them for slides, and un.describe writes the sentences.</p><p><a href="https://youtu.be/tgCRllGjaHk?t=34">0:34</a> It is a dumbbell chart, a favourite of the Atlas: a hollow circle for 2015, a solid one for the latest year. In Sub-Saharan Africa, the share of people who are undernourished rose from 18.5 to 22.2 percent. Northern Africa, Western Asia and Oceania rose too, while Southern Asia fell by about a third.</p><p><a href="https://youtu.be/tgCRllGjaHk?t=55">0:55</a> In PowerPoint, choose the Title Only layout. Type the finding as the headline. Insert the chart. It is saved at three hundred dots per inch, so it stays sharp on a projector. Save it as SVG instead, and Convert to Shape lets you recolour it. Then paste the un.describe text into the speaker notes.</p><p><a href="https://youtu.be/tgCRllGjaHk?t=74">1:14</a> A topic as the headline tells people what the slide is about. A finding tells them what to remember. And because the finding came from the table, anyone in the room can check it.</p><p><a href="https://youtu.be/tgCRllGjaHk?t=84">1:24</a> One finding, one chart, one source, and notes the speaker can trust. Next: a first draft, with Copilot.</p></details>
+  </div>
+</section>
+<section class="sec" id="copilot">
+  <div class="wrap">
+    <p class="anno">// 10 — 2:08</p>
+    <h2>A first draft, with Copilot</h2>
+    <p class="lede">Use Copilot, or any AI assistant, to draft a briefing paragraph from official UN data, and keep every number honest: the numbers go in with the question, and every number in the draft is checked against the table.</p>
+    <div class="player" data-id="I2vCQIEoajg" data-title="A first draft, with Copilot">
+      <button type="button" class="play" aria-label="Play: A first draft, with Copilot (2:08)">
+        <img src="posters/10-copilot-draft.jpg" alt="" width="1280" height="720" loading="lazy"><span class="badge"></span><span class="len">2:08</span>
+      </button>
+    </div>
+    <p class="meta">Shows <code>change</code> · <code>for_ai</code> · <code>ai_pack</code> · Copilot · <a href="https://youtu.be/I2vCQIEoajg">watch on YouTube</a></p>
+    <ul class="chapters" aria-label="Chapters"><li><button type="button" data-t="0"><span>0:00</span>Introduction</button></li><li><button type="button" data-t="12"><span>0:12</span>The one rule</button></li><li><button type="button" data-t="24"><span>0:24</span>un.change + un.for_ai</button></li><li><button type="button" data-t="50"><span>0:50</span>Paste it in</button></li><li><button type="button" data-t="72"><span>1:12</span>Ask for what a report needs</button></li><li><button type="button" data-t="93"><span>1:33</span>un.ai_pack · files to upload</button></li><li><button type="button" data-t="108"><span>1:48</span>The checklist</button></li><li><button type="button" data-t="118"><span>1:58</span>Install and links</button></li></ul>
+    <details><summary>Transcript</summary><p><a href="https://youtu.be/I2vCQIEoajg?t=0">0:00</a> AI assistants write fluent paragraphs. The risk is a fluent paragraph with a number nobody can trace. Here is how to draft with Copilot, or any assistant, and keep every number honest.</p><p><a href="https://youtu.be/I2vCQIEoajg?t=12">0:12</a> Ask an assistant what a statistic is, and it may answer from memory, with no source and no year. Give it the statistic and ask what it means, and it has nothing to invent.</p><p><a href="https://youtu.be/I2vCQIEoajg?t=23">0:23</a> un.change compares 2015 with 2024 across the least developed countries, for safely managed drinking water, SDG 6.1.1. un.for_ai turns the table into a prompt. Rules first: use only these numbers, name the source and the year, a missing country is not zero. Then the table, the 20 countries with no data, by name, and the task: a briefing paragraph for a UN report.</p><p><a href="https://youtu.be/I2vCQIEoajg?t=50">0:50</a> Paste it into Copilot Chat. Here it is sent to GPT-5.4, through Azure, on 16 October 2026; Copilot’s wording will differ. The draft follows the rules. It names the source and the year, and it lists the countries with no data instead of skipping them. But look at the numbers: eight decimal places. Correct, and unusable in a report.</p><p><a href="https://youtu.be/I2vCQIEoajg?t=71">1:11</a> So ask for what a report needs: one decimal place, plain text, under a hundred and thirty words. That is a usable first draft. Now the step that matters: check every number against the table. Here, all 21 match, years included. If one does not, it goes, however good the sentence. The assistant drafts. You sign.</p><p><a href="https://youtu.be/I2vCQIEoajg?t=93">1:33</a> For longer work, un.ai_pack writes three files to upload instead: the data, a note on units, sources and gaps, and the prompt. Attach them in Copilot, and it can calculate from the file rather than from pasted text.</p><p><a href="https://youtu.be/I2vCQIEoajg?t=107">1:47</a> Numbers in, never from memory. A year and a source on every figure. No data is not zero. And every number checked, by you, before it goes out.</p><p><a href="https://youtu.be/I2vCQIEoajg?t=118">1:58</a> The assistant writes the first draft; the table keeps it honest. Next: a publication figure, in Python and R.</p></details>
+  </div>
+</section>
+<section class="sec" id="python-r">
+  <div class="wrap">
+    <p class="anno">// 11 — 1:46</p>
+    <h2>A publication figure, in Python and R</h2>
+    <p class="lede">Build a report-grade figure of every country in Python with matplotlib, and the same figure in R with ggplot2, from one table with its source on every row.</p>
+    <div class="player" data-id="pVlyje0e_78" data-title="A publication figure, in Python and R">
+      <button type="button" class="play" aria-label="Play: A publication figure, in Python and R (1:46)">
+        <img src="posters/11-python-r-figure.jpg" alt="" width="1280" height="720" loading="lazy"><span class="badge"></span><span class="len">1:46</span>
+      </button>
+    </div>
+    <p class="meta">Shows <code>style</code> · <code>latest</code> · <code>save</code> · matplotlib · ggplot2 · <a href="https://youtu.be/pVlyje0e_78">watch on YouTube</a></p>
+    <ul class="chapters" aria-label="Chapters"><li><button type="button" data-t="0"><span>0:00</span>Introduction</button></li><li><button type="button" data-t="11"><span>0:11</span>The product</button></li><li><button type="button" data-t="28"><span>0:28</span>Python · un.style + matplotlib</button></li><li><button type="button" data-t="55"><span>0:55</span>R · readr + ggplot2</button></li><li><button type="button" data-t="69"><span>1:09</span>Two languages, one answer</button></li><li><button type="button" data-t="84"><span>1:24</span>House style, every time</button></li><li><button type="button" data-t="95"><span>1:35</span>Install and links</button></li></ul>
+    <details><summary>Transcript</summary><p><a href="https://youtu.be/pVlyje0e_78?t=0">0:00</a> When a figure goes into a flagship report, it has to survive layout, translation and print. Here is how to build one in Python, and the same one in R, from a single table.</p><p><a href="https://youtu.be/pVlyje0e_78?t=10">0:10</a> Every country is a dot, grouped by region, a form the Atlas uses often. The dashed line is the SDG target: no more than twenty-five deaths before age five, per thousand live births. Orange marks the 66 countries above it, 45 of them in Africa.</p><p><a href="https://youtu.be/pVlyje0e_78?t=27">0:27</a> un.style gives matplotlib undata’s report defaults: the fonts, the light grid, the export settings. Get each country’s latest value since 2020, add its region from the UN’s M49 list, and save a CSV for colleagues who work in R or Stata. Then one short loop draws a row of dots per region, the target line, and a title that counts, rather than one you type. Saved as SVG, the text stays editable for the design team.</p><p><a href="https://youtu.be/pVlyje0e_78?t=54">0:54</a> Your team works in R? Read the same CSV with readr. ggbeeswarm spreads the dots so none sit on top of each other, and the title counts the same way. The source line comes from the file itself, because un.save put it on every row.</p><p><a href="https://youtu.be/pVlyje0e_78?t=69">1:09</a> Two languages, one table, and the same answer: 66 of 199. When both agree, you know the number came from the data, not from the code. Half the countries in Africa are above 48; in Europe, the middle country is under 4.</p><p><a href="https://youtu.be/pVlyje0e_78?t=84">1:24</a> Call un.style once at the top. Let the title count, so it is never out of date. Take the source from the data. And hand the designers an SVG, not a screenshot.</p><p><a href="https://youtu.be/pVlyje0e_78?t=94">1:34</a> Five products, five everyday tools, one habit: every number keeps its source. That is undata at work.</p></details>
+  </div>
+</section>
 <section class="sec">
   <div class="wrap">
     <p class="note">The videos play from YouTube in privacy-enhanced mode, and only after you press play.
-    The narration is a synthetic voice; the music and sound were made for the series. undata is unofficial:
-    not affiliated with or endorsed by the United Nations, and the data belongs to the agencies that publish it.</p>
+    The narration is a synthetic voice; the music and sound were made for the series. In season 2, the Excel and
+    PowerPoint frames are the apps' own renders of the files shown, chart forms are inspired by the World Bank's
+    Atlas of Sustainable Development Goals, and video 10 shows a real, labelled reply from GPT-5.4 via Azure OpenAI.
+    undata is unofficial: not affiliated with or endorsed by the United Nations, Microsoft or Flourish, and the
+    data belongs to the agencies that publish it.</p>
   </div>
 </section>
 </main>
