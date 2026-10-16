@@ -6,6 +6,17 @@ All notable changes are recorded here. The format follows
 
 ## [Unreleased]
 
+## [0.4.3] - 2026-10-16
+
+### Added
+
+- A notebook that runs in Google Colab with nothing to install: a first sourced table, a
+  chart and an Excel file in five minutes. The README and the docs site link to it.
+- A videos page on the docs site with eleven narrated tutorials in two seasons: the
+  package's use cases, and data products made with it in Excel, Flourish, PowerPoint,
+  Copilot, Python and R.
+- A "How to cite" section in the README. Each release is now archived on Zenodo with a DOI.
+
 ### Fixed
 
 - The terms-of-use link points at the UN System Data Commons Terms of Use again. 0.4.1
@@ -219,7 +230,8 @@ First release.
 - Spaces in query strings are sent as `%20`. httpx sends `+`, which this server reads
   literally, so `resolve("Viet Nam")` reached it as `Viet+Nam`.
 
-[Unreleased]: https://github.com/nerd-factory/undata/compare/v0.4.2...HEAD
+[Unreleased]: https://github.com/nerd-factory/undata/compare/v0.4.3...HEAD
+[0.4.3]: https://github.com/nerd-factory/undata/compare/v0.4.2...v0.4.3
 [0.4.2]: https://github.com/nerd-factory/undata/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/nerd-factory/undata/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/nerd-factory/undata/compare/v0.3.0...v0.4.0
