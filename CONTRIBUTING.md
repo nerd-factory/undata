@@ -77,7 +77,8 @@ src/undata/dcid.py         the identifier grammar
 src/undata/errors.py       every exception, each with a message that helps
 tests/                     offline tests; tests/live/ calls the real API
 examples/                  runnable use cases, run nightly against the live API
-site/                      the use-cases page: template, build.py, charts.py
+examples/colab/            a Colab notebook per use case, written by site/build.py
+site/                      the use-cases page: template, build.py, charts.py, colab.py
 docs/                      the API reference (Sphinx), built from the docstrings
 ```
 

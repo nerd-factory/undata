@@ -8,7 +8,8 @@ root with network access:
 
 It writes site/public/index.html, which is committed; deploying needs no build step.
 Charts an example saves (PNG, and interactive HTML) are copied to site/public/img/
-and shown under the example, so the page shows exactly what the code made.
+and shown under the example, so the page shows exactly what the code made. It also
+writes a Colab notebook for each example to examples/colab/, which the page links to.
 """
 
 from __future__ import annotations
@@ -25,14 +26,16 @@ import tokenize
 from pathlib import Path
 
 from charts import render_chart
+from colab import cases, colab_url, write_notebook
 
 ROOT = Path(__file__).resolve().parent.parent
 EXAMPLES = ROOT / "examples"
 TEMPLATE = ROOT / "site" / "template.html"
 OUTPUT = ROOT / "site" / "public" / "index.html"
 IMAGES = OUTPUT.parent / "img"
+NOTEBOOKS = EXAMPLES / "colab"
 
-PLACEHOLDER = re.compile(r"<!--(example|output|name|chart|figure|report):(\d\d)-->")
+PLACEHOLDER = re.compile(r"<!--(example|output|name|chart|figure|report|colab):(\d\d)-->")
 
 
 def highlight(source: str) -> str:
@@ -117,6 +120,15 @@ def figure(names: list[str], alt: str) -> str:
 def main() -> None:
     """Fill the template and write the page."""
     scripts = {path.name[:2]: path for path in sorted(EXAMPLES.glob("[0-9][0-9]_*.py"))}
+    template = TEMPLATE.read_text(encoding="utf-8")
+    described = cases(template)
+    if missing := sorted(set(scripts) - set(described)):
+        raise SystemExit(f"no use case on the page for examples {', '.join(missing)}")
+    NOTEBOOKS.mkdir(exist_ok=True)
+    notebooks = {
+        number: write_notebook(path, described[number], NOTEBOOKS)
+        for number, path in scripts.items()
+    }
     shutil.rmtree(IMAGES, ignore_errors=True)
     IMAGES.mkdir(parents=True)
     outputs: dict[str, str] = {}
@@ -131,7 +143,7 @@ def main() -> None:
     def report(number: str) -> str:
         return outputs[number].split("\n\n")[-1].strip()
 
-    def fill(match: re.Match[str]) -> str:
+    def fill(match: re.Match[str]) -> str:  # noqa: PLR0911 — one return per placeholder
         kind, number = match.groups()
         script = scripts[number]
         if kind == "example":
@@ -144,13 +156,18 @@ def main() -> None:
             return render_chart(number)
         if kind == "figure":
             return figure(figures[number], report(number))
+        if kind == "colab":
+            return colab_url(notebooks[number].relative_to(ROOT).as_posix())
         return f"examples/{script.name}"
 
-    page = PLACEHOLDER.sub(fill, TEMPLATE.read_text(encoding="utf-8"))
+    page = PLACEHOLDER.sub(fill, template)
     page = page.replace("<!--generated-->", dt.datetime.now(dt.UTC).strftime("%-d %B %Y"))
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT.write_text(page, encoding="utf-8")
-    print(f"wrote {OUTPUT.relative_to(ROOT)} from {len(scripts)} examples")
+    print(
+        f"wrote {OUTPUT.relative_to(ROOT)} from {len(scripts)} examples, "
+        f"and {len(notebooks)} notebooks to {NOTEBOOKS.relative_to(ROOT)}/"
+    )
 
 
 if __name__ == "__main__":

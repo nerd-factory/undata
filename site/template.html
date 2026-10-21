@@ -97,6 +97,9 @@ p { max-width: 42rem; }
 .head .file { overflow-wrap: anywhere; }
 .copy { margin-left: auto; font: inherit; color: var(--muted); background: none; border: 1px solid var(--line); padding: 0.2rem 0.6rem; cursor: pointer; }
 .copy:hover { color: var(--volt); border-color: var(--volt); }
+.colab { margin-left: auto; color: var(--ink); background: var(--volt); border: 1px solid var(--volt); padding: 0.2rem 0.6rem; text-decoration: none; }
+.colab:hover { color: var(--volt); background: none; }
+.colab + .copy { margin-left: 0; }
 pre { margin: 0; padding: 1rem 0.95rem; overflow-x: auto; font-size: 0.84rem; line-height: 1.55; tab-size: 4; color: var(--offwhite); }
 pre .c { color: var(--muted); }
 .install pre { border: 1px solid var(--line); background: var(--ink-2); }
@@ -222,6 +225,7 @@ figure.block img { display: block; width: 100%; height: auto; background: #fff; 
     </div>
 
     <p class="watch"><a href="https://colab.research.google.com/github/nerd-factory/undata/blob/main/examples/first_table.ipynb">Try it in your browser, no install</a> ·
+    <a href="#use-cases">Run any of the twelve use cases in Colab</a> ·
     <a href="videos/">Watch it work: six two-minute videos</a> — a sourced spreadsheet,
     SDG progress by the UN method, a country in context, who is left behind, the safeguards, and an AI
     assistant that cites its numbers.</p>
@@ -239,7 +243,9 @@ figure.block img { display: block; width: 100%; height: auto; background: #fff; 
     <h2>Twelve requests, as they actually arrive</h2>
     <p>Each one starts from a real kind of request in UN work and ends with something you can
     send: a table, a chart, an Excel file, or a sentence for the report. Each takes a few lines of
-    Python and a few minutes.</p>
+    Python and a few minutes, and each is also a notebook you can run in
+    <a href="https://colab.research.google.com">Google Colab</a> with nothing to install: press
+    <strong>run in colab</strong> beside its code.</p>
     <ul class="cards">
       <li><a href="#briefing"><p class="role"><b>01</b>Resident Coordinator's Office</p><h3>A briefing note before a country visit</h3><p>Chad against its Sahel neighbours on electricity, child mortality and schooling.</p></a></li>
       <li><a href="#sdg-progress"><p class="role"><b>02</b>SDG reporting</p><h3>Is a target moving?</h3><p>Maternal mortality in Southern Asia since 2015, against the Target 3.1 level.</p></a></li>
@@ -260,7 +266,7 @@ figure.block img { display: block; width: 100%; height: auto; background: #fff; 
       <h3>A briefing note before a country visit</h3>
       <blockquote class="ask"><p>"The RC is in N'Djamena on Monday. I need one page: electricity, child mortality and schooling in Chad, compared with the other Sahel countries."</p><cite>The ask</cite></blockquote>
       <p class="step">The code</p>
-      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:01--></span></div><pre><code><!--example:01--></code></pre></div>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:01--></span><a class="colab" href="<!--colab:01-->">run in colab</a></div><pre><code><!--example:01--></code></pre></div>
       <p class="step">The picture</p>
       <figure class="block"><!--chart:01--></figure>
       <p class="step">What came back</p>
@@ -277,7 +283,7 @@ figure.block img { display: block; width: 100%; height: auto; background: #fff; 
       <h3>Is a target moving?</h3>
       <blockquote class="ask"><p>"For the regional SDG progress report: has maternal mortality in Southern Asia fallen since 2015, and where is it already below 70?"</p><cite>The ask</cite></blockquote>
       <p class="step">The code</p>
-      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:02--></span></div><pre><code><!--example:02--></code></pre></div>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:02--></span><a class="colab" href="<!--colab:02-->">run in colab</a></div><pre><code><!--example:02--></code></pre></div>
       <p class="step">The picture</p>
       <figure class="block"><!--chart:02--></figure>
       <p class="step">What came back</p>
@@ -295,7 +301,7 @@ figure.block img { display: block; width: 100%; height: auto; background: #fff; 
       <h3>Women in parliament, by region</h3>
       <blockquote class="ask"><p>"For our 8 March piece: which parliaments in Eastern Africa have at least 30% women, and has anyone reached parity?"</p><cite>The ask</cite></blockquote>
       <p class="step">The code</p>
-      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:03--></span></div><pre><code><!--example:03--></code></pre></div>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:03--></span><a class="colab" href="<!--colab:03-->">run in colab</a></div><pre><code><!--example:03--></code></pre></div>
       <p class="step">The picture</p>
       <figure class="block"><!--chart:03--></figure>
       <p class="step">What came back</p>
@@ -312,7 +318,7 @@ figure.block img { display: block; width: 100%; height: auto; background: #fff; 
       <h3>Refugees: count or share?</h3>
       <blockquote class="ask"><p>"Which countries in the region have the most people living as refugees abroad, and does the picture change once you account for population?"</p><cite>The ask</cite></blockquote>
       <p class="step">The code</p>
-      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:04--></span></div><pre><code><!--example:04--></code></pre></div>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:04--></span><a class="colab" href="<!--colab:04-->">run in colab</a></div><pre><code><!--example:04--></code></pre></div>
       <p class="step">The picture</p>
       <figure class="block"><!--chart:04--></figure>
       <p class="step">What came back</p>
@@ -329,7 +335,7 @@ figure.block img { display: block; width: 100%; height: auto; background: #fff; 
       <h3>Conflict deaths in context</h3>
       <blockquote class="ask"><p>"For the briefing: where are conflict-related deaths highest, and how do they compare with ordinary homicide in the same countries?"</p><cite>The ask</cite></blockquote>
       <p class="step">The code</p>
-      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:05--></span></div><pre><code><!--example:05--></code></pre></div>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:05--></span><a class="colab" href="<!--colab:05-->">run in colab</a></div><pre><code><!--example:05--></code></pre></div>
       <p class="step">What came back</p>
       <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:05--></samp></pre></div>
       <div class="report"><span class="tag">For your briefing</span><p><!--report:05--></p></div>
@@ -345,7 +351,7 @@ figure.block img { display: block; width: 100%; height: auto; background: #fff; 
       <h3>When agencies disagree</h3>
       <blockquote class="ask"><p>"Two reports quote different maternal mortality figures for Bangladesh. Which is right, and what should we cite?"</p><cite>The ask</cite></blockquote>
       <p class="step">The code</p>
-      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:06--></span></div><pre><code><!--example:06--></code></pre></div>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:06--></span><a class="colab" href="<!--colab:06-->">run in colab</a></div><pre><code><!--example:06--></code></pre></div>
       <p class="step">What came back</p>
       <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:06--></samp></pre></div>
       <div class="report"><span class="tag">For your reply</span><p><!--report:06--></p></div>
@@ -359,7 +365,7 @@ figure.block img { display: block; width: 100%; height: auto; background: #fff; 
       <h3>A regional data pack in Excel</h3>
       <blockquote class="ask"><p>"Send the publications team an Excel file for South-Eastern Asia: electricity, drinking water and primary completion, with sources."</p><cite>The ask</cite></blockquote>
       <p class="step">The code</p>
-      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:07--></span></div><pre><code><!--example:07--></code></pre></div>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:07--></span><a class="colab" href="<!--colab:07-->">run in colab</a></div><pre><code><!--example:07--></code></pre></div>
       <p class="step">What came back</p>
       <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:07--></samp></pre></div>
       <ul class="caught">
@@ -373,7 +379,7 @@ figure.block img { display: block; width: 100%; height: auto; background: #fff; 
       <h3>A dashboard that refreshes itself</h3>
       <blockquote class="ask"><p>"Our Power BI dashboard needs fresh numbers every month, without anyone remembering to update it."</p><cite>The ask</cite></blockquote>
       <p class="step">The code</p>
-      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:08--></span></div><pre><code><!--example:08--></code></pre></div>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:08--></span><a class="colab" href="<!--colab:08-->">run in colab</a></div><pre><code><!--example:08--></code></pre></div>
       <p class="step">What came back</p>
       <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:08--></samp></pre></div>
       <p class="step">Then schedule it</p>
@@ -405,7 +411,7 @@ jobs:
       <h3>Check a chart before you share it</h3>
       <blockquote class="ask"><p>"A colleague made a chart in data.un.org's search box for a social media post. Is it really about the country they asked for?"</p><cite>The ask</cite></blockquote>
       <p class="step">The code</p>
-      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:09--></span></div><pre><code><!--example:09--></code></pre></div>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:09--></span><a class="colab" href="<!--colab:09-->">run in colab</a></div><pre><code><!--example:09--></code></pre></div>
       <p class="step">What came back</p>
       <div class="block out"><div class="head"><span class="tag">output</span><span>live, <!--generated--></span></div><pre><samp><!--output:09--></samp></pre></div>
       <ul class="caught">
@@ -418,7 +424,7 @@ jobs:
       <h3>Who is on track for 2030?</h3>
       <blockquote class="ask"><p>"For the LDC chapter of the SDG progress report: which least developed countries are on track to bring maternal mortality below 70 by 2030, using the same method as the UN's own report?"</p><cite>The ask</cite></blockquote>
       <p class="step">The code</p>
-      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:10--></span></div><pre><code><!--example:10--></code></pre></div>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:10--></span><a class="colab" href="<!--colab:10-->">run in colab</a></div><pre><code><!--example:10--></code></pre></div>
       <p class="step">The chart it saved</p>
       <figure class="block"><!--figure:10--></figure>
       <p class="step">What came back</p>
@@ -436,7 +442,7 @@ jobs:
       <h3>A country profile on one chart</h3>
       <blockquote class="ask"><p>"The Resident Coordinator wants one picture for the Common Country Analysis: where does Chad stand on the basics, against its region and the world?"</p><cite>The ask</cite></blockquote>
       <p class="step">The code</p>
-      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:11--></span></div><pre><code><!--example:11--></code></pre></div>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:11--></span><a class="colab" href="<!--colab:11-->">run in colab</a></div><pre><code><!--example:11--></code></pre></div>
       <p class="step">The chart it saved</p>
       <figure class="block"><!--figure:11--></figure>
       <p class="step">What came back</p>
@@ -454,7 +460,7 @@ jobs:
       <h3>Who is left behind</h3>
       <blockquote class="ask"><p>"For the leave-no-one-behind section: how much less likely are rural children to finish primary school than urban children, and where is the gap widest?"</p><cite>The ask</cite></blockquote>
       <p class="step">The code</p>
-      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:12--></span></div><pre><code><!--example:12--></code></pre></div>
+      <div class="block"><div class="head"><span class="tag">python</span><span class="file"><!--name:12--></span><a class="colab" href="<!--colab:12-->">run in colab</a></div><pre><code><!--example:12--></code></pre></div>
       <p class="step">The chart it saved</p>
       <figure class="block"><!--figure:12--></figure>
       <p class="step">What came back</p>
@@ -596,7 +602,8 @@ un.save(table, "maternal-mortality.xlsx")</code></pre></div>
       </div>
       <div>
         <h3>Run these use cases</h3>
-        <p>With <a href="https://docs.astral.sh/uv/">uv</a>, which fetches the right Python itself.</p>
+        <p>In your browser: press <strong>run in colab</strong> beside any use case. On your
+        computer, with <a href="https://docs.astral.sh/uv/">uv</a>, which fetches the right Python itself.</p>
         <pre><code>git clone https://github.com/nerd-factory/undata
 cd undata
 uv run python examples/01_country_briefing.py</code></pre>
